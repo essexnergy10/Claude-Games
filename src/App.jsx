@@ -175,6 +175,7 @@ const GALAXIES = [
     id:'milky-way', name:'Milky Way', nickname:'Our Home Galaxy',
     type:'Barred Spiral Galaxy',
     img:'https://upload.wikimedia.org/wikipedia/commons/4/43/ESO-VLT-Laser-phot-33a-07.jpg',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/ESO-VLT-Laser-phot-33a-07.jpg/800px-ESO-VLT-Laser-phot-33a-07.jpg',
     color:'#90caf9',
     distance:'We are inside it', diameter:'~100,000 light-years',
     stars:'200–400 billion', constellation:'Sagittarius (core)', age:'~13.6 billion years',
@@ -192,6 +193,7 @@ const GALAXIES = [
     id:'andromeda', name:'Andromeda Galaxy', nickname:'Our Nearest Neighbor',
     type:'Barred Spiral Galaxy',
     img:'https://upload.wikimedia.org/wikipedia/commons/9/98/Andromeda_Galaxy_%28with_h-alpha%29.jpg',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Andromeda_Galaxy_%28with_h-alpha%29.jpg/800px-Andromeda_Galaxy_%28with_h-alpha%29.jpg',
     color:'#b39ddb',
     distance:'2.537 million light-years', diameter:'~220,000 light-years',
     stars:'~1 trillion', constellation:'Andromeda', age:'~10 billion years',
@@ -209,6 +211,7 @@ const GALAXIES = [
     id:'whirlpool', name:'Whirlpool Galaxy', nickname:'The Interacting Pair',
     type:'Grand Design Spiral Galaxy',
     img:'https://upload.wikimedia.org/wikipedia/commons/d/db/Messier51_sRGB.jpg',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Messier51_sRGB.jpg/800px-Messier51_sRGB.jpg',
     color:'#80cbc4',
     distance:'23 million light-years', diameter:'~76,000 light-years',
     stars:'~160 billion', constellation:'Canes Venatici', age:'~400M years (interaction)',
@@ -226,6 +229,7 @@ const GALAXIES = [
     id:'sombrero', name:'Sombrero Galaxy', nickname:'The Cosmic Hat',
     type:'Spiral Galaxy',
     img:'https://upload.wikimedia.org/wikipedia/commons/5/5e/M104_ngc4594_sombrero_galaxy_hi-res.jpg',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/M104_ngc4594_sombrero_galaxy_hi-res.jpg/800px-M104_ngc4594_sombrero_galaxy_hi-res.jpg',
     color:'#f48fb1',
     distance:'28 million light-years', diameter:'~50,000 light-years',
     stars:'~100 billion', constellation:'Virgo', age:'~13 billion years',
@@ -243,6 +247,7 @@ const GALAXIES = [
     id:'pinwheel', name:'Pinwheel Galaxy', nickname:'Face-On Spiral',
     type:'Grand Design Spiral Galaxy',
     img:'https://upload.wikimedia.org/wikipedia/commons/c/c5/M101_hires_STScI-PRC2006-10a.jpg',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/M101_hires_STScI-PRC2006-10a.jpg/800px-M101_hires_STScI-PRC2006-10a.jpg',
     color:'#80deea',
     distance:'21 million light-years', diameter:'~170,000 light-years',
     stars:'~1 trillion', constellation:'Ursa Major', age:'~13 billion years',
@@ -260,6 +265,7 @@ const GALAXIES = [
     id:'cartwheel', name:'Cartwheel Galaxy', nickname:'The Ring Galaxy',
     type:'Ring Galaxy',
     img:'https://upload.wikimedia.org/wikipedia/commons/6/63/Cartwheel_Galaxy.jpg',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Cartwheel_Galaxy.jpg/800px-Cartwheel_Galaxy.jpg',
     color:'#ffcc80',
     distance:'500 million light-years', diameter:'~150,000 light-years',
     stars:'Several billion', constellation:'Sculptor', age:'Impact ~200M years ago',
@@ -277,6 +283,7 @@ const GALAXIES = [
     id:'pillars', name:'Pillars of Creation', nickname:'Stellar Nursery',
     type:'Nebula (Eagle Nebula / M16)',
     img:'https://upload.wikimedia.org/wikipedia/commons/6/68/Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg/800px-Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg',
     color:'#ce93d8',
     distance:'6,500–7,000 light-years', diameter:'Tallest pillar ~4 light-years high',
     stars:'Thousands being born', constellation:'Serpens', age:'~2 million years',
@@ -294,6 +301,7 @@ const GALAXIES = [
     id:'deep-field', name:'Hubble Deep Field', nickname:'The Universe in a Pinpoint',
     type:'Ultra-Deep Space Image',
     img:'https://upload.wikimedia.org/wikipedia/commons/5/5b/Hubble_Deep_Field.jpg',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Hubble_Deep_Field.jpg/800px-Hubble_Deep_Field.jpg',
     color:'#ffe082',
     distance:'Billions of light-years', diameter:'2.6 arcminutes of sky',
     stars:'~3,000 galaxies visible', constellation:'Ursa Major', age:'Galaxies from 800M years after Big Bang',
@@ -311,6 +319,7 @@ const GALAXIES = [
     id:'ngc1300', name:'NGC 1300', nickname:'The Classic Barred Spiral',
     type:'Barred Spiral Galaxy',
     img:'https://upload.wikimedia.org/wikipedia/commons/c/c1/Hubble_ngc1300_istST.jpg',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Hubble_ngc1300_istST.jpg/800px-Hubble_ngc1300_istST.jpg',
     color:'#a5d6a7',
     distance:'61 million light-years', diameter:'~110,000 light-years',
     stars:'Several hundred billion', constellation:'Eridanus', age:'~10–12 billion years',
@@ -328,6 +337,7 @@ const GALAXIES = [
     id:'triangulum', name:'Triangulum Galaxy', nickname:'The Third Musketeer',
     type:'Spiral Galaxy',
     img:'https://upload.wikimedia.org/wikipedia/commons/6/64/Triangulum_Galaxy_HST.jpg',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Triangulum_Galaxy_HST.jpg/800px-Triangulum_Galaxy_HST.jpg',
     color:'#ef9a9a',
     distance:'2.73 million light-years', diameter:'~60,000 light-years',
     stars:'~40 billion', constellation:'Triangulum', age:'~13 billion years',
@@ -572,7 +582,7 @@ function GalaxyModal({ galaxy, onClose }) {
         <button className="modal-close" onClick={onClose}>✕</button>
 
         <div className="galaxy-modal-hero">
-          <img src={galaxy.img} alt={galaxy.name} className="galaxy-modal-img" loading="lazy"/>
+          <img src={galaxy.thumb || galaxy.img} alt={galaxy.name} className="galaxy-modal-img" loading="lazy"/>
           <div className="galaxy-modal-overlay">
             {galaxy.hubble && <div className="hubble-badge">🔭 Hubble Space Telescope</div>}
             <h2 className="galaxy-modal-name" style={{color:galaxy.color}}>{galaxy.name}</h2>
@@ -597,6 +607,16 @@ function GalaxyModal({ galaxy, onClose }) {
         <div className="modal-funfact">
           <span>💡</span><span>{galaxy.funFact}</span>
         </div>
+
+        <a
+          href={galaxy.img}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="full-img-btn"
+          onClick={e => e.stopPropagation()}
+        >
+          🔍 View Full Resolution Image
+        </a>
       </div>
     </div>
   )
@@ -741,7 +761,7 @@ function GalaxiesScreen({ onBack }) {
             onClick={() => { playClick(); setSelected(g) }}
           >
             <div className="galaxy-card-img-wrap">
-              <img src={g.img} alt={g.name} className="galaxy-card-img" loading="lazy"/>
+              <img src={g.thumb || g.img} alt={g.name} className="galaxy-card-img" loading="lazy"/>
               {g.hubble && <div className="galaxy-hubble-chip">🔭 Hubble</div>}
             </div>
             <div className="card-body">
@@ -771,7 +791,8 @@ function QuizScreen({ onBack }) {
   const [streak, setStreak] = useState(0)
 
   const q = questions[qi]
-  const imgData = PLANETS.find(p => p.id === q.planet) || GALAXIES.find(g => g.id === q.galaxy)
+  const _imgRaw = PLANETS.find(p => p.id === q.planet) || GALAXIES.find(g => g.id === q.galaxy)
+  const imgData = _imgRaw ? { ..._imgRaw, img: _imgRaw.thumb || _imgRaw.img } : null
   const correctAnswer = q.answer ?? (q.planet ? q.planet.charAt(0).toUpperCase()+q.planet.slice(1) : '')
 
   function pick(choice) {
