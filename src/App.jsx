@@ -582,7 +582,7 @@ function GalaxyModal({ galaxy, onClose }) {
         <button className="modal-close" onClick={onClose}>✕</button>
 
         <div className="galaxy-modal-hero">
-          <img src={galaxy.thumb || galaxy.img} alt={galaxy.name} className="galaxy-modal-img" loading="lazy"/>
+          <img src={galaxy.img} alt={galaxy.name} className="galaxy-modal-img" loading="lazy" decoding="async"/>
           <div className="galaxy-modal-overlay">
             {galaxy.hubble && <div className="hubble-badge">🔭 Hubble Space Telescope</div>}
             <h2 className="galaxy-modal-name" style={{color:galaxy.color}}>{galaxy.name}</h2>
@@ -761,7 +761,9 @@ function GalaxiesScreen({ onBack }) {
             onClick={() => { playClick(); setSelected(g) }}
           >
             <div className="galaxy-card-img-wrap">
-              <img src={g.thumb || g.img} alt={g.name} className="galaxy-card-img" loading="lazy"/>
+              <img src={g.img} alt={g.name} className="galaxy-card-img" loading="lazy" decoding="async"
+                onLoad={e => e.currentTarget.classList.add('loaded')}
+              />
               {g.hubble && <div className="galaxy-hubble-chip">🔭 Hubble</div>}
             </div>
             <div className="card-body">
@@ -791,8 +793,7 @@ function QuizScreen({ onBack }) {
   const [streak, setStreak] = useState(0)
 
   const q = questions[qi]
-  const _imgRaw = PLANETS.find(p => p.id === q.planet) || GALAXIES.find(g => g.id === q.galaxy)
-  const imgData = _imgRaw ? { ..._imgRaw, img: _imgRaw.thumb || _imgRaw.img } : null
+  const imgData = PLANETS.find(p => p.id === q.planet) || GALAXIES.find(g => g.id === q.galaxy)
   const correctAnswer = q.answer ?? (q.planet ? q.planet.charAt(0).toUpperCase()+q.planet.slice(1) : '')
 
   function pick(choice) {
