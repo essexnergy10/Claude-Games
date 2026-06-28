@@ -169,6 +169,180 @@ const PLANETS = [
   },
 ]
 
+// ── Galaxy & Hubble data ──────────────────────────────────────────────────────
+const GALAXIES = [
+  {
+    id:'milky-way', name:'Milky Way', nickname:'Our Home Galaxy',
+    type:'Barred Spiral Galaxy',
+    img:'https://upload.wikimedia.org/wikipedia/commons/4/43/ESO-VLT-Laser-phot-33a-07.jpg',
+    color:'#90caf9',
+    distance:'We are inside it', diameter:'~100,000 light-years',
+    stars:'200–400 billion', constellation:'Sagittarius (core)', age:'~13.6 billion years',
+    hubble:false,
+    facts:[
+      'We are located ~26,000 light-years from the galactic center',
+      'The Milky Way is a barred spiral galaxy with 4 major spiral arms',
+      'The supermassive black hole at its center is called Sagittarius A* — 4 million solar masses',
+      'The Sun takes 225–250 million years to complete one orbit of the galaxy',
+      'The Milky Way is part of a group of over 50 galaxies called the Local Group',
+    ],
+    funFact:'The Milky Way is on a collision course with the Andromeda Galaxy — they\'ll merge in ~4.5 billion years!',
+  },
+  {
+    id:'andromeda', name:'Andromeda Galaxy', nickname:'Our Nearest Neighbor',
+    type:'Barred Spiral Galaxy',
+    img:'https://upload.wikimedia.org/wikipedia/commons/9/98/Andromeda_Galaxy_%28with_h-alpha%29.jpg',
+    color:'#b39ddb',
+    distance:'2.537 million light-years', diameter:'~220,000 light-years',
+    stars:'~1 trillion', constellation:'Andromeda', age:'~10 billion years',
+    hubble:true,
+    facts:[
+      'Largest galaxy in our Local Group — twice the size of the Milky Way',
+      'Visible to the naked eye from a dark sky as a faint fuzzy patch',
+      'Approaching us at ~110 km/s — it will collide with the Milky Way in ~4.5 billion years',
+      'Contains approximately 1 trillion stars',
+      'Has two satellite dwarf galaxies: M32 and M110',
+    ],
+    funFact:'When Andromeda collides with the Milky Way, the Sun is unlikely to hit another star — space is mostly empty!',
+  },
+  {
+    id:'whirlpool', name:'Whirlpool Galaxy', nickname:'The Interacting Pair',
+    type:'Grand Design Spiral Galaxy',
+    img:'https://upload.wikimedia.org/wikipedia/commons/d/db/Messier51_sRGB.jpg',
+    color:'#80cbc4',
+    distance:'23 million light-years', diameter:'~76,000 light-years',
+    stars:'~160 billion', constellation:'Canes Venatici', age:'~400M years (interaction)',
+    hubble:true,
+    facts:[
+      'Also known as M51 — catalogued by Charles Messier in 1773',
+      'Actively interacting with its companion galaxy NGC 5195',
+      'The collision is triggering massive bursts of new star formation',
+      'One of the most photographed objects in astronomy',
+      'The Hubble Space Telescope captured one of its most famous images in 2005',
+    ],
+    funFact:'The Whirlpool Galaxy\'s spiral arms were the first ever observed in any galaxy, back in 1845!',
+  },
+  {
+    id:'sombrero', name:'Sombrero Galaxy', nickname:'The Cosmic Hat',
+    type:'Spiral Galaxy',
+    img:'https://upload.wikimedia.org/wikipedia/commons/5/5e/M104_ngc4594_sombrero_galaxy_hi-res.jpg',
+    color:'#f48fb1',
+    distance:'28 million light-years', diameter:'~50,000 light-years',
+    stars:'~100 billion', constellation:'Virgo', age:'~13 billion years',
+    hubble:true,
+    facts:[
+      'Named for its resemblance to a Mexican sombrero hat',
+      'Also known as Messier 104 or NGC 4594',
+      'Features a bright bulge and a very prominent dark dust lane',
+      'Its central black hole is 1 billion times the mass of our Sun',
+      'The Hubble image of it is one of the most downloaded space telescope images ever',
+    ],
+    funFact:'The Sombrero Galaxy\'s central black hole is one of the most massive known — 1 billion solar masses!',
+  },
+  {
+    id:'pinwheel', name:'Pinwheel Galaxy', nickname:'Face-On Spiral',
+    type:'Grand Design Spiral Galaxy',
+    img:'https://upload.wikimedia.org/wikipedia/commons/c/c5/M101_hires_STScI-PRC2006-10a.jpg',
+    color:'#80deea',
+    distance:'21 million light-years', diameter:'~170,000 light-years',
+    stars:'~1 trillion', constellation:'Ursa Major', age:'~13 billion years',
+    hubble:true,
+    facts:[
+      'Also known as M101 or NGC 5457',
+      'Nearly twice the diameter of our Milky Way galaxy',
+      'Viewed nearly face-on, making it ideal for studying spiral structure',
+      'Contains very bright HII regions with ongoing massive star formation',
+      'NASA\'s 2006 Hubble mosaic was composed of 51 separate images',
+    ],
+    funFact:'The Pinwheel Galaxy is almost exactly face-on to us — giving astronomers a perfect top-down view!',
+  },
+  {
+    id:'cartwheel', name:'Cartwheel Galaxy', nickname:'The Ring Galaxy',
+    type:'Ring Galaxy',
+    img:'https://upload.wikimedia.org/wikipedia/commons/6/63/Cartwheel_Galaxy.jpg',
+    color:'#ffcc80',
+    distance:'500 million light-years', diameter:'~150,000 light-years',
+    stars:'Several billion', constellation:'Sculptor', age:'Impact ~200M years ago',
+    hubble:true,
+    facts:[
+      'Formed when a smaller galaxy passed directly through a larger spiral galaxy',
+      'The collision sent a shockwave outward, creating the distinctive ring of star birth',
+      'The outer ring is expanding at roughly 200,000 mph',
+      'The James Webb Space Telescope captured a stunning new infrared image in 2022',
+      'It is one of the most dramatic galaxy collisions visible from Earth',
+    ],
+    funFact:'The Cartwheel Galaxy\'s expanding ring is producing millions of new stars as it spreads outward!',
+  },
+  {
+    id:'pillars', name:'Pillars of Creation', nickname:'Stellar Nursery',
+    type:'Nebula (Eagle Nebula / M16)',
+    img:'https://upload.wikimedia.org/wikipedia/commons/6/68/Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg',
+    color:'#ce93d8',
+    distance:'6,500–7,000 light-years', diameter:'Tallest pillar ~4 light-years high',
+    stars:'Thousands being born', constellation:'Serpens', age:'~2 million years',
+    hubble:true,
+    facts:[
+      'One of the most iconic photos ever taken by the Hubble Space Telescope (1995)',
+      'These towering columns of gas and dust are active star-forming regions',
+      'The pillars are slowly being eroded by intense UV radiation from nearby hot stars',
+      'Hubble re-photographed them in 2014 at far higher resolution',
+      'The James Webb Space Telescope revealed hidden stars inside in 2022',
+    ],
+    funFact:'The Pillars of Creation may already be destroyed — the light we see left them 7,000 years ago!',
+  },
+  {
+    id:'deep-field', name:'Hubble Deep Field', nickname:'The Universe in a Pinpoint',
+    type:'Ultra-Deep Space Image',
+    img:'https://upload.wikimedia.org/wikipedia/commons/5/5b/Hubble_Deep_Field.jpg',
+    color:'#ffe082',
+    distance:'Billions of light-years', diameter:'2.6 arcminutes of sky',
+    stars:'~3,000 galaxies visible', constellation:'Ursa Major', age:'Galaxies from 800M years after Big Bang',
+    hubble:true,
+    facts:[
+      'Created by pointing Hubble at an apparently "empty" patch of sky for 10 days in 1995',
+      'Revealed nearly 3,000 entire galaxies — the universe is full of them',
+      'Each spot of light is an entire galaxy containing billions of stars',
+      'One of the most important images in the history of astronomy',
+      'The Hubble Ultra Deep Field (2004) reached galaxies from just 800M years after the Big Bang',
+    ],
+    funFact:'That tiny patch of sky is the size of a tennis ball held 100 metres away — yet contains thousands of galaxies!',
+  },
+  {
+    id:'ngc1300', name:'NGC 1300', nickname:'The Classic Barred Spiral',
+    type:'Barred Spiral Galaxy',
+    img:'https://upload.wikimedia.org/wikipedia/commons/c/c1/Hubble_ngc1300_istST.jpg',
+    color:'#a5d6a7',
+    distance:'61 million light-years', diameter:'~110,000 light-years',
+    stars:'Several hundred billion', constellation:'Eridanus', age:'~10–12 billion years',
+    hubble:true,
+    facts:[
+      'Considered a prototype "grand design" barred spiral galaxy',
+      'Its bar does not connect to a ring — unusual among barred spirals',
+      'Blue spiral arms show active regions of massive young star formation',
+      'At its very center is a tiny spiral just 3,300 light-years across',
+      'The Hubble portrait of NGC 1300 is one of the largest, clearest galaxy images ever made',
+    ],
+    funFact:'NGC 1300 hides a tiny "grand design" spiral at its very center — a galaxy within a galaxy!',
+  },
+  {
+    id:'triangulum', name:'Triangulum Galaxy', nickname:'The Third Musketeer',
+    type:'Spiral Galaxy',
+    img:'https://upload.wikimedia.org/wikipedia/commons/6/64/Triangulum_Galaxy_HST.jpg',
+    color:'#ef9a9a',
+    distance:'2.73 million light-years', diameter:'~60,000 light-years',
+    stars:'~40 billion', constellation:'Triangulum', age:'~13 billion years',
+    hubble:true,
+    facts:[
+      'Third largest galaxy in our Local Group, after the Milky Way and Andromeda',
+      'Also known as M33 or NGC 598',
+      'One of the most distant objects visible to the naked eye under perfect dark skies',
+      'Gravitationally linked to Andromeda and may orbit it as a satellite',
+      'Contains NGC 604 — a star-forming region 40× larger than the Orion Nebula',
+    ],
+    funFact:'The Triangulum Galaxy is the most distant object a human eye can see without any telescope!',
+  },
+]
+
 // ── Quiz questions ─────────────────────────────────────────────────────────────
 const QUESTIONS = [
   { q:'What is this planet?', type:'image-to-name', planet:'mercury', choices:['Mercury','Venus','Mars','Earth'] },
@@ -190,13 +364,9 @@ const QUESTIONS = [
   { q:'How long does sunlight take to travel from the Sun to Earth?', type:'text-to-name', choices:['8 minutes','1 hour','1 second','1 day'], answer:'8 minutes', hint:'Light travels at 300,000 km/s — and it still takes over 8 minutes!', textChoices:true },
   { q:'Stephenson 2-18 is approximately how many times wider than our Sun?', type:'text-to-name', choices:['2,150 times','10 times','500 times','50,000 times'], answer:'2,150 times', hint:'If placed in our solar system, it would extend beyond Saturn\'s orbit!', textChoices:true },
   { q:'What type of star is Stephenson 2-18?', type:'text-to-name', choices:['Red Supergiant','White Dwarf','Blue Giant','Neutron Star'], answer:'Red Supergiant', hint:'Its reddish colour comes from its relatively cool surface temperature of ~3,200 K.', textChoices:true },
-
-  // ── Image-to-name: Uranus & Neptune ───────────────────────────────────────
   { q:'What is this planet?', type:'image-to-name', planet:'uranus', choices:['Uranus','Neptune','Saturn','Jupiter'] },
   { q:'What is this planet?', type:'image-to-name', planet:'neptune', choices:['Neptune','Uranus','Earth','Mars'] },
   { q:'What is this planet?', type:'image-to-name', planet:'venus', choices:['Venus','Mercury','Mars','Saturn'] },
-
-  // ── Planet facts ──────────────────────────────────────────────────────────
   { q:'Which planet has a volcano called Olympus Mons — the tallest in the solar system?', type:'text-to-name', choices:['Mars','Venus','Mercury','Earth'], answer:'Mars', hint:'Olympus Mons stands 21 km tall — nearly 3× the height of Mount Everest!' },
   { q:'Which planet\'s day is longer than its year?', type:'text-to-name', choices:['Venus','Mercury','Mars','Jupiter'], answer:'Venus', hint:'Venus rotates so slowly that one day lasts 243 Earth days but its year is only 225!' },
   { q:'Which planet has a canyon system 4,000 km long — 10× longer than the Grand Canyon?', type:'text-to-name', choices:['Mars','Jupiter','Venus','Saturn'], answer:'Mars', hint:'Valles Marineris stretches across a quarter of the planet!' },
@@ -211,16 +381,34 @@ const QUESTIONS = [
   { q:'Which planet takes 165 Earth years to orbit the Sun once?', type:'text-to-name', choices:['Neptune','Uranus','Saturn','Jupiter'], answer:'Neptune', hint:'It has only completed one full orbit since it was discovered in 1846!' },
   { q:'Which planet is the densest in the solar system?', type:'text-to-name', choices:['Earth','Venus','Mercury','Mars'], answer:'Earth', hint:'Despite not being the largest rocky planet, Earth is the most densely packed.' },
   { q:'On which planet would you weigh the most due to strongest gravity?', type:'text-to-name', choices:['Jupiter','Saturn','Neptune','Uranus'], answer:'Jupiter', hint:'Jupiter\'s gravity is 2.5× that of Earth — you\'d feel very heavy there!' },
-
-  // ── Sun facts ─────────────────────────────────────────────────────────────
   { q:'How old is our Sun?', type:'text-to-name', choices:['4.6 billion years','1 billion years','10 billion years','500 million years'], answer:'4.6 billion years', hint:'The Sun is roughly halfway through its 10-billion-year lifespan!', textChoices:true },
   { q:'What is the core temperature of our Sun?', type:'text-to-name', choices:['15 million °C','5,500 °C','1 million °C','100,000 °C'], answer:'15 million °C', hint:'Nuclear fusion at the core requires incredibly extreme temperatures!', textChoices:true },
   { q:'How many Earths could fit inside the Sun?', type:'text-to-name', choices:['1.3 million','10,000','100 million','50,000'], answer:'1.3 million', hint:'The Sun is absolutely enormous compared to our planet!', textChoices:true },
-
-  // ── Stephenson 2-18 extras ────────────────────────────────────────────────
   { q:'In which constellation is Stephenson 2-18 located?', type:'text-to-name', choices:['Scutum','Orion','Andromeda','Sagittarius'], answer:'Scutum', hint:'It sits in the constellation Scutum, about 19,000 light-years from Earth.', textChoices:true },
   { q:'How many times more luminous is Stephenson 2-18 than our Sun?', type:'text-to-name', choices:['440,000×','10×','1 million×','2,000×'], answer:'440,000×', hint:'Despite being so luminous, it appears reddish because its surface is relatively cool.', textChoices:true },
   { q:'If Stephenson 2-18 replaced our Sun, which planet\'s orbit would it extend beyond?', type:'text-to-name', choices:['Saturn','Mars','Jupiter','Neptune'], answer:'Saturn', hint:'Its radius of ~2,150 solar radii would swallow Mercury, Venus, Earth, Mars, and Jupiter!', textChoices:true },
+
+  // ── Galaxy questions ─────────────────────────────────────────────────────
+  { q:'Which galaxy is closest to our Milky Way?', type:'text-to-name', choices:['Andromeda Galaxy','Sombrero Galaxy','Triangulum Galaxy','Pinwheel Galaxy'], answer:'Andromeda Galaxy', hint:'It is 2.5 million light-years away and visible to the naked eye!', textChoices:true },
+  { q:'Which galaxy is nicknamed "The Cosmic Hat" due to its distinctive shape?', type:'text-to-name', choices:['Sombrero Galaxy','Cartwheel Galaxy','Pinwheel Galaxy','Whirlpool Galaxy'], answer:'Sombrero Galaxy', hint:'Its prominent dust lane and large bulge create a hat-like silhouette!', textChoices:true },
+  { q:'The iconic "Pillars of Creation" image was taken by which space telescope?', type:'text-to-name', choices:['Hubble Space Telescope','James Webb Telescope','Chandra Observatory','Spitzer Telescope'], answer:'Hubble Space Telescope', hint:'The original photograph was taken in 1995 and became one of the most famous images ever.', textChoices:true },
+  { q:'What type of galaxy is the Milky Way?', type:'text-to-name', choices:['Barred Spiral Galaxy','Elliptical Galaxy','Ring Galaxy','Irregular Galaxy'], answer:'Barred Spiral Galaxy', hint:'It has a central bar-shaped structure from which the spiral arms extend!', textChoices:true },
+  { q:'Which ring-shaped galaxy was formed by a smaller galaxy crashing directly through it?', type:'text-to-name', choices:['Cartwheel Galaxy','Sombrero Galaxy','Triangulum Galaxy','NGC 1300'], answer:'Cartwheel Galaxy', hint:'The collision sent shockwaves outward, creating its distinctive ring of star formation!', textChoices:true },
+  { q:'When Hubble pointed at an apparently "empty" patch of sky, it revealed nearly 3,000 of what?', type:'text-to-name', choices:['Galaxies','Asteroids','Stars','Planets'], answer:'Galaxies', hint:'This was the famous Hubble Deep Field image taken in 1995!', textChoices:true },
+  { q:'In approximately how many years will the Andromeda Galaxy collide with the Milky Way?', type:'text-to-name', choices:['4.5 billion years','1 million years','100 billion years','500,000 years'], answer:'4.5 billion years', hint:'By then, our Sun will be nearing the end of its life as well!', textChoices:true },
+  { q:'Which galaxy is the third largest in our Local Group of galaxies?', type:'text-to-name', choices:['Triangulum Galaxy','Sombrero Galaxy','Cartwheel Galaxy','Pinwheel Galaxy'], answer:'Triangulum Galaxy', hint:'Also known as M33, it is the most distant object visible to the naked eye!', textChoices:true },
+  { q:'What is the name of the supermassive black hole at the center of the Milky Way?', type:'text-to-name', choices:['Sagittarius A*','Cygnus X-1','M87*','NGC 1277'], answer:'Sagittarius A*', hint:'It weighs approximately 4 million times the mass of our Sun!', textChoices:true },
+  { q:'Which galaxy\'s spiral arms were the first ever observed in any galaxy (1845)?', type:'text-to-name', choices:['Whirlpool Galaxy','Pinwheel Galaxy','Andromeda Galaxy','NGC 1300'], answer:'Whirlpool Galaxy', hint:'Also known as M51, it was studied by the Earl of Rosse using his giant telescope!', textChoices:true },
+  { q:'How long does it take our Sun to orbit the center of the Milky Way once?', type:'text-to-name', choices:['225–250 million years','1 million years','10 billion years','500 years'], answer:'225–250 million years', hint:'This is sometimes called a "galactic year" or "cosmic year"!', textChoices:true },
+  { q:'Which famous image shows the Pillars of Creation for the first time?', type:'text-to-name', choices:['Hubble Space Telescope (1995)','James Webb (2022)','Voyager 1 (1990)','Spitzer (2003)'], answer:'Hubble Space Telescope (1995)', hint:'The image became one of the most recognizable photographs in astronomy history.', textChoices:true },
+
+  // ── Image-to-name: Galaxies ───────────────────────────────────────────────
+  { q:'Which galaxy is this?', type:'image-to-name', galaxy:'andromeda', choices:['Andromeda Galaxy','Whirlpool Galaxy','Triangulum Galaxy','Sombrero Galaxy'], answer:'Andromeda Galaxy' },
+  { q:'Which galaxy is this?', type:'image-to-name', galaxy:'whirlpool', choices:['Whirlpool Galaxy','Pinwheel Galaxy','Cartwheel Galaxy','NGC 1300'], answer:'Whirlpool Galaxy' },
+  { q:'Which galaxy is this?', type:'image-to-name', galaxy:'sombrero', choices:['Sombrero Galaxy','Cartwheel Galaxy','Andromeda Galaxy','NGC 1300'], answer:'Sombrero Galaxy' },
+  { q:'What is this iconic Hubble image called?', type:'image-to-name', galaxy:'pillars', choices:['Pillars of Creation','Hubble Deep Field','Cat\'s Eye Nebula','Crab Nebula'], answer:'Pillars of Creation' },
+  { q:'What famous image is this?', type:'image-to-name', galaxy:'deep-field', choices:['Hubble Deep Field','Pillars of Creation','Andromeda Galaxy','Triangulum Galaxy'], answer:'Hubble Deep Field' },
+  { q:'Which galaxy is this?', type:'image-to-name', galaxy:'pinwheel', choices:['Pinwheel Galaxy','Whirlpool Galaxy','Triangulum Galaxy','NGC 1300'], answer:'Pinwheel Galaxy' },
 ]
 
 // ── Stephenson 2-18 data ──────────────────────────────────────────────────────
@@ -237,7 +425,7 @@ const ST2_18 = {
   luminosity:'~440,000× the Sun',
   temperature:'~3,200 K (surface)',
   mass:'~12–15 Solar Masses',
-  sunComparison: 2150, // how many Suns wide it is
+  sunComparison: 2150,
   facts:[
     'If placed at the center of our solar system, it would swallow everything up to and beyond Saturn\'s orbit',
     'Its radius is estimated at ~2,150 times that of our Sun',
@@ -262,15 +450,11 @@ function ST2Modal({ onClose }) {
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal st2-modal" onClick={e=>e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>✕</button>
-
-        {/* Header */}
         <div className="st2-header">
           <div className="st2-badge">🌌 MEGA STAR</div>
           <h2 className="st2-title" style={{color:ST2_18.color}}>{ST2_18.name}</h2>
           <p className="st2-nick">"{ST2_18.nickname}"</p>
         </div>
-
-        {/* Size comparison visual */}
         <div className="st2-compare">
           <div className="st2-compare-title">Size Comparison</div>
           <div className="st2-orbs">
@@ -280,16 +464,12 @@ function ST2Modal({ onClose }) {
             </div>
             <div className="st2-arrow">→</div>
             <div className="st2-orb-item">
-              <div className="st2-giant-orb">
-                <span>St2-18</span>
-              </div>
+              <div className="st2-giant-orb"><span>St2-18</span></div>
               <div className="st2-orb-label">🔴 Stephenson 2-18<br/><span>~2,990,000,000 km</span></div>
             </div>
           </div>
           <div className="st2-ratio">Our Sun fits inside Stephenson 2-18 <strong style={{color:ST2_18.color}}>2,150 times</strong> across</div>
         </div>
-
-        {/* Stats */}
         <div className="modal-stats" style={{marginBottom:20}}>
           <div className="stat"><span className="stat-label">Type</span><span>{ST2_18.type}</span></div>
           <div className="stat"><span className="stat-label">Radius</span><span>{ST2_18.radius}</span></div>
@@ -300,13 +480,10 @@ function ST2Modal({ onClose }) {
           <div className="stat"><span className="stat-label">Mass</span><span>{ST2_18.mass}</span></div>
           <div className="stat"><span className="stat-label">Constellation</span><span>{ST2_18.constellation}</span></div>
         </div>
-
-        {/* Facts */}
         <div className="modal-facts">
           <h3>🔭 Key Facts</h3>
           <ul>{ST2_18.facts.map((f,i)=><li key={i}>{f}</li>)}</ul>
         </div>
-
         <div className="modal-funfact">
           <span>💡</span><span>{ST2_18.funFact}</span>
         </div>
@@ -320,7 +497,7 @@ function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5) }
 
 // ── Stars background ──────────────────────────────────────────────────────────
 function Stars() {
-  const stars = useRef(Array.from({length:180}, (_,i) => ({
+  const stars = useRef(Array.from({length:180}, () => ({
     x: Math.random()*100, y: Math.random()*100,
     r: Math.random()*2+0.5,
     op: 0.3+Math.random()*0.7,
@@ -369,16 +546,56 @@ function PlanetModal({ planet, onClose }) {
             </div>
           </div>
         </div>
-
         <div className="modal-facts">
           <h3>🔭 Key Facts</h3>
-          <ul>
-            {planet.facts.map((f,i) => <li key={i}>{f}</li>)}
-          </ul>
+          <ul>{planet.facts.map((f,i) => <li key={i}>{f}</li>)}</ul>
         </div>
         <div className="modal-funfact">
-          <span>💡</span>
-          <span>{planet.funFact}</span>
+          <span>💡</span><span>{planet.funFact}</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Galaxy Detail Modal ───────────────────────────────────────────────────────
+function GalaxyModal({ galaxy, onClose }) {
+  useEffect(() => {
+    const onKey = e => { if(e.key==='Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
+
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal galaxy-modal" onClick={e=>e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose}>✕</button>
+
+        <div className="galaxy-modal-hero">
+          <img src={galaxy.img} alt={galaxy.name} className="galaxy-modal-img" loading="lazy"/>
+          <div className="galaxy-modal-overlay">
+            {galaxy.hubble && <div className="hubble-badge">🔭 Hubble Space Telescope</div>}
+            <h2 className="galaxy-modal-name" style={{color:galaxy.color}}>{galaxy.name}</h2>
+            <p className="galaxy-modal-nick">"{galaxy.nickname}"</p>
+            <div className="galaxy-type-chip">{galaxy.type}</div>
+          </div>
+        </div>
+
+        <div className="modal-stats galaxy-stats">
+          <div className="stat"><span className="stat-label">Distance</span><span>{galaxy.distance}</span></div>
+          <div className="stat"><span className="stat-label">Diameter</span><span>{galaxy.diameter}</span></div>
+          <div className="stat"><span className="stat-label">Stars</span><span>{galaxy.stars}</span></div>
+          <div className="stat"><span className="stat-label">Constellation</span><span>{galaxy.constellation}</span></div>
+          <div className="stat"><span className="stat-label">Age</span><span>{galaxy.age}</span></div>
+          <div className="stat"><span className="stat-label">Type</span><span>{galaxy.type}</span></div>
+        </div>
+
+        <div className="modal-facts">
+          <h3>🌌 Key Facts</h3>
+          <ul>{galaxy.facts.map((f,i) => <li key={i}>{f}</li>)}</ul>
+        </div>
+        <div className="modal-funfact">
+          <span>💡</span><span>{galaxy.funFact}</span>
         </div>
       </div>
     </div>
@@ -428,9 +645,8 @@ function ExploreScreen({ onBack }) {
         </div>
       </div>
 
-      {/* Cards grid — Sun first, then planets */}
+      {/* Cards grid */}
       <div className="planet-cards">
-        {/* Sun card */}
         <button
           className="planet-card sun-card"
           style={{ '--pc': SUN.color, '--pb': '#ffd74018' }}
@@ -468,7 +684,7 @@ function ExploreScreen({ onBack }) {
         ))}
       </div>
 
-      {/* Stephenson 2-18 feature section */}
+      {/* Stephenson 2-18 */}
       <div className="st2-section">
         <div className="st2-section-label">🌌 Beyond Our Solar System</div>
         <button className="st2-feature-card" onClick={() => { playClick(); setShowST2(true) }}>
@@ -491,6 +707,60 @@ function ExploreScreen({ onBack }) {
   )
 }
 
+// ── Galaxies Screen ────────────────────────────────────────────────────────────
+function GalaxiesScreen({ onBack }) {
+  const [selected, setSelected] = useState(null)
+
+  return (
+    <div className="explore galaxies-screen">
+      <div className="explore-header">
+        <button className="back-btn" onClick={onBack}>← Back</button>
+        <h2 className="explore-title">🌌 Galaxies &amp; Hubble</h2>
+        <p className="explore-sub">Real images from the Hubble Space Telescope</p>
+      </div>
+
+      {/* Hubble intro banner */}
+      <div className="hubble-banner">
+        <div className="hubble-banner-icon">🔭</div>
+        <div className="hubble-banner-text">
+          <div className="hubble-banner-title">Hubble Space Telescope</div>
+          <div className="hubble-banner-sub">
+            Launched in 1990, Hubble has captured stunning images of galaxies billions of light-years away —
+            revolutionising our understanding of the universe.
+          </div>
+        </div>
+      </div>
+
+      {/* Galaxy cards grid */}
+      <div className="galaxy-cards">
+        {GALAXIES.map(g => (
+          <button
+            key={g.id}
+            className="galaxy-card"
+            style={{ '--gc': g.color }}
+            onClick={() => { playClick(); setSelected(g) }}
+          >
+            <div className="galaxy-card-img-wrap">
+              <img src={g.img} alt={g.name} className="galaxy-card-img" loading="lazy"/>
+              {g.hubble && <div className="galaxy-hubble-chip">🔭 Hubble</div>}
+            </div>
+            <div className="card-body">
+              <div className="card-name" style={{color:g.color}}>{g.name}</div>
+              <div className="card-nick">{g.nickname}</div>
+              <div className="card-row">
+                <span>📍 {g.distance}</span>
+              </div>
+              <div className="card-type">{g.type}</div>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      {selected && <GalaxyModal galaxy={selected} onClose={() => setSelected(null)}/>}
+    </div>
+  )
+}
+
 // ── Quiz Screen ────────────────────────────────────────────────────────────────
 function QuizScreen({ onBack }) {
   const [questions] = useState(() => shuffle(QUESTIONS).slice(0, 10))
@@ -501,8 +771,8 @@ function QuizScreen({ onBack }) {
   const [streak, setStreak] = useState(0)
 
   const q = questions[qi]
-  const planetData = PLANETS.find(p => p.id === q.planet)
-  const correctAnswer = q.type === 'image-to-name' ? q.planet.charAt(0).toUpperCase()+q.planet.slice(1) : q.answer
+  const imgData = PLANETS.find(p => p.id === q.planet) || GALAXIES.find(g => g.id === q.galaxy)
+  const correctAnswer = q.answer ?? (q.planet ? q.planet.charAt(0).toUpperCase()+q.planet.slice(1) : '')
 
   function pick(choice) {
     if (picked) return
@@ -523,10 +793,10 @@ function QuizScreen({ onBack }) {
   if (done) {
     const pct = Math.round((score/questions.length)*100)
     const grade = pct>=90?'🏆 Astronaut!':pct>=70?'🚀 Explorer!':pct>=50?'🌟 Cadet!':'🌙 Beginner!'
-    const msg = pct>=90?'Incredible! You know the solar system better than most astronomers!'
+    const msg = pct>=90?'Incredible! You know the cosmos better than most astronomers!'
               : pct>=70?'Great job! You\'re a true space explorer!'
-              : pct>=50?'Good effort! Keep studying the planets!'
-              : 'Keep exploring! Visit the Planet Explorer to learn more.'
+              : pct>=50?'Good effort! Keep studying the planets and galaxies!'
+              : 'Keep exploring! Visit the Planet and Galaxy sections to learn more.'
     return (
       <div className="quiz-result">
         <Stars/>
@@ -543,6 +813,9 @@ function QuizScreen({ onBack }) {
       </div>
     )
   }
+
+  const isGalaxyImg = !!q.galaxy
+  const imgLabel = isGalaxyImg ? '🔭 Real Hubble / NASA Photo' : '🔭 Real NASA Photo'
 
   return (
     <div className="quiz">
@@ -561,17 +834,19 @@ function QuizScreen({ onBack }) {
       {streak >= 2 && <div className="streak-badge">🔥 {streak} streak!</div>}
 
       <div className="quiz-card">
-        {/* Show planet image for image-to-name questions */}
         {q.type === 'image-to-name' && (
           <div className="quiz-img-wrap">
-            <img src={planetData?.img} alt="Mystery planet" className="quiz-planet-img" loading="lazy"/>
-            <div className="quiz-img-label">🔭 Real NASA Photo</div>
+            <img
+              src={imgData?.img} alt="Mystery object"
+              className={`quiz-planet-img${isGalaxyImg ? ' quiz-galaxy-img' : ''}`}
+              loading="lazy"
+            />
+            <div className="quiz-img-label">{imgLabel}</div>
           </div>
         )}
 
         <h3 className="quiz-question">{q.q}</h3>
 
-        {/* Hint for text questions */}
         {q.type === 'text-to-name' && picked && (
           <div className={`quiz-hint ${picked===correctAnswer?'hint-right':'hint-wrong'}`}>
             {picked===correctAnswer ? '✅ Correct! ' : `❌ The answer is ${correctAnswer}. `}
@@ -585,11 +860,12 @@ function QuizScreen({ onBack }) {
         )}
         {q.type === 'image-to-name' && picked && picked === correctAnswer && (
           <div className="quiz-hint hint-right">
-            ✅ Correct! That's <strong>{correctAnswer}</strong>! {PLANETS.find(p=>p.name===correctAnswer)?.facts[0]}
+            ✅ Correct! That's <strong>{correctAnswer}</strong>!{' '}
+            {PLANETS.find(p=>p.name===correctAnswer)?.facts[0] ||
+             GALAXIES.find(g=>g.name===correctAnswer)?.facts[0]}
           </div>
         )}
 
-        {/* Choices */}
         <div className="quiz-choices">
           {q.choices.map(choice => {
             const cp = PLANETS.find(p=>p.name===choice)
@@ -623,7 +899,7 @@ function QuizScreen({ onBack }) {
 }
 
 // ── Home Screen ────────────────────────────────────────────────────────────────
-function HomeScreen({ onExplore, onQuiz }) {
+function HomeScreen({ onExplore, onQuiz, onGalaxies }) {
   return (
     <div className="home">
       <Stars/>
@@ -638,21 +914,30 @@ function HomeScreen({ onExplore, onQuiz }) {
             ))}
           </div>
         </div>
-        <h1 className="home-title">🚀 Planet Explorer</h1>
-        <p className="home-sub">Discover our solar system with real NASA photos and learn amazing facts about every planet!</p>
+        <h1 className="home-title">🚀 Space Explorer</h1>
+        <p className="home-sub">Discover our solar system and the cosmos with real NASA &amp; Hubble photos!</p>
         <div className="home-modes">
           <button className="mode-card" onClick={() => { playClick(); onExplore() }}>
             <div className="mode-icon">🔭</div>
             <div className="mode-name">Explore Planets</div>
-            <div className="mode-desc">Browse all 8 planets with real photos, facts & stats</div>
+            <div className="mode-desc">Browse all 8 planets with real photos, facts &amp; stats</div>
           </button>
           <button className="mode-card quiz" onClick={() => { playClick(); onQuiz() }}>
             <div className="mode-icon">🧠</div>
-            <div className="mode-name">Planet Quiz</div>
+            <div className="mode-name">Space Quiz</div>
             <div className="mode-desc">Test your knowledge with 10 fun questions!</div>
           </button>
         </div>
-        <p className="home-footer">All photos courtesy of NASA · ESA · JPL</p>
+        <button className="mode-card galaxy-mode-card" onClick={() => { playClick(); onGalaxies() }}>
+          <div className="galaxy-mode-inner">
+            <div className="mode-icon">🌌</div>
+            <div>
+              <div className="mode-name">Explore Galaxies &amp; Hubble</div>
+              <div className="mode-desc">Real Hubble Space Telescope images of galaxies, nebulae &amp; deep space</div>
+            </div>
+          </div>
+        </button>
+        <p className="home-footer">All photos courtesy of NASA · ESA · Hubble Space Telescope</p>
       </div>
     </div>
   )
@@ -663,9 +948,10 @@ export default function App() {
   const [screen, setScreen] = useState('home')
   return (
     <div className="app">
-      {screen === 'home'    && <HomeScreen onExplore={() => setScreen('explore')} onQuiz={() => setScreen('quiz')}/>}
-      {screen === 'explore' && <ExploreScreen onBack={() => setScreen('home')}/>}
-      {screen === 'quiz'    && <QuizScreen onBack={() => setScreen('home')}/>}
+      {screen === 'home'     && <HomeScreen onExplore={() => setScreen('explore')} onQuiz={() => setScreen('quiz')} onGalaxies={() => setScreen('galaxies')}/>}
+      {screen === 'explore'  && <ExploreScreen onBack={() => setScreen('home')}/>}
+      {screen === 'quiz'     && <QuizScreen onBack={() => setScreen('home')}/>}
+      {screen === 'galaxies' && <GalaxiesScreen onBack={() => setScreen('home')}/>}
     </div>
   )
 }

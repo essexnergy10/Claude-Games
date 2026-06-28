@@ -403,6 +403,120 @@ body, #root {
 .st2-orb-label span { font-size: 10px; color: #546e7a; }
 .st2-ratio { font-size: 13px; color: #b0bec5; line-height: 1.6; }
 
+/* ════════════════════════════════════════════
+   GALAXIES SCREEN
+════════════════════════════════════════════ */
+.galaxies-screen {}
+
+/* Hubble intro banner */
+.hubble-banner {
+  display:flex; align-items:center; gap:18px;
+  background:linear-gradient(135deg,rgba(100,80,180,0.18),rgba(40,20,80,0.25));
+  border:1px solid rgba(160,120,255,0.25); border-radius:18px;
+  padding:18px 22px; margin-bottom:28px;
+}
+.hubble-banner-icon { font-size:36px; flex-shrink:0; }
+.hubble-banner-title { font-size:16px; font-weight:800; color:#ce93d8; margin-bottom:4px; }
+.hubble-banner-sub { font-size:13px; color:#90a4ae; line-height:1.6; }
+
+/* Galaxy cards grid */
+.galaxy-cards {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:18px;
+}
+.galaxy-card {
+  background:linear-gradient(145deg,#080e1f,#0a1228);
+  border:1px solid rgba(255,255,255,0.08); border-radius:18px;
+  overflow:hidden; cursor:pointer; text-align:left;
+  transition:transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  display:flex; flex-direction:column;
+}
+.galaxy-card:hover {
+  transform:translateY(-5px);
+  box-shadow:0 10px 40px rgba(0,0,0,0.6), 0 0 20px var(--gc,#fff)22;
+  border-color:var(--gc,#fff);
+}
+.galaxy-card-img-wrap { position:relative; overflow:hidden; }
+.galaxy-card-img {
+  width:100%; aspect-ratio:16/10; object-fit:cover;
+  display:block;
+  transition:transform 0.35s ease;
+}
+.galaxy-card:hover .galaxy-card-img { transform:scale(1.05); }
+.galaxy-hubble-chip {
+  position:absolute; top:10px; right:10px;
+  background:rgba(10,10,30,0.82); border:1px solid rgba(180,130,255,0.4);
+  border-radius:20px; padding:3px 10px;
+  font-size:10px; font-weight:800; color:#ce93d8; letter-spacing:0.5px;
+  backdrop-filter:blur(4px);
+}
+
+/* Galaxy Modal */
+.galaxy-modal { border-color:rgba(180,130,255,0.3) !important; padding:0 !important; overflow:hidden; }
+
+.galaxy-modal-hero {
+  position:relative; width:100%;
+  height:clamp(200px,40vw,320px);
+  overflow:hidden;
+}
+.galaxy-modal-img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  filter:brightness(0.85);
+}
+.galaxy-modal-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to top, rgba(5,13,26,0.96) 0%, rgba(5,13,26,0.5) 45%, transparent 100%);
+  display:flex; flex-direction:column; justify-content:flex-end;
+  padding:24px 28px 20px;
+}
+.galaxy-modal .modal-close { top:14px; right:14px; z-index:10; }
+
+.hubble-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  background:rgba(180,130,255,0.18); border:1px solid rgba(180,130,255,0.4);
+  border-radius:20px; padding:4px 12px;
+  font-size:11px; font-weight:800; color:#ce93d8;
+  margin-bottom:8px; align-self:flex-start;
+}
+.galaxy-modal-name {
+  font-size:clamp(20px,4vw,30px); font-weight:900; margin-bottom:2px;
+  text-shadow:0 2px 8px rgba(0,0,0,0.8);
+}
+.galaxy-modal-nick { font-size:14px; color:#90a4ae; margin-bottom:10px; }
+.galaxy-type-chip {
+  display:inline-block;
+  background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15);
+  border-radius:8px; padding:3px 10px;
+  font-size:11px; color:#b0bec5; align-self:flex-start;
+}
+.galaxy-stats { margin:20px 28px; }
+.galaxy-modal .modal-facts { margin:0 28px 16px; }
+.galaxy-modal .modal-funfact { margin:0 28px 28px; }
+
+/* Galaxy mode card on home screen */
+.galaxy-mode-card {
+  grid-column:1 / -1;
+  background:linear-gradient(135deg,#0d0820,#140a2e,#0a1228) !important;
+  border-color:rgba(180,130,255,0.25) !important;
+}
+.galaxy-mode-card:hover {
+  box-shadow:0 8px 32px rgba(180,130,255,0.25) !important;
+  border-color:rgba(180,130,255,0.5) !important;
+}
+.galaxy-mode-inner {
+  display:flex; align-items:center; gap:16px; width:100%;
+}
+.galaxy-mode-inner .mode-icon { font-size:44px; flex-shrink:0; }
+.galaxy-mode-inner div { text-align:left; }
+
+/* quiz-galaxy-img — wide rectangle instead of circle */
+.quiz-galaxy-img {
+  border-radius:14px !important;
+  width:320px !important; height:200px !important;
+  object-fit:cover;
+}
+
 /* ── Quiz Result ── */
 .quiz-result {
   min-height:100vh; display:flex; align-items:center; justify-content:center;
