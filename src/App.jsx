@@ -462,6 +462,176 @@ const UNIVERSE_ITEMS = [
   },
 ]
 
+// ── Space Facts for Kids ───────────────────────────────────────────────────────
+const SPACE_FACTS = [
+  {
+    id:'sun-size', emoji:'☀️', category:'scale', color:'#ffd740',
+    title:'The Sun Could Swallow 1.3 Million Earths',
+    body:'The Sun is so enormous that 1.3 million planet Earths could fit inside it. It contains 99.86% of all the mass in our entire solar system — everything else is just a tiny fraction!',
+    wow:'Imagine filling a football stadium with 1.3 million grapes — that\'s how many Earths fit inside the Sun!',
+  },
+  {
+    id:'light-speed', emoji:'⚡', category:'time', color:'#ffeb3b',
+    title:'Sunlight Takes 8 Minutes to Reach Us',
+    body:'Light travels at 300,000 km every second — so fast it could circle Earth 7.5 times in just one second! But the Sun is so far away that even light takes 8 minutes 20 seconds to arrive.',
+    wow:'If the Sun suddenly disappeared, we wouldn\'t know about it for over 8 minutes — the sky would still be bright!',
+  },
+  {
+    id:'stardust', emoji:'✨', category:'universe', color:'#ce93d8',
+    title:'You Are Literally Made of Stardust!',
+    body:'Almost every atom in your body — the carbon in your skin, the iron in your blood, the calcium in your bones — was forged inside a dying star billions of years ago. When that star exploded, it scattered atoms into space.',
+    wow:'You are a child of the stars! Every time you look up at the night sky, you\'re looking at your ancient relatives.',
+  },
+  {
+    id:'universe-age', emoji:'⏰', category:'time', color:'#82b1ff',
+    title:'The Universe is 13.8 Billion Years Old',
+    body:'The universe began with the Big Bang 13.8 billion years ago. Our Solar System only formed 4.6 billion years ago. Modern humans only appeared just 300,000 years ago — a tiny blip in cosmic history!',
+    wow:'If all of time were squeezed into one year, humans only appeared in the last 10 seconds of December 31st!',
+  },
+  {
+    id:'stars-count', emoji:'⭐', category:'scale', color:'#ffe082',
+    title:'More Stars Than Grains of Sand on Earth',
+    body:'The observable universe has an estimated 1 septillion stars — that\'s a 1 followed by 24 zeros! Scientists believe this is more than all the grains of sand on every beach on Earth combined.',
+    wow:'Every grain of sand on every beach represents about 10,000 stars — and there are 2 trillion galaxies, each with billions more!',
+  },
+  {
+    id:'saturn-float', emoji:'🪐', category:'planets', color:'#f0d080',
+    title:'Saturn Would Float on Water!',
+    body:'Saturn is made mostly of gases like hydrogen and helium, making it the least dense planet in our solar system. It\'s so light for its size that it would actually float if placed in a giant enough ocean!',
+    wow:'Saturn is the only planet in our solar system that is less dense than water — it\'s like a giant, gorgeous balloon!',
+  },
+  {
+    id:'silent-space', emoji:'🤫', category:'space', color:'#80deea',
+    title:'Space is Completely and Totally Silent',
+    body:'Sound needs air (or some material) to travel through. Since space is almost completely empty, there is absolutely no sound. Giant star explosions, galaxies colliding — all completely, eerily silent!',
+    wow:'The biggest explosions in the universe happen in total silence. A supernova — billions of times brighter than the Sun — produces no sound at all!',
+  },
+  {
+    id:'venus-day', emoji:'🌍', category:'planets', color:'#e8c94c',
+    title:'A Day on Venus Lasts Longer Than Its Year',
+    body:'Venus spins so slowly that one full rotation (one "day") takes 243 Earth days. But Venus completes its orbit around the Sun in just 225 Earth days — so its day is actually longer than its year!',
+    wow:'On Venus, the Sun rises in the WEST and sets in the EAST because Venus spins backwards compared to most other planets!',
+  },
+  {
+    id:'black-holes', emoji:'🕳️', category:'universe', color:'#b39ddb',
+    title:'Black Holes Are Invisible But Incredibly Powerful',
+    body:'A black hole has gravity so strong that nothing — not even light — can escape. This is why they\'re invisible! Scientists detect them by watching nearby stars being flung around at incredible speeds.',
+    wow:'The black hole at the centre of the Milky Way — Sagittarius A* — is 4 million times heavier than our Sun. It\'s sitting right in our own galaxy!',
+  },
+  {
+    id:'neptune-wind', emoji:'🌪️', category:'planets', color:'#3d7ebf',
+    title:'Neptune Has the Fastest Winds in the Solar System',
+    body:'Winds on Neptune can reach 2,100 km per hour — that\'s faster than the speed of sound on Earth! The most powerful hurricane ever recorded on Earth only reached about 305 km/h.',
+    wow:'A Neptune wind would make the world\'s fastest jet aircraft look like it\'s standing still. Imagine a storm 7× faster than any storm on Earth!',
+  },
+  {
+    id:'andromeda-crash', emoji:'💫', category:'universe', color:'#90caf9',
+    title:'Our Galaxy is Going to Crash into Andromeda!',
+    body:'The Andromeda Galaxy is heading straight toward the Milky Way at 110 km per second. In about 4.5 billion years, the two galaxies will slowly merge into one giant new galaxy.',
+    wow:'Don\'t panic! Galaxies are so spread out that almost no stars will actually collide — it\'s like two swarms of fireflies flying through each other!',
+  },
+  {
+    id:'moon-footprints', emoji:'👟', category:'space', color:'#90a4ae',
+    title:'Moon Footprints Have Lasted Over 55 Years',
+    body:'The Moon has no wind, no rain, and almost no atmosphere — so nothing wears things away. The footprints left by Apollo 11 astronauts in 1969 are still there today, perfectly preserved in the dust!',
+    wow:'Those footprints could last for millions of years unless a meteor hits that exact spot. The Moon is the universe\'s greatest time capsule!',
+  },
+  {
+    id:'jupiter-shield', emoji:'🛡️', category:'planets', color:'#e8a87c',
+    title:'Jupiter is Earth\'s Mighty Bodyguard',
+    body:'Jupiter is so massive that its powerful gravity acts like a shield for Earth. It attracts and captures asteroids and comets that might otherwise smash into our planet, preventing many catastrophic impacts.',
+    wow:'Without Jupiter\'s protective gravity, scientists think Earth would be hit by asteroids up to 1,000 times more often. We might not even exist!',
+  },
+  {
+    id:'big-bang', emoji:'💥', category:'universe', color:'#ffab40',
+    title:'The Big Bang Wasn\'t Actually a Bang!',
+    body:'The universe didn\'t start with an explosion in existing space. It started as an impossibly tiny, super-hot point, and space itself has been stretching and expanding ever since. There was no sound because there was no space yet!',
+    wow:'Everything that exists — all 2 trillion galaxies, all the stars, Earth, you — was once squished into something smaller than a grain of sand!',
+  },
+  {
+    id:'mars-volcano', emoji:'🌋', category:'planets', color:'#e57373',
+    title:'Mars Has the Tallest Volcano in the Solar System',
+    body:'Olympus Mons on Mars stands 21 km tall — almost 3 times the height of Mount Everest! It\'s 600 km wide, so if you stood on its slopes you wouldn\'t even know you\'re on a volcano because it\'s beyond the horizon.',
+    wow:'Olympus Mons is so wide and flat that from the surface it just looks like a gentle hill — you\'d never guess you\'re standing on the solar system\'s largest volcano!',
+  },
+  {
+    id:'galaxies-count', emoji:'🌌', category:'scale', color:'#b2ebf2',
+    title:'There Are 2 Trillion Galaxies in the Universe',
+    body:'In 2016, scientists revised their count upward from 200 billion to 2 trillion galaxies in the observable universe alone. Each galaxy contains hundreds of billions of stars. The numbers are almost beyond imagination!',
+    wow:'If you counted one galaxy every second without stopping, it would take you over 63,000 years just to count all 2 trillion galaxies!',
+  },
+  {
+    id:'light-past', emoji:'🔭', category:'time', color:'#a5d6a7',
+    title:'Looking at Stars Means Looking Back in Time',
+    body:'Light takes time to travel across space. When you look at a star 100 light-years away, you\'re seeing it as it looked 100 years ago. The Andromeda Galaxy is 2.5 million light-years away — we see it as it was 2.5 million years ago!',
+    wow:'Some stars you see tonight might not even exist anymore — they could have exploded thousands of years ago, but the news just hasn\'t reached us yet!',
+  },
+  {
+    id:'space-cold', emoji:'🥶', category:'space', color:'#80d8ff',
+    title:'Space is Incredibly Cold — Colder Than You Can Imagine',
+    body:'The background temperature of empty space is -270°C — just 3 degrees above absolute zero, the coldest temperature that is physically possible. But near stars, it can be millions of degrees hot!',
+    wow:'At absolute zero (-273°C), atoms almost completely stop moving. The background of space is only 3 degrees warmer than that extreme — space is basically a giant freezer!',
+  },
+]
+
+// ── Facts Quiz Questions ───────────────────────────────────────────────────────
+const FACT_QUESTIONS = [
+  { q:'How many Earths could fit inside the Sun?', type:'text-to-name', textChoices:true,
+    choices:['1.3 million','10,000','100 billion','50,000'],
+    answer:'1.3 million', hint:'The Sun contains 99.86% of all mass in the solar system!' },
+  { q:'How long does sunlight take to travel from the Sun to Earth?', type:'text-to-name', textChoices:true,
+    choices:['8 minutes','1 second','1 hour','24 hours'],
+    answer:'8 minutes', hint:'Light travels 300,000 km per second but the Sun is 150 million km away!' },
+  { q:'What are the atoms in your body mostly made from?', type:'text-to-name', textChoices:true,
+    choices:['Stardust from exploded stars','Earth rocks and minerals','Ocean water molecules','Oxygen from the Sun'],
+    answer:'Stardust from exploded stars', hint:'Every atom in you was forged inside a dying star billions of years ago!' },
+  { q:'How old is the universe?', type:'text-to-name', textChoices:true,
+    choices:['13.8 billion years','4.6 billion years','1 million years','100 billion years'],
+    answer:'13.8 billion years', hint:'The Big Bang happened 13.8 billion years ago — our Solar System only formed 4.6 billion years ago.' },
+  { q:'Which planet is the ONLY one in the solar system less dense than water (so it could float)?', type:'text-to-name', textChoices:true,
+    choices:['Saturn','Jupiter','Neptune','Uranus'],
+    answer:'Saturn', hint:'Saturn is made mostly of gas, making it lighter than you\'d expect for its huge size!' },
+  { q:'Why is space completely silent?', type:'text-to-name', textChoices:true,
+    choices:['No air to carry sound waves','It\'s too cold for sound','Stars absorb all sound','Black holes silence everything'],
+    answer:'No air to carry sound waves', hint:'Sound needs a material — like air or water — to travel through. Space is almost completely empty!' },
+  { q:'On Venus, in which direction does the Sun rise each morning?', type:'text-to-name', textChoices:true,
+    choices:['The West','The East','The North','It doesn\'t rise on Venus'],
+    answer:'The West', hint:'Venus spins backwards compared to most planets, so sunrises are in the west and sunsets are in the east!' },
+  { q:'What sits at the centre of our Milky Way galaxy?', type:'text-to-name', textChoices:true,
+    choices:['A supermassive black hole','Our Sun','A giant nebula','Another galaxy'],
+    answer:'A supermassive black hole', hint:'It\'s called Sagittarius A* and it weighs 4 million times more than our Sun!' },
+  { q:'Which planet has the fastest winds in the entire solar system — up to 2,100 km/h?', type:'text-to-name', textChoices:true,
+    choices:['Neptune','Saturn','Jupiter','Uranus'],
+    answer:'Neptune', hint:'Neptune\'s winds are actually faster than the speed of sound on Earth!' },
+  { q:'In how many years will the Andromeda Galaxy collide with the Milky Way?', type:'text-to-name', textChoices:true,
+    choices:['4.5 billion years','1 million years','50,000 years','100 trillion years'],
+    answer:'4.5 billion years', hint:'Don\'t panic — the galaxies are so spread out that almost no individual stars will actually collide!' },
+  { q:'Why are the Apollo Moon footprints from 1969 still perfectly preserved today?', type:'text-to-name', textChoices:true,
+    choices:['No wind or rain on the Moon','The astronauts used special boots','NASA sprayed a protective coat','The Moon\'s temperature preserves them'],
+    answer:'No wind or rain on the Moon', hint:'The Moon has almost no atmosphere, so nothing can erode the footprints — they could last millions of years!' },
+  { q:'Why is Jupiter called Earth\'s bodyguard?', type:'text-to-name', textChoices:true,
+    choices:['Its gravity attracts asteroids away from Earth','It generates Earth\'s magnetic field','It blocks harmful solar rays','It produces Earth\'s oxygen'],
+    answer:'Its gravity attracts asteroids away from Earth', hint:'Without Jupiter\'s protection, Earth would be struck by asteroids up to 1,000 times more often!' },
+  { q:'What was the size of everything in the universe just before the Big Bang?', type:'text-to-name', textChoices:true,
+    choices:['Smaller than a grain of sand','The size of our Solar System','The size of the Milky Way','The size of Earth'],
+    answer:'Smaller than a grain of sand', hint:'All 2 trillion galaxies, every star, and even you — once compressed into a point smaller than a grain of sand!' },
+  { q:'How tall is Olympus Mons, the tallest volcano in the solar system, on Mars?', type:'text-to-name', textChoices:true,
+    choices:['21 km','8.8 km','55 km','3 km'],
+    answer:'21 km', hint:'It\'s nearly 3 times the height of Mount Everest! It\'s so wide (600km) that from the surface you can\'t see the top.' },
+  { q:'How many galaxies are in the observable universe?', type:'text-to-name', textChoices:true,
+    choices:['2 trillion','200 million','10 billion','500 billion'],
+    answer:'2 trillion', hint:'Scientists revised this estimate in 2016 — there are 10 times more galaxies than previously thought!' },
+  { q:'When you look at a star 100 light-years away, what are you actually seeing?', type:'text-to-name', textChoices:true,
+    choices:['The star as it looked 100 years ago','The star as it looks right now','A reflection of the star','The star\'s future light'],
+    answer:'The star as it looked 100 years ago', hint:'Light takes 100 years to travel 100 light-years — so you\'re always looking back in time when you look at stars!' },
+  { q:'What is the background temperature of empty space?', type:'text-to-name', textChoices:true,
+    choices:['-270°C','-10°C','0°C','-100°C'],
+    answer:'-270°C', hint:'This is just 3 degrees above absolute zero — the coldest temperature that is physically possible in the universe!' },
+  { q:'What is the number of stars in the observable universe compared to Earth\'s sand grains?', type:'text-to-name', textChoices:true,
+    choices:['More stars than sand grains','Fewer stars than sand grains','Exactly the same number','About twice as many sand grains'],
+    answer:'More stars than sand grains', hint:'There are about 10²⁴ stars — more than every grain of sand on every beach on Earth combined!' },
+]
+
 // ── Quiz questions ─────────────────────────────────────────────────────────────
 const QUESTIONS = [
   { q:'What is this planet?', type:'image-to-name', planet:'mercury', choices:['Mercury','Venus','Mars','Earth'] },
@@ -906,8 +1076,8 @@ function GalaxiesScreen({ onBack }) {
 }
 
 // ── Quiz Screen ────────────────────────────────────────────────────────────────
-function QuizScreen({ onBack }) {
-  const [questions] = useState(() => shuffle(QUESTIONS).slice(0, 10))
+function QuizScreen({ onBack, questionPool = QUESTIONS }) {
+  const [questions] = useState(() => shuffle(questionPool).slice(0, Math.min(10, questionPool.length)))
   const [qi, setQi] = useState(0)
   const [picked, setPicked] = useState(null)
   const [score, setScore] = useState(0)
@@ -1043,8 +1213,82 @@ function QuizScreen({ onBack }) {
   )
 }
 
+// ── Facts Screen ───────────────────────────────────────────────────────────────
+const FACT_CATEGORIES = [
+  { key:'all', label:'All Facts', emoji:'🌠' },
+  { key:'planets', label:'Planets', emoji:'🌍' },
+  { key:'universe', label:'Universe', emoji:'💫' },
+  { key:'scale', label:'Scale', emoji:'📏' },
+  { key:'time', label:'Time', emoji:'⏰' },
+  { key:'space', label:'Space', emoji:'🚀' },
+]
+
+function FactsScreen({ onBack, onQuiz }) {
+  const [filter, setFilter] = useState('all')
+  const visible = filter === 'all' ? SPACE_FACTS : SPACE_FACTS.filter(f => f.category === filter)
+
+  return (
+    <div className="facts-screen">
+      <div className="explore-header">
+        <button className="back-btn" onClick={onBack}>← Back</button>
+        <h2 className="explore-title">📖 Fun Space Facts</h2>
+        <p className="explore-sub">Mind-blowing facts about the universe — for curious minds!</p>
+      </div>
+
+      <div className="facts-banner">
+        <div className="facts-banner-emoji">🌠</div>
+        <div className="facts-banner-text">
+          <div className="facts-banner-title">Did You Know?</div>
+          <div className="facts-banner-sub">
+            The universe is so vast and strange that even the most incredible-sounding facts are completely true.
+            Read them all, then take the quiz to see how much you remember!
+          </div>
+        </div>
+      </div>
+
+      <div className="fact-filters">
+        {FACT_CATEGORIES.map(cat => (
+          <button
+            key={cat.key}
+            className={`fact-filter-btn${filter===cat.key?' active':''}`}
+            onClick={() => { playClick(); setFilter(cat.key) }}
+          >
+            {cat.emoji} {cat.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="facts-count">{visible.length} fact{visible.length!==1?'s':''}</div>
+
+      <div className="facts-grid">
+        {visible.map(fact => (
+          <div key={fact.id} className="fact-card" style={{ '--fc': fact.color }}>
+            <div className="fact-card-top">
+              <div className="fact-card-emoji">{fact.emoji}</div>
+              <div className="fact-card-cat-chip">{FACT_CATEGORIES.find(c=>c.key===fact.category)?.label}</div>
+            </div>
+            <div className="fact-card-title" style={{ color: fact.color }}>{fact.title}</div>
+            <div className="fact-card-body">{fact.body}</div>
+            <div className="fact-wow">
+              <span className="fact-wow-icon">💡</span>
+              <span className="fact-wow-text"><strong>Think About It: </strong>{fact.wow}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="facts-quiz-footer">
+        <div className="facts-quiz-footer-text">Finished reading? Test what you remember!</div>
+        <button className="facts-quiz-btn" onClick={() => { playClick(); onQuiz() }}>
+          🧠 Take the Universe Quiz!
+        </button>
+      </div>
+    </div>
+  )
+}
+
 // ── Home Screen ────────────────────────────────────────────────────────────────
-function HomeScreen({ onExplore, onQuiz, onGalaxies }) {
+function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts }) {
   return (
     <div className="home">
       <Stars/>
@@ -1082,6 +1326,15 @@ function HomeScreen({ onExplore, onQuiz, onGalaxies }) {
             </div>
           </div>
         </button>
+        <button className="mode-card facts-mode-card" onClick={() => { playClick(); onFacts() }}>
+          <div className="galaxy-mode-inner">
+            <div className="mode-icon">📖</div>
+            <div>
+              <div className="mode-name">Fun Space Facts for Kids</div>
+              <div className="mode-desc">18 mind-blowing universe facts with fun comparisons — then take the quiz!</div>
+            </div>
+          </div>
+        </button>
         <p className="home-footer">All photos courtesy of NASA · ESA · Hubble Space Telescope</p>
       </div>
     </div>
@@ -1093,10 +1346,12 @@ export default function App() {
   const [screen, setScreen] = useState('home')
   return (
     <div className="app">
-      {screen === 'home'     && <HomeScreen onExplore={() => setScreen('explore')} onQuiz={() => setScreen('quiz')} onGalaxies={() => setScreen('galaxies')}/>}
-      {screen === 'explore'  && <ExploreScreen onBack={() => setScreen('home')}/>}
-      {screen === 'quiz'     && <QuizScreen onBack={() => setScreen('home')}/>}
-      {screen === 'galaxies' && <GalaxiesScreen onBack={() => setScreen('home')}/>}
+      {screen === 'home'      && <HomeScreen onExplore={() => setScreen('explore')} onQuiz={() => setScreen('quiz')} onGalaxies={() => setScreen('galaxies')} onFacts={() => setScreen('facts')}/>}
+      {screen === 'explore'   && <ExploreScreen onBack={() => setScreen('home')}/>}
+      {screen === 'quiz'      && <QuizScreen onBack={() => setScreen('home')}/>}
+      {screen === 'galaxies'  && <GalaxiesScreen onBack={() => setScreen('home')}/>}
+      {screen === 'facts'     && <FactsScreen onBack={() => setScreen('home')} onQuiz={() => setScreen('factsquiz')}/>}
+      {screen === 'factsquiz' && <QuizScreen onBack={() => setScreen('facts')} questionPool={FACT_QUESTIONS}/>}
     </div>
   )
 }
