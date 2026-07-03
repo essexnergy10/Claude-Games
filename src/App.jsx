@@ -363,6 +363,105 @@ const GALAXIES = [
   },
 ]
 
+// ── Observable Universe data ──────────────────────────────────────────────────
+const UNIVERSE_ITEMS = [
+  {
+    id:'observable-universe', name:'The Observable Universe', nickname:'Everything We Can See',
+    type:'Observable Universe',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Observable_Universe_with_Measurements_01.png/500px-Observable_Universe_with_Measurements_01.png',
+    thumbLg:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Observable_Universe_with_Measurements_01.png/1280px-Observable_Universe_with_Measurements_01.png',
+    img:'https://upload.wikimedia.org/wikipedia/commons/9/98/Observable_Universe_with_Measurements_01.png',
+    color:'#82b1ff',
+    distance:'46.5 billion light-years (radius)', diameter:'93 billion light-years across',
+    stars:'~1 septillion (10²⁴)', constellation:'All of them', age:'~13.8 billion years',
+    hubble:false,
+    facts:[
+      'The observable universe is a sphere ~93 billion light-years in diameter centred on Earth',
+      'It contains an estimated 2 trillion galaxies — 10× more than scientists thought before 2016',
+      'The universe is 13.8 billion years old, but is far larger because space itself has expanded',
+      'Light from the edge of the observable universe has been travelling since 380,000 years after the Big Bang',
+      'The universe is not the same as the total universe — we can only see as far as light has had time to reach us',
+    ],
+    funFact:'The total universe may be 250 times larger than the observable part — or even infinite!',
+  },
+  {
+    id:'cmb', name:'Cosmic Microwave Background', nickname:'The Afterglow of the Big Bang',
+    type:'Electromagnetic Radiation Map',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Cosmic_Microwave_Background_%28CMB%29.jpeg/500px-Cosmic_Microwave_Background_%28CMB%29.jpeg',
+    thumbLg:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Cosmic_Microwave_Background_%28CMB%29.jpeg/1280px-Cosmic_Microwave_Background_%28CMB%29.jpeg',
+    img:'https://upload.wikimedia.org/wikipedia/commons/0/04/Cosmic_Microwave_Background_%28CMB%29.jpeg',
+    color:'#ffab40',
+    distance:'46.5 billion light-years', diameter:'The full sky',
+    stars:'N/A (pre-dates stars)', constellation:'The entire sky', age:'380,000 years after Big Bang',
+    hubble:false,
+    facts:[
+      'The CMB is ancient light — the oldest light in the universe, emitted just 380,000 years after the Big Bang',
+      'It is detected as faint microwave radiation coming equally from every direction in the sky',
+      'The temperature variations (just 0.00001°C) reveal the seeds that grew into today\'s galaxies and clusters',
+      'First accidentally discovered in 1965 by Penzias and Wilson, earning them the Nobel Prize',
+      'NASA\'s WMAP and ESA\'s Planck satellites mapped it in extraordinary detail',
+    ],
+    funFact:'Your microwave oven uses the same frequency of radiation as the Cosmic Microwave Background!',
+  },
+  {
+    id:'ultra-deep-field', name:'Hubble Ultra Deep Field', nickname:'The Deepest View Ever',
+    type:'Ultra-Deep Hubble Image',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Hubble_ultra_deep_field_high_rez_edit1.jpg/500px-Hubble_ultra_deep_field_high_rez_edit1.jpg',
+    thumbLg:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Hubble_ultra_deep_field_high_rez_edit1.jpg/1280px-Hubble_ultra_deep_field_high_rez_edit1.jpg',
+    img:'https://upload.wikimedia.org/wikipedia/commons/0/0d/Hubble_ultra_deep_field_high_rez_edit1.jpg',
+    color:'#ffe082',
+    distance:'Galaxies from 13+ billion light-years away', diameter:'Covers 3.1 arcminutes of sky',
+    stars:'~10,000 galaxies visible', constellation:'Fornax', age:'Galaxies as old as 400–800M years after Big Bang',
+    hubble:true,
+    facts:[
+      'Created by pointing Hubble at a tiny patch of apparently empty sky for 11.3 days in 2003–2004',
+      'Revealed nearly 10,000 galaxies in a speck of sky — the most detailed view of the early universe',
+      'Some galaxies shown are seen as they were only 400–800 million years after the Big Bang',
+      'The patch of sky is equivalent to a 1mm × 1mm square held 1 metre from your eye',
+      'The James Webb Space Telescope\'s JWST Deep Field (2022) went even deeper and further back in time',
+    ],
+    funFact:'If you covered the entire night sky with Ultra Deep Field images, you\'d find 100–200 billion galaxies!',
+  },
+  {
+    id:'laniakea', name:'Laniakea Supercluster', nickname:'Our Cosmic Home',
+    type:'Galactic Supercluster',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/07-Laniakea_%28LofE07240%29.png/500px-07-Laniakea_%28LofE07240%29.png',
+    thumbLg:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/07-Laniakea_%28LofE07240%29.png/1280px-07-Laniakea_%28LofE07240%29.png',
+    img:'https://upload.wikimedia.org/wikipedia/commons/8/81/07-Laniakea_%28LofE07240%29.png',
+    color:'#80cbc4',
+    distance:'250 million light-years across', diameter:'520 million light-years',
+    stars:'Hundreds of trillions', constellation:'Spans many constellations', age:'~13.8 billion years',
+    hubble:false,
+    facts:[
+      'Laniakea means "immeasurable heaven" in Hawaiian — named by discoverer Brent Tully in 2014',
+      'The Milky Way is a tiny speck on the outer edge of this vast supercluster',
+      'It contains 100,000 large galaxies and has the mass of 100 quadrillion Suns',
+      'Everything within Laniakea flows gravitationally toward the Great Attractor — a mysterious dense region',
+      'Laniakea is itself just one of millions of superclusters in the observable universe',
+    ],
+    funFact:'Our "home address" in the universe: Earth → Solar System → Milky Way → Local Group → Virgo Cluster → Laniakea!',
+  },
+  {
+    id:'cosmic-web', name:'The Cosmic Web', nickname:'The Skeleton of the Universe',
+    type:'Large-Scale Structure',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/WMAP_2012.png/500px-WMAP_2012.png',
+    thumbLg:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/WMAP_2012.png/1280px-WMAP_2012.png',
+    img:'https://upload.wikimedia.org/wikipedia/commons/e/ed/WMAP_2012.png',
+    color:'#b39ddb',
+    distance:'Spans the entire observable universe', diameter:'93 billion light-years',
+    stars:'All stars in the universe', constellation:'All constellations', age:'~13.8 billion years',
+    hubble:false,
+    facts:[
+      'The cosmic web is the largest known structure in the universe — a vast network of filaments and voids',
+      'Galaxies cluster along the filaments like beads on a string, while vast empty voids separate them',
+      'The web formed from tiny density fluctuations in the early universe amplified by dark matter and gravity',
+      'Simulations like the Millennium Simulation reproduce the cosmic web from basic physics alone',
+      'Dark matter forms the scaffolding of the cosmic web — ordinary matter clumps along it',
+    ],
+    funFact:'Strikingly, the cosmic web looks almost identical to the neural networks in a human brain!',
+  },
+]
+
 // ── Quiz questions ─────────────────────────────────────────────────────────────
 const QUESTIONS = [
   { q:'What is this planet?', type:'image-to-name', planet:'mercury', choices:['Mercury','Venus','Mars','Earth'] },
@@ -603,9 +702,9 @@ function GalaxyModal({ galaxy, onClose }) {
 
         <div className="modal-stats galaxy-stats">
           <div className="stat"><span className="stat-label">Distance</span><span>{galaxy.distance}</span></div>
-          <div className="stat"><span className="stat-label">Diameter</span><span>{galaxy.diameter}</span></div>
-          <div className="stat"><span className="stat-label">Stars</span><span>{galaxy.stars}</span></div>
-          <div className="stat"><span className="stat-label">Constellation</span><span>{galaxy.constellation}</span></div>
+          <div className="stat"><span className="stat-label">Size</span><span>{galaxy.diameter}</span></div>
+          <div className="stat"><span className="stat-label">Stars / Objects</span><span>{galaxy.stars}</span></div>
+          <div className="stat"><span className="stat-label">Location</span><span>{galaxy.constellation}</span></div>
           <div className="stat"><span className="stat-label">Age</span><span>{galaxy.age}</span></div>
           <div className="stat"><span className="stat-label">Type</span><span>{galaxy.type}</span></div>
         </div>
@@ -741,6 +840,27 @@ function ExploreScreen({ onBack }) {
 function GalaxiesScreen({ onBack }) {
   const [selected, setSelected] = useState(null)
 
+  const GalaxyCard = ({ g }) => (
+    <button
+      className="galaxy-card"
+      style={{ '--gc': g.color }}
+      onClick={() => { playClick(); setSelected(g) }}
+    >
+      <div className="galaxy-card-img-wrap">
+        <img src={g.thumb} alt={g.name} className="galaxy-card-img" loading="lazy" decoding="async"
+          onLoad={e => e.currentTarget.classList.add('loaded')}
+        />
+        {g.hubble && <div className="galaxy-hubble-chip">🔭 Hubble</div>}
+      </div>
+      <div className="card-body">
+        <div className="card-name" style={{color:g.color}}>{g.name}</div>
+        <div className="card-nick">{g.nickname}</div>
+        <div className="card-row"><span>📍 {g.distance}</span></div>
+        <div className="card-type">{g.type}</div>
+      </div>
+    </button>
+  )
+
   return (
     <div className="explore galaxies-screen">
       <div className="explore-header">
@@ -763,29 +883,21 @@ function GalaxiesScreen({ onBack }) {
 
       {/* Galaxy cards grid */}
       <div className="galaxy-cards">
-        {GALAXIES.map(g => (
-          <button
-            key={g.id}
-            className="galaxy-card"
-            style={{ '--gc': g.color }}
-            onClick={() => { playClick(); setSelected(g) }}
-          >
-            <div className="galaxy-card-img-wrap">
-              <img src={g.thumb} alt={g.name} className="galaxy-card-img" loading="lazy" decoding="async"
-                onLoad={e => e.currentTarget.classList.add('loaded')}
-              />
-              {g.hubble && <div className="galaxy-hubble-chip">🔭 Hubble</div>}
-            </div>
-            <div className="card-body">
-              <div className="card-name" style={{color:g.color}}>{g.name}</div>
-              <div className="card-nick">{g.nickname}</div>
-              <div className="card-row">
-                <span>📍 {g.distance}</span>
-              </div>
-              <div className="card-type">{g.type}</div>
-            </div>
-          </button>
-        ))}
+        {GALAXIES.map(g => <GalaxyCard key={g.id} g={g}/>)}
+      </div>
+
+      {/* Observable Universe section */}
+      <div className="universe-section">
+        <div className="universe-section-header">
+          <div className="universe-section-icon">🌐</div>
+          <div>
+            <div className="universe-section-title">The Observable Universe</div>
+            <div className="universe-section-sub">The full scale of everything we can see — from superclusters to the cosmic web</div>
+          </div>
+        </div>
+        <div className="galaxy-cards">
+          {UNIVERSE_ITEMS.map(g => <GalaxyCard key={g.id} g={g}/>)}
+        </div>
       </div>
 
       {selected && <GalaxyModal galaxy={selected} onClose={() => setSelected(null)}/>}

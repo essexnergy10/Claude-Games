@@ -522,6 +522,18 @@ body, #root {
 .galaxy-mode-inner .mode-icon { font-size:44px; flex-shrink:0; }
 .galaxy-mode-inner div { text-align:left; }
 
+/* Observable Universe section */
+.universe-section { margin-top: 48px; }
+.universe-section-header {
+  display:flex; align-items:center; gap:16px;
+  background:linear-gradient(135deg,rgba(80,100,200,0.15),rgba(120,60,200,0.12));
+  border:1px solid rgba(130,177,255,0.2); border-radius:18px;
+  padding:18px 22px; margin-bottom:20px;
+}
+.universe-section-icon { font-size:38px; flex-shrink:0; }
+.universe-section-title { font-size:18px; font-weight:900; color:#82b1ff; margin-bottom:4px; }
+.universe-section-sub { font-size:13px; color:#78909c; line-height:1.5; }
+
 /* Full resolution image link in galaxy modal */
 .full-img-btn {
   display:block; margin:0 28px 28px;
