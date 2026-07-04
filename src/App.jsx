@@ -462,6 +462,86 @@ const UNIVERSE_ITEMS = [
   },
 ]
 
+// ── Black Holes ────────────────────────────────────────────────────────────────
+const BLACK_HOLES = [
+  {
+    id:'m87-bh', name:'M87* Black Hole', nickname:'The First Ever Photographed',
+    type:'Supermassive Black Hole',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Black_hole_-_Messier_87_crop_max_res.jpg/500px-Black_hole_-_Messier_87_crop_max_res.jpg',
+    thumbLg:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Black_hole_-_Messier_87_crop_max_res.jpg/1280px-Black_hole_-_Messier_87_crop_max_res.jpg',
+    img:'https://upload.wikimedia.org/wikipedia/commons/4/4f/Black_hole_-_Messier_87_crop_max_res.jpg',
+    color:'#ffab40',
+    distance:'55 million light-years', diameter:'Event horizon ~38 billion km',
+    stars:'6.5 billion solar masses', constellation:'Virgo', age:'Ancient — billions of years',
+    hubble:false,
+    facts:[
+      'This is the FIRST black hole ever photographed — the historic image was released in April 2019',
+      'Captured by the Event Horizon Telescope: 8 radio telescopes around the world working as one Earth-sized telescope',
+      'It weighs as much as 6.5 billion Suns',
+      'The glowing orange ring is superheated gas swirling around the event horizon at near light-speed',
+      'The dark centre is the black hole\'s "shadow" — the point of no return for light itself',
+    ],
+    funFact:'The photo took 2 years to process and needed half a tonne of hard drives to store all the data!',
+  },
+  {
+    id:'sgr-a', name:'Sagittarius A*', nickname:'Our Own Black Hole',
+    type:'Supermassive Black Hole',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/EHT_Saggitarius_A_black_hole.tif/lossy-page1-500px-EHT_Saggitarius_A_black_hole.tif.jpg',
+    thumbLg:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/EHT_Saggitarius_A_black_hole.tif/lossy-page1-1280px-EHT_Saggitarius_A_black_hole.tif.jpg',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/EHT_Saggitarius_A_black_hole.tif/lossy-page1-3840px-EHT_Saggitarius_A_black_hole.tif.jpg',
+    color:'#ff7043',
+    distance:'26,000 light-years', diameter:'Event horizon ~24 million km',
+    stars:'4.15 million solar masses', constellation:'Sagittarius', age:'~13 billion years',
+    hubble:false,
+    facts:[
+      'This is the supermassive black hole at the centre of OUR galaxy, the Milky Way',
+      'Photographed by the Event Horizon Telescope in 2022 — the second black hole ever imaged',
+      'It weighs about 4.15 million times more than our Sun',
+      'Stars near it orbit at up to 24,000 km per second — the fastest-moving stars known',
+      'Two astronomers won the 2020 Nobel Prize for proving it exists by tracking those stars',
+    ],
+    funFact:'Don\'t worry — at 26,000 light-years away, it\'s far too distant to ever pull Earth in!',
+  },
+  {
+    id:'cygnus-x1', name:'Cygnus X-1', nickname:'The First Black Hole Discovered',
+    type:'Stellar-Mass Black Hole',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Black_hole_Cygnus_X-1.jpg/500px-Black_hole_Cygnus_X-1.jpg',
+    thumbLg:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Black_hole_Cygnus_X-1.jpg/1280px-Black_hole_Cygnus_X-1.jpg',
+    img:'https://upload.wikimedia.org/wikipedia/commons/9/98/Black_hole_Cygnus_X-1.jpg',
+    color:'#4fc3f7',
+    distance:'7,200 light-years', diameter:'Event horizon ~124 km',
+    stars:'21 solar masses', constellation:'Cygnus', age:'~5 million years',
+    hubble:false,
+    facts:[
+      'The first object widely accepted to be a black hole — discovered in 1964',
+      'It formed when a giant star collapsed at the end of its life',
+      'It\'s stealing gas from a blue supergiant companion star orbiting right next to it (shown in this artist\'s illustration)',
+      'The stolen gas heats to millions of degrees and blasts out X-rays we can detect from Earth',
+      'Famous physicist Stephen Hawking bet it was NOT a black hole — and happily lost the bet in 1990',
+    ],
+    funFact:'Cygnus X-1 spins about 800 times per second — one of the fastest-spinning black holes known!',
+  },
+  {
+    id:'ton-618', name:'TON 618', nickname:'The Ultramassive Monster',
+    type:'Ultramassive Black Hole / Quasar',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/e/e1/TON_618_SDSS9_version_3.jpg',
+    thumbLg:'https://upload.wikimedia.org/wikipedia/commons/e/e1/TON_618_SDSS9_version_3.jpg',
+    img:'https://upload.wikimedia.org/wikipedia/commons/e/e1/TON_618_SDSS9_version_3.jpg',
+    color:'#ce93d8',
+    distance:'18.2 billion light-years', diameter:'Event horizon ~390 billion km',
+    stars:'~40 billion solar masses', constellation:'Canes Venatici', age:'Over 10 billion years',
+    hubble:false,
+    facts:[
+      'One of the most massive black holes ever found — about 40 BILLION solar masses',
+      'Its event horizon is so big that our entire solar system would be a tiny dot inside it',
+      'It powers a quasar — a beam of light 140 trillion times brighter than the Sun',
+      'Light takes about 3 weeks just to cross its event horizon',
+      'It\'s so far away that the light we see left it before Earth even existed',
+    ],
+    funFact:'TON 618 is so enormous that 1,000 of our Milky Way\'s central black holes (Sgr A*) would fit inside it — with room to spare!',
+  },
+]
+
 // ── Space Facts for Kids ───────────────────────────────────────────────────────
 const SPACE_FACTS = [
   {
@@ -698,6 +778,14 @@ const QUESTIONS = [
   { q:'What is this iconic Hubble image called?', type:'image-to-name', galaxy:'pillars', choices:['Pillars of Creation','Hubble Deep Field','Cat\'s Eye Nebula','Crab Nebula'], answer:'Pillars of Creation' },
   { q:'What famous image is this?', type:'image-to-name', galaxy:'deep-field', choices:['Hubble Deep Field','Pillars of Creation','Andromeda Galaxy','Triangulum Galaxy'], answer:'Hubble Deep Field' },
   { q:'Which galaxy is this?', type:'image-to-name', galaxy:'pinwheel', choices:['Pinwheel Galaxy','Whirlpool Galaxy','Triangulum Galaxy','NGC 1300'], answer:'Pinwheel Galaxy' },
+
+  // ── Black hole questions ──────────────────────────────────────────────────
+  { q:'What was the first black hole ever photographed (in 2019)?', type:'text-to-name', choices:['M87*','Sagittarius A*','Cygnus X-1','TON 618'], answer:'M87*', hint:'The Event Horizon Telescope captured this historic image in the galaxy Messier 87!', textChoices:true },
+  { q:'What is the name of the supermassive black hole at the centre of our Milky Way?', type:'text-to-name', choices:['Sagittarius A*','M87*','Cygnus X-1','TON 618'], answer:'Sagittarius A*', hint:'It sits 26,000 light-years away in the constellation Sagittarius.', textChoices:true },
+  { q:'Why are black holes invisible?', type:'text-to-name', choices:['Not even light can escape their gravity','They are too small to see','They are hidden behind dust','They only exist in other galaxies'], answer:'Not even light can escape their gravity', hint:'Anything crossing the event horizon — including light — can never come back out!', textChoices:true },
+  { q:'How massive is TON 618, one of the largest black holes known?', type:'text-to-name', choices:['~40 billion solar masses','~100 solar masses','~1 million solar masses','~21 solar masses'], answer:'~40 billion solar masses', hint:'It\'s an ultramassive monster — thousands of times heavier than our galaxy\'s central black hole!', textChoices:true },
+  { q:'Which black hole is this — the first ever photographed?', type:'image-to-name', galaxy:'m87-bh', choices:['M87* Black Hole','Sagittarius A*','Cygnus X-1','TON 618'], answer:'M87* Black Hole' },
+  { q:'Which black hole is this — at the centre of OUR galaxy?', type:'image-to-name', galaxy:'sgr-a', choices:['Sagittarius A*','M87* Black Hole','Cygnus X-1','TON 618'], answer:'Sagittarius A*' },
 ]
 
 // ── Stephenson 2-18 data ──────────────────────────────────────────────────────
@@ -1056,6 +1144,20 @@ function GalaxiesScreen({ onBack }) {
         {GALAXIES.map(g => <GalaxyCard key={g.id} g={g}/>)}
       </div>
 
+      {/* Black Holes section */}
+      <div className="universe-section blackholes-section">
+        <div className="universe-section-header">
+          <div className="universe-section-icon">🕳️</div>
+          <div>
+            <div className="universe-section-title">Black Holes</div>
+            <div className="universe-section-sub">Real photographed black holes — where gravity is so strong that even light cannot escape</div>
+          </div>
+        </div>
+        <div className="galaxy-cards">
+          {BLACK_HOLES.map(g => <GalaxyCard key={g.id} g={g}/>)}
+        </div>
+      </div>
+
       {/* Observable Universe section */}
       <div className="universe-section">
         <div className="universe-section-header">
@@ -1085,7 +1187,7 @@ function QuizScreen({ onBack, questionPool = QUESTIONS }) {
   const [streak, setStreak] = useState(0)
 
   const q = questions[qi]
-  const _raw = PLANETS.find(p => p.id === q.planet) || GALAXIES.find(g => g.id === q.galaxy)
+  const _raw = PLANETS.find(p => p.id === q.planet) || GALAXIES.find(g => g.id === q.galaxy) || BLACK_HOLES.find(b => b.id === q.galaxy)
   const imgData = _raw && q.galaxy ? { ..._raw, img: _raw.thumb } : _raw
   const correctAnswer = q.answer ?? (q.planet ? q.planet.charAt(0).toUpperCase()+q.planet.slice(1) : '')
 
