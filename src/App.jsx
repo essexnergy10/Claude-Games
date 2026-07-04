@@ -1213,6 +1213,433 @@ function QuizScreen({ onBack, questionPool = QUESTIONS }) {
   )
 }
 
+// ── Walli's Adventure Game ────────────────────────────────────────────────────
+
+function WalliSays({ text }) {
+  return (
+    <div className="walli-says-wrap">
+      <div className="walli-char-icon">🧑‍🚀</div>
+      <div className="walli-bubble">
+        <span className="walli-name-chip">Walli</span>
+        <p>{text}</p>
+      </div>
+    </div>
+  )
+}
+
+function GameFact({ icon, text }) {
+  return (
+    <div className="game-fact-box">
+      <span className="gfb-icon">{icon}</span>
+      <span className="gfb-text"><strong>Fun Fact: </strong>{text}</span>
+    </div>
+  )
+}
+
+function BadgeScreen({ badge, message, onNext }) {
+  return (
+    <div className="badge-screen">
+      <div className="badge-glow">🏅</div>
+      <div className="badge-name">{badge}</div>
+      <div className="badge-msg">{message}</div>
+      <button className="game-btn" onClick={() => { playClick(); onNext() }}>Continue →</button>
+    </div>
+  )
+}
+
+// ── Scene: Opening Intro ───────────────────────────────────────────────────────
+function IntroScene({ onDone }) {
+  const LINES = [
+    { type:'narrator', text:'Welcome to Walli\'s Space World!' },
+    { type:'walli',    text:'Hi, Explorer! My name is Walli, and today we\'re going on the greatest adventure ever!' },
+    { type:'walli',    text:'Have you ever wondered what it\'s like to walk on the Moon, fly past Saturn\'s rings, or discover a brand-new planet?' },
+    { type:'walli',    text:'Well... today is your chance!' },
+    { type:'walli',    text:'Together, we\'ll travel through space, meet amazing friends, solve exciting missions, and learn incredible facts about our universe.' },
+    { type:'walli',    text:'Are you ready? Let\'s count down together! 🚀' },
+  ]
+  const [idx, setIdx] = useState(0)
+
+  const advance = () => {
+    playClick()
+    if (idx < LINES.length - 1) setIdx(i => i + 1)
+    else onDone()
+  }
+
+  const line = LINES[idx]
+  return (
+    <div className="intro-scene" onClick={advance}>
+      <div className="intro-rocket-art">
+        <div className="intro-stars-bg">{'✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧'}</div>
+        <div className="intro-rocket-emoji">🚀</div>
+        <div className="intro-launch-pad">▬▬▬▬▬</div>
+      </div>
+      {line.type === 'narrator'
+        ? <div className="narrator-box"><p>{line.text}</p></div>
+        : <WalliSays text={line.text} />
+      }
+      <div className="tap-hint">👆 Tap anywhere to continue</div>
+      <div className="scene-dots">
+        {LINES.map((_,i) => <span key={i} className={`scene-dot ${i === idx ? 'active' : i < idx ? 'done' : ''}`}/>)}
+      </div>
+    </div>
+  )
+}
+
+// ── Scene: Countdown ──────────────────────────────────────────────────────────
+function CountdownScene({ onDone }) {
+  const [num, setNum] = useState(10)
+  const [blastOff, setBlastOff] = useState(false)
+
+  useEffect(() => {
+    if (blastOff) {
+      const t = setTimeout(onDone, 2200)
+      return () => clearTimeout(t)
+    }
+    const t = setTimeout(() => {
+      if (num > 1) {
+        tone(260 + num * 28, 0.25, 'sine', 0.2)
+        setNum(n => n - 1)
+      } else {
+        tone(880, 0.4, 'sine', 0.3)
+        tone(1100, 0.6, 'sine', 0.2, 0.1)
+        setBlastOff(true)
+      }
+    }, 750)
+    return () => clearTimeout(t)
+  }, [num, blastOff, onDone])
+
+  return (
+    <div className="countdown-scene">
+      {!blastOff ? (
+        <>
+          <div className="countdown-label">🚀 Launching in...</div>
+          <div className="countdown-num" key={num}>{num}</div>
+          <div className="countdown-rocket">🚀</div>
+        </>
+      ) : (
+        <div className="blastoff-wrap">
+          <div className="blastoff-rocket">🚀</div>
+          <div className="blastoff-text">BLAST OFF!!</div>
+          <div className="blastoff-sub">Hold on, Explorer!</div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Scene: Travel ─────────────────────────────────────────────────────────────
+function TravelScene({ to, walliText, factIcon, factText, onDone }) {
+  return (
+    <div className="travel-scene">
+      <div className="travel-header">Travelling to {to}...</div>
+      <div className="travel-rocket">🚀</div>
+      <WalliSays text={walliText} />
+      <GameFact icon={factIcon} text={factText} />
+      <button className="game-btn" style={{marginTop:28}} onClick={() => { playClick(); onDone() }}>
+        Arrive at {to} →
+      </button>
+    </div>
+  )
+}
+
+// ── Mission 1: Earth Launch Base ──────────────────────────────────────────────
+function Mission1({ onDone }) {
+  const ITEMS = [
+    { id:'suit',    emoji:'👨‍🚀', label:'Put on the astronaut suit' },
+    { id:'oxygen',  emoji:'🫧',  label:'Pack oxygen tanks' },
+    { id:'fuel',    emoji:'⛽',  label:'Fuel the rocket' },
+    { id:'belt',    emoji:'🔒',  label:'Fasten your seatbelt' },
+  ]
+  const [checked, setChecked] = useState([])
+  const tick = id => {
+    if (checked.includes(id)) return
+    playCorrect(); setChecked(c => [...c, id])
+  }
+  if (checked.length === ITEMS.length)
+    return <BadgeScreen badge="🏅 Official Space Explorer!" message="Excellent! You're now an official Space Explorer!" onNext={onDone} />
+
+  return (
+    <div className="game-mission">
+      <div className="mission-hdr"><span className="mission-planet-icon">🌍</span><span className="mission-title-text">Mission 1 · Earth Launch Base</span></div>
+      <WalliSays text="Before we leave Earth, every astronaut must complete their training. Can you help me?" />
+      <div className="checklist">
+        {ITEMS.map(it => (
+          <button key={it.id} className={`checklist-item${checked.includes(it.id) ? ' checked' : ''}`} onClick={() => tick(it.id)}>
+            <span className="cl-emoji">{it.emoji}</span>
+            <span className="cl-label">{it.label}</span>
+            <span className="cl-tick">{checked.includes(it.id) ? '✅' : '⬜'}</span>
+          </button>
+        ))}
+      </div>
+      <div className="mission-prog">{checked.length}/{ITEMS.length} complete</div>
+    </div>
+  )
+}
+
+// ── Mission 2: The Moon ───────────────────────────────────────────────────────
+function Mission2({ onDone }) {
+  const ITEMS = [
+    { id:'r1', emoji:'🌑', x:12, y:28 }, { id:'r2', emoji:'🌑', x:68, y:52 },
+    { id:'r3', emoji:'🌑', x:38, y:72 }, { id:'s1', emoji:'⭐', x:22, y:60 },
+    { id:'s2', emoji:'⭐', x:78, y:22 }, { id:'fu', emoji:'🔋', x:54, y:42 },
+  ]
+  const [got, setGot] = useState([])
+  const collect = id => { if (got.includes(id)) return; playCorrect(); setGot(g => [...g, id]) }
+  if (got.length === ITEMS.length)
+    return <BadgeScreen badge="🏅 Moon Explorer Badge!" message="Amazing! You collected everything on the Moon!" onNext={onDone} />
+
+  return (
+    <div className="game-mission moon-mission">
+      <div className="mission-hdr"><span className="mission-planet-icon">🌙</span><span className="mission-title-text">Mission 2 · The Moon</span></div>
+      <WalliSays text="We've landed on the Moon! Help me collect the moon rocks, stars, and rocket fuel!" />
+      <GameFact icon="🌙" text="The Moon has much weaker gravity than Earth — you can jump much higher here!" />
+      <div className="collect-arena">
+        {ITEMS.map(it => !got.includes(it.id) && (
+          <button key={it.id} className="collect-btn" style={{left:`${it.x}%`,top:`${it.y}%`}} onClick={() => collect(it.id)}>
+            {it.emoji}
+          </button>
+        ))}
+        <div className="collect-counter">{got.length}/{ITEMS.length} collected</div>
+      </div>
+    </div>
+  )
+}
+
+// ── Mission 3: Mars ───────────────────────────────────────────────────────────
+function Mission3({ onDone }) {
+  const FINDS = [
+    { id:'water',   emoji:'💧', label:'Frozen Water' },
+    { id:'crystal', emoji:'💎', label:'Rare Crystal' },
+    { id:'alien',   emoji:'👽', label:'Friendly Alien' },
+  ]
+  const [found, setFound] = useState([])
+  const search = id => { if (found.includes(id)) return; playCorrect(); setFound(f => [...f, id]) }
+  if (found.length === FINDS.length)
+    return <BadgeScreen badge="🏅 Mars Discoverer Badge!" message="Incredible! You found everything hidden on Mars!" onNext={onDone} />
+
+  return (
+    <div className="game-mission mars-mission">
+      <div className="mission-hdr"><span className="mission-planet-icon">🔴</span><span className="mission-title-text">Mission 3 · Mars</span></div>
+      <WalliSays text="Welcome to the Red Planet! Search under the rocks to find hidden items!" />
+      <GameFact icon="🔴" text="Mars looks red because its soil contains iron oxide — basically rust!" />
+      <div className="search-grid">
+        {FINDS.map(it => (
+          <button key={it.id} className={`search-rock${found.includes(it.id) ? ' revealed' : ''}`} onClick={() => search(it.id)}>
+            {found.includes(it.id)
+              ? <><div className="found-emoji">{it.emoji}</div><div className="found-label">{it.label}</div></>
+              : <><div className="rock-emoji">🪨</div><div className="rock-tap">Tap to search!</div></>}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ── Mission 4: Jupiter Dodge ──────────────────────────────────────────────────
+function Mission4({ onDone }) {
+  const OBSTACLES = ['🌪️','⚡','☄️','🌪️','⚡']
+  const TOTAL = 5
+  const [round, setRound] = useState(0)
+  const [danger, setDanger] = useState(() => Math.floor(Math.random() * 3))
+  const [phase, setPhase] = useState('choose') // choose | safe | hit | done
+  const [dodged, setDodged] = useState(0)
+
+  const pickLane = lane => {
+    if (phase !== 'choose') return
+    playClick()
+    const safe = lane !== danger
+    if (safe) setDodged(d => d + 1)
+    setPhase(safe ? 'safe' : 'hit')
+    setTimeout(() => {
+      const next = round + 1
+      if (next >= TOTAL) { setPhase('done'); return }
+      setRound(next)
+      setDanger(Math.floor(Math.random() * 3))
+      setPhase('choose')
+    }, 1000)
+  }
+
+  if (phase === 'done')
+    return <BadgeScreen badge="🏅 Jupiter Pilot Badge!" message={`You dodged ${dodged}/${TOTAL} obstacles — amazing flying!`} onNext={onDone} />
+
+  const LABELS = ['⬅️ Left', '⬆️ Centre', '➡️ Right']
+  return (
+    <div className="game-mission jupiter-mission">
+      <div className="mission-hdr"><span className="mission-planet-icon">🪐</span><span className="mission-title-text">Mission 4 · Jupiter</span></div>
+      <WalliSays text="Jupiter is the biggest planet! Dodge into a safe lane — avoid the storms!" />
+      <GameFact icon="🪐" text="More than 1,300 Earths could fit inside Jupiter!" />
+      <div className="dodge-board">
+        <span>Round {round+1}/{TOTAL}</span><span>✅ {dodged} dodged</span>
+      </div>
+      <div className="dodge-status">
+        {phase === 'choose' && <div className="dodge-warning">⚠️ INCOMING! Choose a safe lane!</div>}
+        {phase === 'safe'   && <div className="dodge-ok">✅ Dodged it!</div>}
+        {phase === 'hit'    && <div className="dodge-bad">💥 Hit! Keep going...</div>}
+      </div>
+      <div className="dodge-lanes">
+        {[0,1,2].map(i => (
+          <button key={i} className={`dodge-lane${phase !== 'choose' && i === danger ? ' is-danger' : ''}${phase !== 'choose' ? ' no-click' : ''}`} onClick={() => pickLane(i)}>
+            <div className="dodge-top">{i === danger ? OBSTACLES[round] : '🌟'}</div>
+            <div className="dodge-lbl">{LABELS[i]}</div>
+            <div className="dodge-rocket">{i !== danger ? '🚀' : ''}</div>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ── Mission 5: Saturn Rings ───────────────────────────────────────────────────
+function Mission5({ onDone }) {
+  const TOTAL = 5
+  const [gaps] = useState(() => Array.from({length:TOTAL}, () => Math.random() > 0.5 ? 'left' : 'right'))
+  const [ring, setRing] = useState(0)
+  const [phase, setPhase] = useState('choose') // choose | pass | crash
+  const [lives, setLives] = useState(3)
+  const [passed, setPassed] = useState(0)
+
+  const fly = side => {
+    if (phase !== 'choose') return
+    playClick()
+    if (side === gaps[ring]) {
+      playCorrect(); setPassed(p => p + 1); setPhase('pass')
+      setTimeout(() => {
+        if (ring + 1 >= TOTAL) setPhase('done')
+        else { setRing(r => r + 1); setPhase('choose') }
+      }, 700)
+    } else {
+      playWrong()
+      const nl = lives - 1; setLives(nl); setPhase('crash')
+      setTimeout(() => {
+        if (nl <= 0) { setRing(0); setLives(3); setPassed(0) }
+        setPhase('choose')
+      }, 900)
+    }
+  }
+
+  if (phase === 'done')
+    return <BadgeScreen badge="🏅 Saturn Ring Champion!" message="You flew through all 5 rings without crashing!" onNext={onDone} />
+
+  const gap = gaps[ring]
+  return (
+    <div className="game-mission saturn-mission">
+      <div className="mission-hdr"><span className="mission-planet-icon">🪐</span><span className="mission-title-text">Mission 5 · Saturn's Rings</span></div>
+      <WalliSays text="Look at those beautiful rings! Fly through the gap — choose left or right!" />
+      <GameFact icon="💫" text="Saturn's rings are made from billions of pieces of ice and rock!" />
+      <div className="ring-stats">Ring {ring+1}/{TOTAL} · ❤️×{lives}</div>
+
+      <div className="ring-visual-wrap">
+        <div className="ring-bar">
+          {gap === 'left'
+            ? <><div className="ring-gap"/><div className="ring-solid" style={{flex:1}}/></>
+            : <><div className="ring-solid" style={{flex:1}}/><div className="ring-gap"/></>
+          }
+        </div>
+        {phase === 'pass'  && <div className="ring-result pass-r">✅ Through the gap!</div>}
+        {phase === 'crash' && <div className="ring-result crash-r">💥 Hit the ring! Try again</div>}
+        <div className="ring-rocket">🚀</div>
+      </div>
+
+      {phase === 'choose' && (
+        <div className="ring-controls">
+          <p>Which side has the gap?</p>
+          <div className="ring-btns">
+            <button className="ring-btn" onClick={() => fly('left')}>⬅️ Left</button>
+            <button className="ring-btn" onClick={() => fly('right')}>Right ➡️</button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Mission 6: Black Hole Repair ──────────────────────────────────────────────
+function Mission6({ onDone }) {
+  const PARTS = [
+    { id:'engine', emoji:'⚙️', label:'Engine' },
+    { id:'wing-l', emoji:'🔧', label:'Left Wing' },
+    { id:'wing-r', emoji:'🔧', label:'Right Wing' },
+    { id:'hull',   emoji:'🔩', label:'Hull' },
+  ]
+  const [fixed, setFixed] = useState([])
+  const repair = id => { if (fixed.includes(id)) return; playCorrect(); setFixed(f => [...f, id]) }
+  if (fixed.length === PARTS.length)
+    return <BadgeScreen badge="🏅 Rocket Repair Champion!" message="You repaired the rocket just in time and escaped the black hole!" onNext={onDone} />
+
+  return (
+    <div className="game-mission blackhole-mission">
+      <div className="mission-hdr"><span className="mission-planet-icon">🕳️</span><span className="mission-title-text">Mission 6 · Black Hole!</span></div>
+      <WalliSays text="Oh no! A black hole is pulling us in! Repair the rocket before it's too late — tap every glowing part!" />
+      <GameFact icon="🕳️" text="A black hole has gravity so strong that even light cannot escape!" />
+      <div className="bh-warning">🕳️ Black hole getting closer! {fixed.length}/{PARTS.length} parts repaired</div>
+      <div className="repair-grid">
+        {PARTS.map(p => (
+          <button key={p.id} className={`repair-part${fixed.includes(p.id) ? ' fixed' : ' broken'}`} onClick={() => repair(p.id)}>
+            <div className="repair-emoji">{fixed.includes(p.id) ? '✅' : p.emoji}</div>
+            <div className="repair-label">{p.label}</div>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ── Game Complete ─────────────────────────────────────────────────────────────
+function GameComplete({ onBack }) {
+  return (
+    <div className="game-complete">
+      <div className="gc-stars">⭐ ⭐ ⭐</div>
+      <div className="gc-walli">🧑‍🚀</div>
+      <div className="gc-title">You Did It, Explorer!</div>
+      <div className="gc-walli-speech">
+        <p>"You did it! You're becoming an amazing Space Explorer."</p>
+        <p>"But our adventure has only just begun... There are still thousands of planets waiting to be discovered."</p>
+      </div>
+      <div className="gc-final">
+        <p>"Remember...</p>
+        <p>Every astronaut starts with <strong>curiosity.</strong></p>
+        <p>Every scientist starts by <strong>asking questions.</strong></p>
+        <p>And every explorer starts with <strong>one small step."</strong></p>
+        <p className="gc-keep">Keep dreaming... Keep exploring...</p>
+        <p className="gc-universe">The universe is waiting for you! 🚀</p>
+      </div>
+      <div className="gc-badges">
+        {['🏅 Space Explorer','🏅 Moon Explorer','🏅 Mars Discoverer','🏅 Jupiter Pilot','🏅 Saturn Champion','🏅 Rocket Repair'].map(b => (
+          <div key={b} className="gc-badge">{b}</div>
+        ))}
+      </div>
+      <button className="game-btn" style={{marginTop:28}} onClick={onBack}>🏠 Back to Home</button>
+    </div>
+  )
+}
+
+// ── Walli Game Main ───────────────────────────────────────────────────────────
+function WalliGame({ onBack }) {
+  const [scene, setScene] = useState('intro')
+  const go = s => setScene(s)
+
+  return (
+    <div className="walli-game">
+      <Stars/>
+      <button className="back-btn game-exit-btn" onClick={onBack}>✕ Exit</button>
+      {scene==='intro'     && <IntroScene      onDone={() => go('countdown')}/>}
+      {scene==='countdown' && <CountdownScene  onDone={() => go('m1')}/>}
+      {scene==='m1'        && <Mission1        onDone={() => go('t1')}/>}
+      {scene==='t1'        && <TravelScene to="the Moon"   walliText="Wow! Look outside the window. Can you see all those stars? Did you know there are billions of stars in our galaxy?"  factIcon="⭐" factText="The Sun is actually a star — and there are billions more in our galaxy!" onDone={() => go('m2')}/>}
+      {scene==='m2'        && <Mission2        onDone={() => go('t2')}/>}
+      {scene==='t2'        && <TravelScene to="Mars"       walliText="We're leaving the Moon! Next stop — the Red Planet! Can you see it glowing red in the distance?"                   factIcon="🔴" factText="Mars is named after the ancient Roman god of war because of its blood-red colour." onDone={() => go('m3')}/>}
+      {scene==='m3'        && <Mission3        onDone={() => go('t3')}/>}
+      {scene==='t3'        && <TravelScene to="Jupiter"    walliText="Mars was incredible! Now we're heading to the giant of our solar system — Jupiter! Hold on tight!"                  factIcon="🪐" factText="Jupiter has a massive storm called the Great Red Spot that has been raging for over 350 years!" onDone={() => go('m4')}/>}
+      {scene==='m4'        && <Mission4        onDone={() => go('t4')}/>}
+      {scene==='t4'        && <TravelScene to="Saturn"     walliText="Jupiter was wild! Now look ahead — can you see those beautiful glowing rings? That's Saturn!"                        factIcon="💫" factText="Saturn's rings are incredibly thin — only about 1 km thick but 282,000 km wide!" onDone={() => go('m5')}/>}
+      {scene==='m5'        && <Mission5        onDone={() => go('t5')}/>}
+      {scene==='t5'        && <TravelScene to="a Black Hole" walliText="Oh no! Something's pulling us off course... I'm detecting a massive gravity source ahead. A Black Hole!"          factIcon="🕳️" factText="The nearest black hole to Earth is about 1,500 light-years away — safely far from us!" onDone={() => go('m6')}/>}
+      {scene==='m6'        && <Mission6        onDone={() => go('complete')}/>}
+      {scene==='complete'  && <GameComplete    onBack={onBack}/>}
+    </div>
+  )
+}
+
 // ── Facts Screen ───────────────────────────────────────────────────────────────
 const FACT_CATEGORIES = [
   { key:'all', label:'All Facts', emoji:'🌠' },
@@ -1288,7 +1715,7 @@ function FactsScreen({ onBack, onQuiz }) {
 }
 
 // ── Home Screen ────────────────────────────────────────────────────────────────
-function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts }) {
+function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts, onGame }) {
   return (
     <div className="home">
       <Stars/>
@@ -1308,6 +1735,15 @@ function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts }) {
         <div className="home-story">
           <p>Join Walli on an exciting journey across the universe! Travel to distant planets, solve puzzles, rescue friendly aliens, collect space crystals, and discover amazing facts about our solar system and beyond. Every mission brings a new adventure and a chance to become the greatest space explorer in the galaxy.</p>
         </div>
+        <button className="mode-card game-mode-card" onClick={() => { playClick(); onGame() }}>
+          <div className="galaxy-mode-inner">
+            <div className="mode-icon">🎮</div>
+            <div>
+              <div className="mode-name">Play Walli's Adventure</div>
+              <div className="mode-desc">6 missions across the solar system — collect, dodge, explore &amp; save the day!</div>
+            </div>
+          </div>
+        </button>
         <div className="home-modes">
           <button className="mode-card" onClick={() => { playClick(); onExplore() }}>
             <div className="mode-icon">🔭</div>
@@ -1349,7 +1785,8 @@ export default function App() {
   const [screen, setScreen] = useState('home')
   return (
     <div className="app">
-      {screen === 'home'      && <HomeScreen onExplore={() => setScreen('explore')} onQuiz={() => setScreen('quiz')} onGalaxies={() => setScreen('galaxies')} onFacts={() => setScreen('facts')}/>}
+      {screen === 'home'      && <HomeScreen onExplore={() => setScreen('explore')} onQuiz={() => setScreen('quiz')} onGalaxies={() => setScreen('galaxies')} onFacts={() => setScreen('facts')} onGame={() => setScreen('game')}/>}
+      {screen === 'game'      && <WalliGame onBack={() => setScreen('home')}/>}
       {screen === 'explore'   && <ExploreScreen onBack={() => setScreen('home')}/>}
       {screen === 'quiz'      && <QuizScreen onBack={() => setScreen('home')}/>}
       {screen === 'galaxies'  && <GalaxiesScreen onBack={() => setScreen('home')}/>}
