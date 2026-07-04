@@ -581,6 +581,18 @@ body, #root {
   min-height:100vh; padding:0 0 120px; background:#050d1a;
   overflow-y:auto;
 }
+.home-story {
+  background: linear-gradient(135deg, rgba(100,60,200,0.12), rgba(40,80,180,0.10));
+  border: 1px solid rgba(160,130,255,0.2);
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin: 0 0 20px;
+  font-size: 14px;
+  color: #90a4ae;
+  line-height: 1.75;
+  text-align: center;
+}
+
 .facts-banner {
   display:flex; align-items:center; gap:18px;
   background:linear-gradient(135deg,rgba(100,60,200,0.18),rgba(40,80,200,0.15));

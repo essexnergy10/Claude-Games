@@ -1303,8 +1303,11 @@ function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts }) {
             ))}
           </div>
         </div>
-        <h1 className="home-title">🚀 Space Explorer</h1>
-        <p className="home-sub">Discover our solar system and the cosmos with real NASA &amp; Hubble photos!</p>
+        <h1 className="home-title">🚀 Walli's Space World</h1>
+        <p className="home-sub">Discover New Worlds with Walli!</p>
+        <div className="home-story">
+          <p>Join Walli on an exciting journey across the universe! Travel to distant planets, solve puzzles, rescue friendly aliens, collect space crystals, and discover amazing facts about our solar system and beyond. Every mission brings a new adventure and a chance to become the greatest space explorer in the galaxy.</p>
+        </div>
         <div className="home-modes">
           <button className="mode-card" onClick={() => { playClick(); onExplore() }}>
             <div className="mode-icon">🔭</div>
