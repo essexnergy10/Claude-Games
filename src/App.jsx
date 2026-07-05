@@ -2508,8 +2508,41 @@ function FactsScreen({ onBack, onQuiz }) {
   )
 }
 
+// ── Games Hub ──────────────────────────────────────────────────────────────────
+function GamesScreen({ onBack, onGame, onArcade, onScout }) {
+  const GAMES = [
+    { icon:'🎮', cls:'game-mode-card',   name:'Walli\'s Adventure', desc:'Story mode! 6 missions across the solar system — collect, dodge, explore & save the day', tag:'Story · 6 missions', go:onGame },
+    { icon:'🛸', cls:'arcade-mode-card', name:'Space Blaster',      desc:'Arcade action! Steer your fighter, blast splitting asteroids, chain combos, grab power-ups', tag:'Arcade · endless waves', go:onArcade },
+    { icon:'📡', cls:'scout-mode-card',  name:'Space Scout: Data Hunter', desc:'Exploration! Scan every world, download 52 real space facts & rank up to Cosmic Master', tag:'Explore · collect & learn', go:onScout },
+  ]
+  return (
+    <div className="games-screen">
+      <Stars/>
+      <div className="games-inner">
+        <div className="blaster-top">
+          <button className="back-btn" onClick={onBack}>← Back</button>
+          <h2 className="blaster-title">🎮 Games</h2>
+        </div>
+        <p className="games-sub">Three ways to play — pick your mission, Explorer!</p>
+        {GAMES.map(g => (
+          <button key={g.name} className={`mode-card games-hub-card ${g.cls}`} onClick={() => { playClick(); g.go() }}>
+            <div className="galaxy-mode-inner">
+              <div className="mode-icon">{g.icon}</div>
+              <div>
+                <div className="mode-name">{g.name}</div>
+                <div className="mode-desc">{g.desc}</div>
+                <div className="games-hub-tag">{g.tag}</div>
+              </div>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ── Home Screen ────────────────────────────────────────────────────────────────
-function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts, onGame, onArcade, onScout }) {
+function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts, onGames }) {
   return (
     <div className="home">
       <Stars/>
@@ -2529,12 +2562,12 @@ function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts, onGame, onArcade, 
         <div className="home-story">
           <p>Join Walli on an exciting journey across the universe! Travel to distant planets, solve puzzles, rescue friendly aliens, collect space crystals, and discover amazing facts about our solar system and beyond. Every mission brings a new adventure and a chance to become the greatest space explorer in the galaxy.</p>
         </div>
-        <button className="mode-card game-mode-card" onClick={() => { playClick(); onGame() }}>
+        <button className="mode-card game-mode-card" onClick={() => { playClick(); onGames() }}>
           <div className="galaxy-mode-inner">
             <div className="mode-icon">🎮</div>
             <div>
-              <div className="mode-name">Play Walli's Adventure</div>
-              <div className="mode-desc">6 missions across the solar system — collect, dodge, explore &amp; save the day!</div>
+              <div className="mode-name">Games</div>
+              <div className="mode-desc">3 space games: Walli's Adventure, Space Blaster arcade &amp; Space Scout data hunt!</div>
             </div>
           </div>
         </button>
@@ -2559,24 +2592,6 @@ function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts, onGame, onArcade, 
             </div>
           </div>
         </button>
-        <button className="mode-card arcade-mode-card" onClick={() => { playClick(); onArcade() }}>
-          <div className="galaxy-mode-inner">
-            <div className="mode-icon">🛸</div>
-            <div>
-              <div className="mode-name">Space Blaster Arcade</div>
-              <div className="mode-desc">Round-based action! Blast falling asteroids — every round gets faster</div>
-            </div>
-          </div>
-        </button>
-        <button className="mode-card scout-mode-card" onClick={() => { playClick(); onScout() }}>
-          <div className="galaxy-mode-inner">
-            <div className="mode-icon">📡</div>
-            <div>
-              <div className="mode-name">Space Scout: Data Hunter</div>
-              <div className="mode-desc">Scan every world, download real space facts &amp; rank up from Cadet to Cosmic Master!</div>
-            </div>
-          </div>
-        </button>
         <button className="mode-card facts-mode-card" onClick={() => { playClick(); onFacts() }}>
           <div className="galaxy-mode-inner">
             <div className="mode-icon">📖</div>
@@ -2597,10 +2612,11 @@ export default function App() {
   const [screen, setScreen] = useState('home')
   return (
     <div className="app">
-      {screen === 'home'      && <HomeScreen onExplore={() => setScreen('explore')} onQuiz={() => setScreen('quiz')} onGalaxies={() => setScreen('galaxies')} onFacts={() => setScreen('facts')} onGame={() => setScreen('game')} onArcade={() => setScreen('arcade')} onScout={() => setScreen('scout')}/>}
-      {screen === 'game'      && <WalliGame onBack={() => setScreen('home')}/>}
-      {screen === 'arcade'    && <SpaceBlaster onBack={() => setScreen('home')}/>}
-      {screen === 'scout'     && <SpaceScout onBack={() => setScreen('home')}/>}
+      {screen === 'home'      && <HomeScreen onExplore={() => setScreen('explore')} onQuiz={() => setScreen('quiz')} onGalaxies={() => setScreen('galaxies')} onFacts={() => setScreen('facts')} onGames={() => setScreen('games')}/>}
+      {screen === 'games'     && <GamesScreen onBack={() => setScreen('home')} onGame={() => setScreen('game')} onArcade={() => setScreen('arcade')} onScout={() => setScreen('scout')}/>}
+      {screen === 'game'      && <WalliGame onBack={() => setScreen('games')}/>}
+      {screen === 'arcade'    && <SpaceBlaster onBack={() => setScreen('games')}/>}
+      {screen === 'scout'     && <SpaceScout onBack={() => setScreen('games')}/>}
       {screen === 'explore'   && <ExploreScreen onBack={() => setScreen('home')}/>}
       {screen === 'quiz'      && <QuizScreen onBack={() => setScreen('home')}/>}
       {screen === 'galaxies'  && <GalaxiesScreen onBack={() => setScreen('home')}/>}
