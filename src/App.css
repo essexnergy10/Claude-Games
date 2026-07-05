@@ -936,6 +936,143 @@ body, #root {
 }
 .arcade-mode-card:hover { border-color:rgba(79,195,247,0.65) !important; }
 
+/* ── Walli's Space World: Galaxy Quest ──────────────────────────────────────── */
+.ww-screen {
+  min-height:100vh; background:#050d1a; overflow-y:auto;
+  position:relative; padding:16px; display:flex; justify-content:center;
+}
+.ww-inner {
+  position:relative; z-index:1; width:100%; max-width:560px;
+  display:flex; flex-direction:column; gap:14px; padding-bottom:60px;
+}
+.ww-hud { display:flex; gap:8px; flex-wrap:wrap; }
+
+.walli-says-wrap.nova { border-color:rgba(105,240,174,0.25); }
+.nova-chip { color:#69f0ae !important; background:rgba(105,240,174,0.15) !important; }
+
+.ww-dialogue { cursor:pointer; text-align:center; padding:8px 0 4px; }
+.ww-dialogue .walli-says-wrap { text-align:left; }
+
+.ww-cert-banner {
+  border:1px solid rgba(255,215,64,0.45); border-radius:14px;
+  background:rgba(255,215,64,0.12); color:#ffd740;
+  font-size:14px; font-weight:800; padding:14px; cursor:pointer;
+  animation:blink 2s ease-in-out infinite; line-height:1.5;
+}
+
+.ww-map {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px;
+}
+.ww-node {
+  background:linear-gradient(145deg,#0a1428,#080e1f);
+  border:1px solid rgba(255,255,255,0.1); border-radius:16px;
+  padding:16px 10px; cursor:pointer; text-align:center;
+  display:flex; flex-direction:column; align-items:center; gap:5px;
+  transition:transform 0.2s, border-color 0.2s;
+}
+.ww-node:hover { transform:translateY(-3px); border-color:var(--wc,#7c4dff); }
+.ww-node.done { border-color:rgba(76,175,80,0.45); }
+.ww-node.locked { opacity:0.42; cursor:not-allowed; }
+.ww-node.locked:hover { transform:none; border-color:rgba(255,255,255,0.1); }
+.ww-node-orb {
+  width:58px; height:58px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:30px;
+  background:radial-gradient(circle at 35% 35%, rgba(255,255,255,0.15), rgba(255,255,255,0.03));
+  border:2px solid var(--wc,#7c4dff);
+  box-shadow:0 0 18px color-mix(in srgb, var(--wc,#7c4dff) 40%, transparent);
+}
+.ww-node.locked .ww-node-orb { border-color:rgba(255,255,255,0.15); box-shadow:none; }
+.ww-node-name { font-size:13px; font-weight:800; color:#e0e6f0; }
+.ww-node-tag { font-size:11px; color:#78909c; }
+
+.ww-hangar {
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px; padding:14px 16px;
+}
+.ww-hangar-title { font-size:13px; font-weight:900; color:#90caf9; margin-bottom:10px; letter-spacing:0.05em; }
+.ww-hangar-row { display:flex; gap:10px; overflow-x:auto; padding-bottom:4px; }
+.ww-ship {
+  flex:0 0 auto; width:92px; text-align:center;
+  background:rgba(124,77,255,0.1); border:1px solid rgba(124,77,255,0.3);
+  border-radius:12px; padding:10px 6px;
+}
+.ww-ship.locked { background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.1); opacity:0.6; }
+.ww-ship-emoji { font-size:26px; }
+.ww-ship-name { font-size:11px; font-weight:800; color:#cfd8dc; margin-top:4px; }
+.ww-ship-req { font-size:10px; color:#69f0ae; margin-top:2px; }
+.ww-ship.locked .ww-ship-req { color:#546e7a; }
+
+.ww-motto { text-align:center; font-size:12px; color:#546e7a; font-style:italic; }
+
+.ww-world-banner {
+  display:flex; align-items:center; gap:14px;
+  background:linear-gradient(135deg, color-mix(in srgb, var(--wc,#7c4dff) 18%, transparent), rgba(255,255,255,0.03));
+  border:1px solid color-mix(in srgb, var(--wc,#7c4dff) 40%, transparent);
+  border-radius:16px; padding:14px 18px;
+}
+.ww-world-emoji { font-size:40px; }
+.ww-world-name { font-size:17px; font-weight:900; color:#fff; }
+.ww-world-tag { font-size:12px; color:#90a4ae; }
+
+.ww-mini-title { font-size:15px; font-weight:800; color:#ffd740; text-align:center; }
+
+.ww-reward-row { display:flex; gap:10px; justify-content:center; margin:14px 0 18px; flex-wrap:wrap; }
+.ww-reward-chip {
+  font-size:14px; font-weight:800; color:#ffd740;
+  background:rgba(255,215,64,0.1); border:1px solid rgba(255,215,64,0.3);
+  border-radius:20px; padding:7px 16px;
+}
+
+/* tap-fast escape */
+.ww-tapfast { display:flex; flex-direction:column; gap:14px; align-items:center; padding:10px 0; }
+.ww-bar-row { width:100%; font-size:13px; font-weight:700; color:#90a4ae; display:flex; flex-direction:column; gap:6px; }
+.ww-bar { height:16px; border-radius:9px; background:rgba(255,255,255,0.07); overflow:hidden; }
+.ww-bar-fill { height:100%; border-radius:9px; transition:width 0.12s linear; }
+.ww-bar-fill.pull { background:linear-gradient(90deg,#7b1fa2,#d500f9); }
+.ww-bar-fill.thrust { background:linear-gradient(90deg,#ff6d00,#ffd740); }
+.ww-thrust-btn {
+  border:none; border-radius:18px; padding:22px 40px;
+  background:linear-gradient(135deg,#ff6d00,#ff3d00);
+  color:#fff; font-size:20px; font-weight:900; cursor:pointer;
+  box-shadow:0 4px 24px rgba(255,80,0,0.5);
+  transition:transform 0.06s;
+  user-select:none; -webkit-user-select:none;
+}
+.ww-thrust-btn:active { transform:scale(0.93); }
+.ww-tapfail { text-align:center; color:#ff8a80; font-size:15px; display:flex; flex-direction:column; gap:12px; }
+
+/* gift game */
+.ww-gift { text-align:center; display:flex; flex-direction:column; gap:12px; align-items:center; padding:8px 0; }
+.ww-gift-zip { font-size:56px; animation:floatY 2s ease-in-out infinite; }
+.ww-gift-clue {
+  font-size:15px; color:#b9f6ca; font-weight:700; line-height:1.6;
+  background:rgba(105,240,174,0.08); border:1px solid rgba(105,240,174,0.25);
+  border-radius:14px; padding:12px 18px;
+}
+.ww-gift-row { display:flex; gap:14px; justify-content:center; }
+.ww-gift-btn {
+  font-size:34px; width:76px; height:76px; cursor:pointer;
+  background:rgba(255,255,255,0.06); border:2px solid rgba(255,255,255,0.15);
+  border-radius:18px; transition:transform 0.15s, border-color 0.15s;
+}
+.ww-gift-btn:hover { transform:scale(1.1); border-color:#69f0ae; }
+
+/* certificate */
+.ww-cert {
+  text-align:center; border:3px double rgba(255,215,64,0.5); border-radius:20px;
+  background:linear-gradient(160deg, rgba(255,215,64,0.06), rgba(124,77,255,0.06));
+  padding:30px 22px; margin-top:20px;
+}
+.ww-cert-stars { font-size:22px; letter-spacing:10px; margin-bottom:10px; }
+.ww-cert-head { font-size:13px; font-weight:900; letter-spacing:0.25em; color:#90caf9; margin-bottom:14px; }
+.ww-cert-walli { font-size:52px; margin-bottom:10px; }
+.ww-cert-line { font-size:13px; color:#90a4ae; margin:4px 0; }
+.ww-cert-name { font-size:24px; font-weight:900; color:#fff; margin:6px 0; }
+.ww-cert-rank { font-size:19px; font-weight:900; color:#ffd740; margin:12px 0; }
+.ww-cert-stickers { font-size:22px; letter-spacing:6px; margin:12px 0; }
+.ww-cert-motto { font-size:13px; color:#ce93d8; font-style:italic; margin-top:10px; }
+
 /* ── Games Hub ──────────────────────────────────────────────────────────────── */
 .games-screen {
   min-height:100vh; background:#050d1a; overflow-y:auto;
