@@ -1742,6 +1742,252 @@ function WalliGame({ onBack }) {
   )
 }
 
+// ── Space Blaster Arcade (round-based) ────────────────────────────────────────
+const BLASTER_W = 420, BLASTER_H = 560
+
+function roundConfig(round) {
+  return {
+    total: 6 + round * 2,                        // asteroids this round
+    spawnEvery: Math.max(24, 60 - round * 5),    // frames between spawns
+    speedMin: 1.0 + round * 0.22,
+    speedMax: 1.8 + round * 0.32,
+  }
+}
+
+function SpaceBlaster({ onBack }) {
+  const canvasRef = useRef(null)
+  const [hud, setHud] = useState({ phase:'ready', round:1, score:0, lives:3, destroyed:0, total:roundConfig(1).total })
+  const g = useRef(null) // mutable game state
+
+  const initRound = (round, score, lives) => {
+    const cfg = roundConfig(round)
+    g.current = {
+      round, score, lives, cfg,
+      shipX: BLASTER_W / 2,
+      keys: { left:false, right:false, fire:false },
+      lasers: [], asteroids: [], particles: [],
+      spawned: 0, destroyed: 0, missed: 0,
+      frame: 0, spawnAcc: 0, cooldown: 0, shipFlash: 0,
+      lastT: performance.now(),
+      running: true,
+    }
+    setHud({ phase:'playing', round, score, lives, destroyed:0, total:cfg.total })
+  }
+
+  const startGame  = () => { playClick(); initRound(1, 0, 3) }
+  const nextRound  = () => { playClick(); const s = g.current; initRound(s.round + 1, s.score, s.lives) }
+
+  useEffect(() => {
+    const cv = canvasRef.current
+    if (!cv) return
+    const ctx = cv.getContext('2d')
+    let raf
+
+    const onKey = (e, down) => {
+      if (!g.current?.running) return
+      if (e.key === 'ArrowLeft')  { g.current.keys.left  = down; e.preventDefault() }
+      if (e.key === 'ArrowRight') { g.current.keys.right = down; e.preventDefault() }
+      if (e.key === ' ')          { g.current.keys.fire  = down; e.preventDefault() }
+    }
+    const kd = e => onKey(e, true), ku = e => onKey(e, false)
+    window.addEventListener('keydown', kd)
+    window.addEventListener('keyup', ku)
+
+    const loop = () => {
+      raf = requestAnimationFrame(loop)
+      const s = g.current
+
+      // background
+      ctx.fillStyle = '#050d1a'
+      ctx.fillRect(0, 0, BLASTER_W, BLASTER_H)
+      ctx.fillStyle = 'rgba(255,255,255,0.35)'
+      for (let i = 0; i < 40; i++) {
+        const sx = (i * 97) % BLASTER_W
+        const sy = ((i * 61) + (s ? s.frame * (0.3 + (i % 3) * 0.25) : 0)) % BLASTER_H
+        ctx.fillRect(sx, sy, 2, 2)
+      }
+      if (!s || !s.running) return
+
+      // time-based step: dt = 1 at 60fps; capped so throttled tabs don't tunnel
+      const now = performance.now()
+      const dt = Math.min((now - s.lastT) / 16.667, 2.5)
+      s.lastT = now
+      s.frame += dt
+
+      // ship movement
+      const SHIP_SPEED = 5.2
+      if (s.keys.left)  s.shipX = Math.max(24, s.shipX - SHIP_SPEED * dt)
+      if (s.keys.right) s.shipX = Math.min(BLASTER_W - 24, s.shipX + SHIP_SPEED * dt)
+
+      // shooting
+      if (s.cooldown > 0) s.cooldown -= dt
+      if (s.keys.fire && s.cooldown <= 0) {
+        s.lasers.push({ x: s.shipX, y: BLASTER_H - 64 })
+        s.cooldown = 14
+        tone(920, 0.06, 'square', 0.08)
+      }
+
+      // spawn asteroids (time-accumulated)
+      s.spawnAcc += dt
+      if (s.spawned < s.cfg.total && s.spawnAcc >= s.cfg.spawnEvery) {
+        s.spawnAcc = 0
+        s.spawned++
+        s.asteroids.push({
+          x: 28 + Math.random() * (BLASTER_W - 56),
+          y: -24,
+          v: s.cfg.speedMin + Math.random() * (s.cfg.speedMax - s.cfg.speedMin),
+          r: 16 + Math.random() * 10,
+          spin: Math.random() * Math.PI * 2,
+        })
+      }
+
+      // update lasers (keep prevY for swept collision so fast steps can't skip targets)
+      s.lasers = s.lasers.filter(l => { l.prevY = l.y; return (l.y -= 9 * dt) > -20 })
+
+      // update asteroids + collisions
+      const shipY = BLASTER_H - 48
+      s.asteroids = s.asteroids.filter(a => {
+        a.y += a.v * dt
+        a.spin += 0.02 * dt
+
+        // laser hit (swept: asteroid within the segment the laser travelled this step)
+        for (let i = 0; i < s.lasers.length; i++) {
+          const l = s.lasers[i]
+          if (Math.abs(l.x - a.x) < a.r + 4 && a.y > l.y - (a.r + 8) && a.y < (l.prevY ?? l.y) + (a.r + 8)) {
+            s.lasers.splice(i, 1)
+            s.destroyed++
+            s.score += 10 * s.round
+            for (let p = 0; p < 8; p++)
+              s.particles.push({ x:a.x, y:a.y, vx:(Math.random()-0.5)*5, vy:(Math.random()-0.5)*5, life:22 })
+            tone(300, 0.1, 'sawtooth', 0.12)
+            setHud(h => ({ ...h, score:s.score, destroyed:s.destroyed }))
+            return false
+          }
+        }
+
+        // ship hit or reached bottom
+        const hitShip = Math.abs(a.x - s.shipX) < a.r + 16 && Math.abs(a.y - shipY) < a.r + 16
+        if (hitShip || a.y > BLASTER_H + 20) {
+          s.missed++
+          s.lives--
+          s.shipFlash = 30
+          playWrong()
+          setHud(h => ({ ...h, lives:s.lives }))
+          if (s.lives <= 0) {
+            s.running = false
+            setHud(h => ({ ...h, phase:'gameover' }))
+          }
+          return false
+        }
+        return true
+      })
+
+      // particles
+      s.particles = s.particles.filter(p => { p.x += p.vx * dt; p.y += p.vy * dt; return (p.life -= dt) > 0 })
+
+      // round clear
+      if (s.running && s.spawned === s.cfg.total && s.asteroids.length === 0 && s.destroyed + s.missed === s.cfg.total) {
+        s.running = false
+        playCorrect()
+        setHud(h => ({ ...h, phase:'roundclear', score:s.score }))
+      }
+
+      // draw lasers
+      ctx.strokeStyle = '#69f0ae'
+      ctx.lineWidth = 3
+      s.lasers.forEach(l => { ctx.beginPath(); ctx.moveTo(l.x, l.y); ctx.lineTo(l.x, l.y + 14); ctx.stroke() })
+
+      // draw particles
+      ctx.fillStyle = '#ffab40'
+      s.particles.forEach(p => ctx.fillRect(p.x, p.y, 3, 3))
+
+      // draw asteroids
+      ctx.font = '28px serif'
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+      s.asteroids.forEach(a => {
+        ctx.save(); ctx.translate(a.x, a.y); ctx.rotate(a.spin)
+        ctx.font = `${a.r * 2}px serif`
+        ctx.fillText('🪨', 0, 0)
+        ctx.restore()
+      })
+
+      // draw ship (flash red when hit)
+      if (s.shipFlash > 0) s.shipFlash -= dt
+      ctx.save()
+      ctx.translate(s.shipX, shipY)
+      if (s.shipFlash > 0 && s.shipFlash % 8 < 4) ctx.globalAlpha = 0.35
+      ctx.font = '38px serif'
+      ctx.fillText('🚀', 0, 0)
+      ctx.restore()
+    }
+    raf = requestAnimationFrame(loop)
+    return () => { cancelAnimationFrame(raf); window.removeEventListener('keydown', kd); window.removeEventListener('keyup', ku) }
+  }, [])
+
+  // touch / mouse hold controls
+  const hold = (key, down) => e => {
+    e.preventDefault()
+    if (g.current) g.current.keys[key] = down
+  }
+
+  return (
+    <div className="blaster-screen">
+      <Stars/>
+      <div className="blaster-inner">
+        <div className="blaster-top">
+          <button className="back-btn" onClick={onBack}>← Back</button>
+          <h2 className="blaster-title">🛸 Space Blaster</h2>
+        </div>
+
+        <div className="blaster-hud">
+          <span className="bh-chip">Round <strong>{hud.round}</strong></span>
+          <span className="bh-chip">⭐ <strong>{hud.score}</strong></span>
+          <span className="bh-chip">{'❤️'.repeat(Math.max(0, hud.lives))}{'🖤'.repeat(Math.max(0, 3 - hud.lives))}</span>
+          <span className="bh-chip">☄️ <strong>{hud.destroyed}/{hud.total}</strong></span>
+        </div>
+
+        <div className="blaster-stage">
+          <canvas ref={canvasRef} width={BLASTER_W} height={BLASTER_H} className="blaster-canvas"/>
+
+          {hud.phase === 'ready' && (
+            <div className="blaster-overlay">
+              <div className="bo-emoji">🛸</div>
+              <div className="bo-title">Space Blaster</div>
+              <div className="bo-text">Asteroids are falling in waves! Move your rocket, blast them before they hit you. Each round gets faster — how far can you go?</div>
+              <div className="bo-keys">⌨️ Arrow keys to move · Space to fire<br/>📱 Or use the buttons below</div>
+              <button className="game-btn" onClick={startGame}>🚀 Start Round 1</button>
+            </div>
+          )}
+
+          {hud.phase === 'roundclear' && (
+            <div className="blaster-overlay">
+              <div className="bo-emoji">🎉</div>
+              <div className="bo-title">Round {hud.round} Complete!</div>
+              <div className="bo-text">Score: <strong>{hud.score}</strong> · Lives left: {hud.lives}<br/>Round {hud.round + 1} will be faster with more asteroids!</div>
+              <button className="game-btn" onClick={nextRound}>▶️ Start Round {hud.round + 1}</button>
+            </div>
+          )}
+
+          {hud.phase === 'gameover' && (
+            <div className="blaster-overlay">
+              <div className="bo-emoji">💥</div>
+              <div className="bo-title">Game Over</div>
+              <div className="bo-text">You reached <strong>Round {hud.round}</strong> with <strong>{hud.score}</strong> points!</div>
+              <button className="game-btn" onClick={startGame}>🔄 Play Again</button>
+            </div>
+          )}
+        </div>
+
+        <div className="blaster-controls">
+          <button className="bc-btn" onPointerDown={hold('left',true)} onPointerUp={hold('left',false)} onPointerLeave={hold('left',false)}>⬅️</button>
+          <button className="bc-btn bc-fire" onPointerDown={hold('fire',true)} onPointerUp={hold('fire',false)} onPointerLeave={hold('fire',false)}>🔥 FIRE</button>
+          <button className="bc-btn" onPointerDown={hold('right',true)} onPointerUp={hold('right',false)} onPointerLeave={hold('right',false)}>➡️</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ── Facts Screen ───────────────────────────────────────────────────────────────
 const FACT_CATEGORIES = [
   { key:'all', label:'All Facts', emoji:'🌠' },
@@ -1817,7 +2063,7 @@ function FactsScreen({ onBack, onQuiz }) {
 }
 
 // ── Home Screen ────────────────────────────────────────────────────────────────
-function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts, onGame }) {
+function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts, onGame, onArcade }) {
   return (
     <div className="home">
       <Stars/>
@@ -1867,6 +2113,15 @@ function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts, onGame }) {
             </div>
           </div>
         </button>
+        <button className="mode-card arcade-mode-card" onClick={() => { playClick(); onArcade() }}>
+          <div className="galaxy-mode-inner">
+            <div className="mode-icon">🛸</div>
+            <div>
+              <div className="mode-name">Space Blaster Arcade</div>
+              <div className="mode-desc">Round-based action! Blast falling asteroids — every round gets faster</div>
+            </div>
+          </div>
+        </button>
         <button className="mode-card facts-mode-card" onClick={() => { playClick(); onFacts() }}>
           <div className="galaxy-mode-inner">
             <div className="mode-icon">📖</div>
@@ -1887,8 +2142,9 @@ export default function App() {
   const [screen, setScreen] = useState('home')
   return (
     <div className="app">
-      {screen === 'home'      && <HomeScreen onExplore={() => setScreen('explore')} onQuiz={() => setScreen('quiz')} onGalaxies={() => setScreen('galaxies')} onFacts={() => setScreen('facts')} onGame={() => setScreen('game')}/>}
+      {screen === 'home'      && <HomeScreen onExplore={() => setScreen('explore')} onQuiz={() => setScreen('quiz')} onGalaxies={() => setScreen('galaxies')} onFacts={() => setScreen('facts')} onGame={() => setScreen('game')} onArcade={() => setScreen('arcade')}/>}
       {screen === 'game'      && <WalliGame onBack={() => setScreen('home')}/>}
+      {screen === 'arcade'    && <SpaceBlaster onBack={() => setScreen('home')}/>}
       {screen === 'explore'   && <ExploreScreen onBack={() => setScreen('home')}/>}
       {screen === 'quiz'      && <QuizScreen onBack={() => setScreen('home')}/>}
       {screen === 'galaxies'  && <GalaxiesScreen onBack={() => setScreen('home')}/>}

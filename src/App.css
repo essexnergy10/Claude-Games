@@ -872,6 +872,75 @@ body, #root {
 
 @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 
+/* ── Space Blaster Arcade ───────────────────────────────────────────────────── */
+.blaster-screen {
+  min-height:100vh; background:#050d1a; overflow-y:auto;
+  position:relative; padding:16px;
+  display:flex; justify-content:center;
+}
+.blaster-inner {
+  position:relative; z-index:1; width:100%; max-width:480px;
+  display:flex; flex-direction:column; gap:12px;
+}
+.blaster-top { display:flex; align-items:center; gap:14px; }
+.blaster-title { font-size:20px; font-weight:900; color:#fff; }
+
+.blaster-hud {
+  display:flex; gap:8px; flex-wrap:wrap;
+}
+.bh-chip {
+  flex:1; text-align:center; white-space:nowrap;
+  background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+  border-radius:10px; padding:7px 10px;
+  font-size:13px; color:#90a4ae;
+}
+.bh-chip strong { color:#fff; }
+
+.blaster-stage { position:relative; }
+.blaster-canvas {
+  display:block; width:100%; height:auto;
+  border:1px solid rgba(255,255,255,0.12); border-radius:16px;
+  background:#050d1a;
+  touch-action:none;
+}
+.blaster-overlay {
+  position:absolute; inset:0; z-index:2;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:24px;
+  background:rgba(5,13,26,0.82); backdrop-filter:blur(3px);
+  border-radius:16px; animation:fadeIn 0.3s ease;
+}
+.bo-emoji { font-size:56px; margin-bottom:10px; }
+.bo-title { font-size:24px; font-weight:900; color:#ffd740; margin-bottom:10px; }
+.bo-text { font-size:14px; color:#b0bec5; line-height:1.7; margin-bottom:14px; max-width:320px; }
+.bo-text strong { color:#fff; }
+.bo-keys { font-size:12px; color:#546e7a; line-height:1.8; margin-bottom:18px; }
+
+.blaster-controls {
+  display:flex; gap:10px;
+}
+.bc-btn {
+  flex:1; border:1px solid rgba(255,255,255,0.15); border-radius:14px;
+  background:rgba(255,255,255,0.06); color:#fff;
+  font-size:22px; font-weight:900; padding:16px 0; cursor:pointer;
+  user-select:none; -webkit-user-select:none; touch-action:none;
+  transition:background 0.15s;
+}
+.bc-btn:active { background:rgba(124,77,255,0.35); }
+.bc-fire {
+  flex:1.4; font-size:16px;
+  background:linear-gradient(135deg,rgba(255,87,34,0.25),rgba(255,152,0,0.2));
+  border-color:rgba(255,152,0,0.4); color:#ffab40;
+}
+
+/* Arcade mode card on Home */
+.arcade-mode-card {
+  background:linear-gradient(135deg,rgba(0,150,200,0.18),rgba(30,60,200,0.14)) !important;
+  border-color:rgba(79,195,247,0.35) !important;
+  width:100%; margin-bottom:12px;
+}
+.arcade-mode-card:hover { border-color:rgba(79,195,247,0.65) !important; }
+
 /* ── Facts Screen ───────────────────────────────────────────────────────────── */
 .facts-screen {
   min-height:100vh; padding:20px 16px 120px; background:#050d1a;
