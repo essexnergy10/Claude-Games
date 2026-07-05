@@ -1756,26 +1756,46 @@ function roundConfig(round) {
 
 function SpaceBlaster({ onBack }) {
   const canvasRef = useRef(null)
-  const [hud, setHud] = useState({ phase:'ready', round:1, score:0, lives:3, destroyed:0, total:roundConfig(1).total })
-  const g = useRef(null) // mutable game state
+  const stageRef = useRef(null)
+  const [hud, setHud] = useState({ phase:'ready', round:1, score:0, lives:3, destroyed:0, total:roundConfig(1).total, combo:0, shield:false, rapid:false })
+  const g = useRef(null)
 
-  const initRound = (round, score, lives) => {
+  const makeAsteroid = (cfg, big = true, x, y) => {
+    const r = big ? 16 + Math.random() * 12 : 9 + Math.random() * 4
+    const verts = Array.from({ length: 9 }, () => 0.72 + Math.random() * 0.4)
+    return {
+      x: x ?? 28 + Math.random() * (BLASTER_W - 56),
+      y: y ?? -30,
+      v: cfg.speedMin + Math.random() * (cfg.speedMax - cfg.speedMin) * (big ? 1 : 1.5),
+      vx: (Math.random() - 0.5) * 0.7,
+      r, big, verts,
+      spin: Math.random() * Math.PI * 2,
+      spinV: (Math.random() - 0.5) * 0.05,
+      hue: 18 + Math.random() * 20,
+    }
+  }
+
+  const initRound = (round, score, lives, shield) => {
     const cfg = roundConfig(round)
     g.current = {
       round, score, lives, cfg,
-      shipX: BLASTER_W / 2,
-      keys: { left:false, right:false, fire:false },
-      lasers: [], asteroids: [], particles: [],
-      spawned: 0, destroyed: 0, missed: 0,
-      frame: 0, spawnAcc: 0, cooldown: 0, shipFlash: 0,
+      shipX: BLASTER_W / 2, shipVX: 0,
+      targetX: null,
+      keys: { left:false, right:false },
+      lasers: [], asteroids: [], particles: [], pops: [], powerups: [], rings: [],
+      spawned: 0, destroyed: 0, escaped: 0,
+      frame: 0, spawnAcc: 0, cooldown: 0,
+      invuln: 0, shake: 0, redFlash: 0,
+      shield: !!shield, rapidT: 0,
+      combo: 0, comboT: 0,
       lastT: performance.now(),
       running: true,
     }
-    setHud({ phase:'playing', round, score, lives, destroyed:0, total:cfg.total })
+    setHud({ phase:'playing', round, score, lives, destroyed:0, total:cfg.total, combo:0, shield:!!shield, rapid:false })
   }
 
-  const startGame  = () => { playClick(); initRound(1, 0, 3) }
-  const nextRound  = () => { playClick(); const s = g.current; initRound(s.round + 1, s.score, s.lives) }
+  const startGame = () => { playClick(); initRound(1, 0, 3, false) }
+  const nextRound = () => { playClick(); const s = g.current; initRound(s.round + 1, s.score, s.lives, s.shield) }
 
   useEffect(() => {
     const cv = canvasRef.current
@@ -1785,150 +1805,368 @@ function SpaceBlaster({ onBack }) {
 
     const onKey = (e, down) => {
       if (!g.current?.running) return
-      if (e.key === 'ArrowLeft')  { g.current.keys.left  = down; e.preventDefault() }
-      if (e.key === 'ArrowRight') { g.current.keys.right = down; e.preventDefault() }
-      if (e.key === ' ')          { g.current.keys.fire  = down; e.preventDefault() }
+      if (e.key === 'ArrowLeft')  { g.current.keys.left  = down; g.current.targetX = null; e.preventDefault() }
+      if (e.key === 'ArrowRight') { g.current.keys.right = down; g.current.targetX = null; e.preventDefault() }
     }
     const kd = e => onKey(e, true), ku = e => onKey(e, false)
     window.addEventListener('keydown', kd)
     window.addEventListener('keyup', ku)
 
+    // pointer drag: ship follows finger / mouse x
+    const toGameX = e => {
+      const rect = cv.getBoundingClientRect()
+      return ((e.clientX - rect.left) / rect.width) * BLASTER_W
+    }
+    let dragging = false
+    const pd = e => { dragging = true; if (g.current) g.current.targetX = toGameX(e); e.preventDefault() }
+    const pm = e => { if (dragging && g.current) g.current.targetX = toGameX(e) }
+    const pu = () => { dragging = false }
+    cv.addEventListener('pointerdown', pd)
+    window.addEventListener('pointermove', pm)
+    window.addEventListener('pointerup', pu)
+
+    const burst = (s, x, y, hue, n, speed) => {
+      for (let i = 0; i < n; i++) {
+        const a = Math.random() * Math.PI * 2, sp = (0.5 + Math.random()) * speed
+        s.particles.push({ x, y, vx: Math.cos(a)*sp, vy: Math.sin(a)*sp, life: 26 + Math.random()*14, max: 40, hue: hue + Math.random()*30 - 15, r: 1.5 + Math.random()*2 })
+      }
+    }
+
     const loop = () => {
       raf = requestAnimationFrame(loop)
       const s = g.current
+      const t = performance.now() / 1000
 
-      // background
-      ctx.fillStyle = '#050d1a'
+      // ── background: deep-space gradient + nebula + parallax stars ──
+      const bg = ctx.createLinearGradient(0, 0, 0, BLASTER_H)
+      bg.addColorStop(0, '#040918'); bg.addColorStop(0.6, '#081026'); bg.addColorStop(1, '#120a2a')
+      ctx.fillStyle = bg
       ctx.fillRect(0, 0, BLASTER_W, BLASTER_H)
-      ctx.fillStyle = 'rgba(255,255,255,0.35)'
-      for (let i = 0; i < 40; i++) {
-        const sx = (i * 97) % BLASTER_W
-        const sy = ((i * 61) + (s ? s.frame * (0.3 + (i % 3) * 0.25) : 0)) % BLASTER_H
-        ctx.fillRect(sx, sy, 2, 2)
+      const neb = ctx.createRadialGradient(BLASTER_W*0.75, BLASTER_H*0.25, 20, BLASTER_W*0.75, BLASTER_H*0.25, 260)
+      neb.addColorStop(0, 'rgba(124,77,255,0.10)'); neb.addColorStop(1, 'rgba(124,77,255,0)')
+      ctx.fillStyle = neb; ctx.fillRect(0, 0, BLASTER_W, BLASTER_H)
+      const neb2 = ctx.createRadialGradient(BLASTER_W*0.2, BLASTER_H*0.7, 10, BLASTER_W*0.2, BLASTER_H*0.7, 220)
+      neb2.addColorStop(0, 'rgba(0,150,200,0.08)'); neb2.addColorStop(1, 'rgba(0,150,200,0)')
+      ctx.fillStyle = neb2; ctx.fillRect(0, 0, BLASTER_W, BLASTER_H)
+
+      const scrollBase = s ? s.frame : t * 60
+      for (let layer = 0; layer < 3; layer++) {
+        const speed = [0.25, 0.6, 1.2][layer]
+        ctx.fillStyle = ['rgba(255,255,255,0.25)','rgba(200,220,255,0.45)','rgba(255,255,255,0.8)'][layer]
+        for (let i = 0; i < 18; i++) {
+          const sx = ((i * 137 + layer * 61) % BLASTER_W)
+          const sy = (i * 83 + scrollBase * speed) % BLASTER_H
+          const sz = layer + 1
+          ctx.fillRect(sx, sy, sz, sz)
+        }
       }
       if (!s || !s.running) return
 
-      // time-based step: dt = 1 at 60fps; capped so throttled tabs don't tunnel
       const now = performance.now()
       const dt = Math.min((now - s.lastT) / 16.667, 2.5)
       s.lastT = now
       s.frame += dt
 
-      // ship movement
-      const SHIP_SPEED = 5.2
-      if (s.keys.left)  s.shipX = Math.max(24, s.shipX - SHIP_SPEED * dt)
-      if (s.keys.right) s.shipX = Math.min(BLASTER_W - 24, s.shipX + SHIP_SPEED * dt)
-
-      // shooting
-      if (s.cooldown > 0) s.cooldown -= dt
-      if (s.keys.fire && s.cooldown <= 0) {
-        s.lasers.push({ x: s.shipX, y: BLASTER_H - 64 })
-        s.cooldown = 14
-        tone(920, 0.06, 'square', 0.08)
+      // camera shake
+      ctx.save()
+      if (s.shake > 0) {
+        s.shake -= dt
+        ctx.translate((Math.random()-0.5) * s.shake, (Math.random()-0.5) * s.shake)
       }
 
-      // spawn asteroids (time-accumulated)
+      // ── ship movement: pointer-follow (smooth) or arrow keys ──
+      const KEY_SPEED = 6
+      if (s.targetX != null) {
+        const dx = s.targetX - s.shipX
+        s.shipVX = dx * 0.18 * dt
+        s.shipX += s.shipVX
+      } else {
+        s.shipVX = (s.keys.left ? -KEY_SPEED : 0) + (s.keys.right ? KEY_SPEED : 0)
+        s.shipX += s.shipVX * dt
+      }
+      s.shipX = Math.max(20, Math.min(BLASTER_W - 20, s.shipX))
+      const shipY = BLASTER_H - 54
+
+      // ── auto-fire ──
+      if (s.cooldown > 0) s.cooldown -= dt
+      if (s.cooldown <= 0) {
+        s.lasers.push({ x: s.shipX, y: shipY - 18 })
+        s.cooldown = s.rapidT > 0 ? 6 : 13
+        tone(s.rapidT > 0 ? 1100 : 920, 0.045, 'square', 0.05)
+      }
+      if (s.rapidT > 0) { s.rapidT -= dt; if (s.rapidT <= 0) setHud(h => ({ ...h, rapid:false })) }
+
+      // ── spawn ──
       s.spawnAcc += dt
       if (s.spawned < s.cfg.total && s.spawnAcc >= s.cfg.spawnEvery) {
-        s.spawnAcc = 0
-        s.spawned++
-        s.asteroids.push({
-          x: 28 + Math.random() * (BLASTER_W - 56),
-          y: -24,
-          v: s.cfg.speedMin + Math.random() * (s.cfg.speedMax - s.cfg.speedMin),
-          r: 16 + Math.random() * 10,
-          spin: Math.random() * Math.PI * 2,
-        })
+        s.spawnAcc = 0; s.spawned++
+        s.asteroids.push(makeAsteroid(s.cfg))
       }
 
-      // update lasers (keep prevY for swept collision so fast steps can't skip targets)
-      s.lasers = s.lasers.filter(l => { l.prevY = l.y; return (l.y -= 9 * dt) > -20 })
+      // combo timer
+      if (s.comboT > 0) { s.comboT -= dt; if (s.comboT <= 0 && s.combo > 0) { s.combo = 0; setHud(h => ({ ...h, combo:0 })) } }
 
-      // update asteroids + collisions
-      const shipY = BLASTER_H - 48
+      // ── lasers ──
+      s.lasers = s.lasers.filter(l => { l.prevY = l.y; return (l.y -= 10 * dt) > -20 })
+
+      // ── power-ups ──
+      s.powerups = s.powerups.filter(p => {
+        p.y += 1.6 * dt; p.pulse = (p.pulse || 0) + dt
+        if (Math.abs(p.x - s.shipX) < 26 && Math.abs(p.y - shipY) < 26) {
+          playCorrect()
+          if (p.kind === 'shield') { s.shield = true; setHud(h => ({ ...h, shield:true })) }
+          else { s.rapidT = 480; setHud(h => ({ ...h, rapid:true })) }
+          s.rings.push({ x: s.shipX, y: shipY, r: 6, max: 46, hue: p.kind === 'shield' ? 190 : 45 })
+          return false
+        }
+        return p.y < BLASTER_H + 20
+      })
+
+      // ── asteroids ──
+      const spawnChildren = []
       s.asteroids = s.asteroids.filter(a => {
         a.y += a.v * dt
-        a.spin += 0.02 * dt
+        a.x += a.vx * dt
+        if (a.x < a.r || a.x > BLASTER_W - a.r) a.vx *= -1
+        a.spin += a.spinV * dt
 
-        // laser hit (swept: asteroid within the segment the laser travelled this step)
+        // laser hit (swept)
         for (let i = 0; i < s.lasers.length; i++) {
           const l = s.lasers[i]
-          if (Math.abs(l.x - a.x) < a.r + 4 && a.y > l.y - (a.r + 8) && a.y < (l.prevY ?? l.y) + (a.r + 8)) {
+          if (Math.abs(l.x - a.x) < a.r + 3 && a.y > l.y - (a.r + 8) && a.y < (l.prevY ?? l.y) + (a.r + 8)) {
             s.lasers.splice(i, 1)
-            s.destroyed++
-            s.score += 10 * s.round
-            for (let p = 0; p < 8; p++)
-              s.particles.push({ x:a.x, y:a.y, vx:(Math.random()-0.5)*5, vy:(Math.random()-0.5)*5, life:22 })
-            tone(300, 0.1, 'sawtooth', 0.12)
-            setHud(h => ({ ...h, score:s.score, destroyed:s.destroyed }))
+            s.combo++; s.comboT = 90
+            const mult = Math.min(5, 1 + Math.floor(s.combo / 3))
+            const pts = 10 * s.round * mult
+            s.score += pts
+            s.pops.push({ x: a.x, y: a.y, txt: `+${pts}`, life: 40, mult })
+            burst(s, a.x, a.y, a.big ? 28 : 200, a.big ? 14 : 9, a.big ? 2.6 : 2)
+            s.rings.push({ x: a.x, y: a.y, r: 4, max: a.r * 2.2, hue: 28 })
+            tone(a.big ? 220 : 330, 0.12, 'sawtooth', 0.1)
+            if (a.big) {
+              s.destroyed++  // wave progress tracks original rocks only; fragments are bonus
+              spawnChildren.push(makeAsteroid(s.cfg, false, a.x - 8, a.y), makeAsteroid(s.cfg, false, a.x + 8, a.y))
+            }
+            if (!a.big && Math.random() < 0.14)
+              s.powerups.push({ x: a.x, y: a.y, kind: Math.random() < 0.5 ? 'shield' : 'rapid' })
+            setHud(h => ({ ...h, score: s.score, destroyed: s.destroyed, combo: s.combo }))
             return false
           }
         }
 
-        // ship hit or reached bottom
-        const hitShip = Math.abs(a.x - s.shipX) < a.r + 16 && Math.abs(a.y - shipY) < a.r + 16
-        if (hitShip || a.y > BLASTER_H + 20) {
-          s.missed++
-          s.lives--
-          s.shipFlash = 30
-          playWrong()
-          setHud(h => ({ ...h, lives:s.lives }))
-          if (s.lives <= 0) {
-            s.running = false
-            setHud(h => ({ ...h, phase:'gameover' }))
+        // ship collision — tight, fair hitbox + i-frames after a hit
+        if (s.invuln <= 0) {
+          const dx = a.x - s.shipX, dy = a.y - shipY
+          if (dx*dx + dy*dy < Math.pow(a.r * 0.72 + 12, 2)) {
+            burst(s, s.shipX, shipY, 200, 20, 3.2)
+            s.rings.push({ x: s.shipX, y: shipY, r: 8, max: 60, hue: 0 })
+            s.shake = 14; s.invuln = 110
+            if (s.shield) {
+              s.shield = false
+              tone(180, 0.2, 'square', 0.15)
+              setHud(h => ({ ...h, shield:false }))
+            } else {
+              s.lives--; s.redFlash = 16
+              playWrong()
+              setHud(h => ({ ...h, lives: s.lives }))
+              if (s.lives <= 0) { s.running = false; setHud(h => ({ ...h, phase:'gameover' })) }
+            }
+            if (a.big) s.destroyed++  // resolved by impact
+            return false
           }
+        }
+
+        // escaped off the bottom — dodging works: NO life lost
+        if (a.y > BLASTER_H + a.r + 6) {
+          s.escaped++
+          if (a.big) s.destroyed++  // counts toward wave completion
+          setHud(h => ({ ...h, destroyed: s.destroyed }))
           return false
         }
         return true
       })
+      if (spawnChildren.length) s.asteroids.push(...spawnChildren)
 
-      // particles
-      s.particles = s.particles.filter(p => { p.x += p.vx * dt; p.y += p.vy * dt; return (p.life -= dt) > 0 })
-
-      // round clear
-      if (s.running && s.spawned === s.cfg.total && s.asteroids.length === 0 && s.destroyed + s.missed === s.cfg.total) {
+      // wave complete: all big asteroids resolved and no fragments left
+      if (s.running && s.spawned === s.cfg.total && s.asteroids.length === 0 && s.destroyed >= s.cfg.total) {
         s.running = false
         playCorrect()
-        setHud(h => ({ ...h, phase:'roundclear', score:s.score }))
+        setHud(h => ({ ...h, phase:'roundclear', score: s.score }))
       }
 
-      // draw lasers
-      ctx.strokeStyle = '#69f0ae'
-      ctx.lineWidth = 3
-      s.lasers.forEach(l => { ctx.beginPath(); ctx.moveTo(l.x, l.y); ctx.lineTo(l.x, l.y + 14); ctx.stroke() })
+      if (s.invuln > 0) s.invuln -= dt
+      if (s.redFlash > 0) s.redFlash -= dt
 
-      // draw particles
-      ctx.fillStyle = '#ffab40'
-      s.particles.forEach(p => ctx.fillRect(p.x, p.y, 3, 3))
+      // ── draw: additive glow pass ──
+      ctx.globalCompositeOperation = 'lighter'
 
-      // draw asteroids
-      ctx.font = '28px serif'
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+      // lasers with glow trail
+      s.lasers.forEach(l => {
+        const lg = ctx.createLinearGradient(l.x, l.y + 22, l.x, l.y - 4)
+        lg.addColorStop(0, 'rgba(0,255,170,0)'); lg.addColorStop(1, 'rgba(120,255,210,0.95)')
+        ctx.strokeStyle = lg; ctx.lineWidth = 3.5; ctx.lineCap = 'round'
+        ctx.beginPath(); ctx.moveTo(l.x, l.y + 22); ctx.lineTo(l.x, l.y); ctx.stroke()
+        ctx.fillStyle = 'rgba(190,255,230,0.9)'
+        ctx.beginPath(); ctx.arc(l.x, l.y, 2.4, 0, Math.PI*2); ctx.fill()
+      })
+
+      // particles
+      s.particles = s.particles.filter(p => {
+        p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 0.02 * dt
+        p.life -= dt
+        if (p.life <= 0) return false
+        const al = p.life / p.max
+        ctx.fillStyle = `hsla(${p.hue}, 100%, 62%, ${al})`
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r * al + 0.4, 0, Math.PI*2); ctx.fill()
+        return true
+      })
+
+      // shockwave rings
+      s.rings = s.rings.filter(r => {
+        r.r += (r.max - r.r) * 0.16 * dt
+        const al = 1 - r.r / r.max
+        if (al <= 0.04) return false
+        ctx.strokeStyle = `hsla(${r.hue}, 100%, 65%, ${al})`
+        ctx.lineWidth = 2
+        ctx.beginPath(); ctx.arc(r.x, r.y, r.r, 0, Math.PI*2); ctx.stroke()
+        return true
+      })
+
+      ctx.globalCompositeOperation = 'source-over'
+
+      // ── asteroids: shaded procedural rocks ──
       s.asteroids.forEach(a => {
         ctx.save(); ctx.translate(a.x, a.y); ctx.rotate(a.spin)
-        ctx.font = `${a.r * 2}px serif`
-        ctx.fillText('🪨', 0, 0)
+        const grad = ctx.createRadialGradient(-a.r*0.35, -a.r*0.35, a.r*0.15, 0, 0, a.r*1.15)
+        grad.addColorStop(0, `hsl(${a.hue}, 18%, 52%)`)
+        grad.addColorStop(0.65, `hsl(${a.hue}, 20%, 30%)`)
+        grad.addColorStop(1, `hsl(${a.hue}, 24%, 14%)`)
+        ctx.fillStyle = grad
+        ctx.beginPath()
+        a.verts.forEach((vr, i) => {
+          const ang = (i / a.verts.length) * Math.PI * 2
+          const px = Math.cos(ang) * a.r * vr, py = Math.sin(ang) * a.r * vr
+          i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py)
+        })
+        ctx.closePath(); ctx.fill()
+        ctx.strokeStyle = 'rgba(255,190,120,0.18)'; ctx.lineWidth = 1.2; ctx.stroke()
+        // crater
+        ctx.fillStyle = 'rgba(0,0,0,0.25)'
+        ctx.beginPath(); ctx.arc(a.r*0.25, a.r*0.1, a.r*0.28, 0, Math.PI*2); ctx.fill()
         ctx.restore()
       })
 
-      // draw ship (flash red when hit)
-      if (s.shipFlash > 0) s.shipFlash -= dt
+      // ── power-ups ──
+      s.powerups.forEach(p => {
+        const pl = 1 + Math.sin(p.pulse * 0.25) * 0.15
+        ctx.save(); ctx.translate(p.x, p.y); ctx.scale(pl, pl)
+        const hue = p.kind === 'shield' ? 190 : 45
+        ctx.globalCompositeOperation = 'lighter'
+        const pg = ctx.createRadialGradient(0, 0, 2, 0, 0, 16)
+        pg.addColorStop(0, `hsla(${hue},100%,70%,0.9)`); pg.addColorStop(1, `hsla(${hue},100%,60%,0)`)
+        ctx.fillStyle = pg
+        ctx.beginPath(); ctx.arc(0, 0, 16, 0, Math.PI*2); ctx.fill()
+        ctx.globalCompositeOperation = 'source-over'
+        ctx.strokeStyle = `hsl(${hue},100%,72%)`; ctx.lineWidth = 2
+        ctx.beginPath(); ctx.arc(0, 0, 11, 0, Math.PI*2); ctx.stroke()
+        ctx.fillStyle = '#fff'; ctx.font = 'bold 11px sans-serif'
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+        ctx.fillText(p.kind === 'shield' ? 'S' : 'R', 0, 0.5)
+        ctx.restore()
+      })
+
+      // ── ship: neon vector fighter ──
+      const tilt = Math.max(-0.35, Math.min(0.35, s.shipVX * 0.045))
       ctx.save()
       ctx.translate(s.shipX, shipY)
-      if (s.shipFlash > 0 && s.shipFlash % 8 < 4) ctx.globalAlpha = 0.35
-      ctx.font = '38px serif'
-      ctx.fillText('🚀', 0, 0)
+      ctx.rotate(tilt)
+      if (s.invuln > 0 && Math.floor(s.invuln / 6) % 2 === 0) ctx.globalAlpha = 0.35
+
+      // engine flame (additive)
+      ctx.globalCompositeOperation = 'lighter'
+      const fl = 15 + Math.sin(s.frame * 0.6) * 4 + Math.random() * 3
+      const fg2 = ctx.createLinearGradient(0, 12, 0, 12 + fl)
+      fg2.addColorStop(0, 'rgba(120,200,255,0.95)')
+      fg2.addColorStop(0.4, 'rgba(255,170,60,0.8)')
+      fg2.addColorStop(1, 'rgba(255,80,0,0)')
+      ctx.fillStyle = fg2
+      ctx.beginPath(); ctx.moveTo(-4.5, 12); ctx.lineTo(4.5, 12); ctx.lineTo(0, 12 + fl); ctx.closePath(); ctx.fill()
+      ctx.globalCompositeOperation = 'source-over'
+
+      // wings
+      ctx.fillStyle = '#20355c'
+      ctx.beginPath(); ctx.moveTo(-4, -2); ctx.lineTo(-17, 11); ctx.lineTo(-5, 10); ctx.closePath(); ctx.fill()
+      ctx.beginPath(); ctx.moveTo(4, -2); ctx.lineTo(17, 11); ctx.lineTo(5, 10); ctx.closePath(); ctx.fill()
+      ctx.strokeStyle = 'rgba(90,160,255,0.7)'; ctx.lineWidth = 1
+      ctx.beginPath(); ctx.moveTo(-4, -2); ctx.lineTo(-17, 11); ctx.moveTo(4, -2); ctx.lineTo(17, 11); ctx.stroke()
+
+      // hull
+      const hull = ctx.createLinearGradient(0, -18, 0, 12)
+      hull.addColorStop(0, '#dff1ff'); hull.addColorStop(0.45, '#5b8dff'); hull.addColorStop(1, '#23306b')
+      ctx.fillStyle = hull
+      ctx.beginPath()
+      ctx.moveTo(0, -18); ctx.quadraticCurveTo(7, -4, 6, 10); ctx.lineTo(-6, 10); ctx.quadraticCurveTo(-7, -4, 0, -18)
+      ctx.closePath(); ctx.fill()
+      ctx.strokeStyle = 'rgba(160,210,255,0.8)'; ctx.lineWidth = 1.2; ctx.stroke()
+
+      // cockpit glow
+      ctx.globalCompositeOperation = 'lighter'
+      const cp = ctx.createRadialGradient(0, -5, 0.5, 0, -5, 5)
+      cp.addColorStop(0, 'rgba(160,255,255,0.95)'); cp.addColorStop(1, 'rgba(0,140,255,0)')
+      ctx.fillStyle = cp
+      ctx.beginPath(); ctx.arc(0, -5, 5, 0, Math.PI*2); ctx.fill()
+      ctx.globalCompositeOperation = 'source-over'
+
+      // shield bubble
+      if (s.shield) {
+        ctx.globalCompositeOperation = 'lighter'
+        ctx.strokeStyle = `rgba(80,220,255,${0.5 + Math.sin(s.frame*0.15)*0.2})`
+        ctx.lineWidth = 2
+        ctx.beginPath(); ctx.arc(0, -3, 24, 0, Math.PI*2); ctx.stroke()
+        ctx.globalCompositeOperation = 'source-over'
+      }
       ctx.restore()
+
+      // ── floating score pops ──
+      s.pops = s.pops.filter(p => {
+        p.y -= 0.8 * dt; p.life -= dt
+        if (p.life <= 0) return false
+        ctx.globalAlpha = Math.min(1, p.life / 20)
+        ctx.fillStyle = p.mult > 1 ? '#ffd740' : '#b9f6ca'
+        ctx.font = `bold ${p.mult > 1 ? 15 : 13}px sans-serif`
+        ctx.textAlign = 'center'
+        ctx.fillText(p.txt, p.x, p.y)
+        ctx.globalAlpha = 1
+        return true
+      })
+
+      // combo banner
+      if (s.combo >= 3) {
+        const mult = Math.min(5, 1 + Math.floor(s.combo / 3))
+        ctx.fillStyle = 'rgba(255,215,64,0.9)'
+        ctx.font = 'bold 15px sans-serif'
+        ctx.textAlign = 'center'
+        ctx.fillText(`🔥 COMBO ×${mult}`, BLASTER_W / 2, 30)
+      }
+
+      ctx.restore() // shake
+
+      // red damage vignette
+      if (s.redFlash > 0) {
+        ctx.fillStyle = `rgba(255,40,40,${s.redFlash / 60})`
+        ctx.fillRect(0, 0, BLASTER_W, BLASTER_H)
+      }
     }
     raf = requestAnimationFrame(loop)
-    return () => { cancelAnimationFrame(raf); window.removeEventListener('keydown', kd); window.removeEventListener('keyup', ku) }
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener('keydown', kd)
+      window.removeEventListener('keyup', ku)
+      cv.removeEventListener('pointerdown', pd)
+      window.removeEventListener('pointermove', pm)
+      window.removeEventListener('pointerup', pu)
+    }
   }, [])
-
-  // touch / mouse hold controls
-  const hold = (key, down) => e => {
-    e.preventDefault()
-    if (g.current) g.current.keys[key] = down
-  }
 
   return (
     <div className="blaster-screen">
@@ -1940,31 +2178,33 @@ function SpaceBlaster({ onBack }) {
         </div>
 
         <div className="blaster-hud">
-          <span className="bh-chip">Round <strong>{hud.round}</strong></span>
-          <span className="bh-chip">⭐ <strong>{hud.score}</strong></span>
+          <span className="bh-chip">Wave <strong>{hud.round}</strong></span>
+          <span className="bh-chip">⭐ <strong>{hud.score.toLocaleString()}</strong></span>
           <span className="bh-chip">{'❤️'.repeat(Math.max(0, hud.lives))}{'🖤'.repeat(Math.max(0, 3 - hud.lives))}</span>
           <span className="bh-chip">☄️ <strong>{hud.destroyed}/{hud.total}</strong></span>
+          {hud.shield && <span className="bh-chip bh-buff">🛡 Shield</span>}
+          {hud.rapid && <span className="bh-chip bh-buff">⚡ Rapid</span>}
         </div>
 
-        <div className="blaster-stage">
+        <div className="blaster-stage" ref={stageRef}>
           <canvas ref={canvasRef} width={BLASTER_W} height={BLASTER_H} className="blaster-canvas"/>
 
           {hud.phase === 'ready' && (
             <div className="blaster-overlay">
               <div className="bo-emoji">🛸</div>
               <div className="bo-title">Space Blaster</div>
-              <div className="bo-text">Asteroids are falling in waves! Move your rocket, blast them before they hit you. Each round gets faster — how far can you go?</div>
-              <div className="bo-keys">⌨️ Arrow keys to move · Space to fire<br/>📱 Or use the buttons below</div>
-              <button className="game-btn" onClick={startGame}>🚀 Start Round 1</button>
+              <div className="bo-text">Waves of asteroids incoming! Your ship fires automatically — just steer. Big rocks split in two. Chain kills for combo multipliers, grab 🛡 shields and ⚡ rapid-fire drops. Dodging works: rocks that pass you don't hurt.</div>
+              <div className="bo-keys">🖱️ Drag on the field (or ⌨️ arrow keys) to fly</div>
+              <button className="game-btn" onClick={startGame}>🚀 Launch Wave 1</button>
             </div>
           )}
 
           {hud.phase === 'roundclear' && (
             <div className="blaster-overlay">
               <div className="bo-emoji">🎉</div>
-              <div className="bo-title">Round {hud.round} Complete!</div>
-              <div className="bo-text">Score: <strong>{hud.score}</strong> · Lives left: {hud.lives}<br/>Round {hud.round + 1} will be faster with more asteroids!</div>
-              <button className="game-btn" onClick={nextRound}>▶️ Start Round {hud.round + 1}</button>
+              <div className="bo-title">Wave {hud.round} Cleared!</div>
+              <div className="bo-text">Score: <strong>{hud.score.toLocaleString()}</strong> · Lives: {hud.lives}{hud.shield ? ' · 🛡 shield carried over' : ''}<br/>Wave {hud.round + 1}: more rocks, more speed.</div>
+              <button className="game-btn" onClick={nextRound}>▶️ Launch Wave {hud.round + 1}</button>
             </div>
           )}
 
@@ -1972,17 +2212,13 @@ function SpaceBlaster({ onBack }) {
             <div className="blaster-overlay">
               <div className="bo-emoji">💥</div>
               <div className="bo-title">Game Over</div>
-              <div className="bo-text">You reached <strong>Round {hud.round}</strong> with <strong>{hud.score}</strong> points!</div>
+              <div className="bo-text">You survived to <strong>Wave {hud.round}</strong> and scored <strong>{hud.score.toLocaleString()}</strong> points!</div>
               <button className="game-btn" onClick={startGame}>🔄 Play Again</button>
             </div>
           )}
         </div>
 
-        <div className="blaster-controls">
-          <button className="bc-btn" onPointerDown={hold('left',true)} onPointerUp={hold('left',false)} onPointerLeave={hold('left',false)}>⬅️</button>
-          <button className="bc-btn bc-fire" onPointerDown={hold('fire',true)} onPointerUp={hold('fire',false)} onPointerLeave={hold('fire',false)}>🔥 FIRE</button>
-          <button className="bc-btn" onPointerDown={hold('right',true)} onPointerUp={hold('right',false)} onPointerLeave={hold('right',false)}>➡️</button>
-        </div>
+        <div className="blaster-hint">🖱️ Drag to steer · fires automatically · big rocks split in two</div>
       </div>
     </div>
   )
