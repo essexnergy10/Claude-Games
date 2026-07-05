@@ -2224,6 +2224,216 @@ function SpaceBlaster({ onBack }) {
   )
 }
 
+// ── Space Scout: Data Hunter (information-gathering game) ─────────────────────
+const SCOUT_RANKS = [
+  { min: 0,  title: 'Space Cadet',      icon: '🎒' },
+  { min: 10, title: 'Junior Scout',     icon: '🔭' },
+  { min: 22, title: 'Data Analyst',     icon: '📡' },
+  { min: 36, title: 'Star Navigator',   icon: '🧭' },
+  { min: 50, title: 'Mission Commander',icon: '🎖️' },
+  { min: 62, title: 'Cosmic Master',    icon: '👑' },
+]
+
+function getScoutStops() {
+  return [
+    { id: SUN.id, name: SUN.name, img: SUN.img, color: SUN.color, facts: SUN.facts, funFact: SUN.funFact, tag: 'Our Star' },
+    ...PLANETS.map(p => ({ id: p.id, name: p.name, img: p.img, color: p.color, facts: p.facts, funFact: p.funFact, tag: p.nickname })),
+    { id: 'st2-18', name: 'Stephenson 2-18', img: null, color: '#ff6e40', facts: ST2_18.facts, funFact: ST2_18.funFact, tag: 'Deep Space Bonus' },
+  ]
+}
+
+function SpaceScout({ onBack }) {
+  const stops = useRef(getScoutStops()).current
+  const [codex, setCodex] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('walli-codex')) || {} } catch { return {} }
+  })
+  const [view, setView] = useState('map')          // 'map' | 'scan'
+  const [stopIdx, setStopIdx] = useState(0)
+  const [lastFact, setLastFact] = useState(null)   // index of most recently downloaded fact
+  const [downloading, setDownloading] = useState(null) // orb index mid-download
+
+  useEffect(() => {
+    try { localStorage.setItem('walli-codex', JSON.stringify(codex)) } catch { /* private mode */ }
+  }, [codex])
+
+  const gotFor = stop => codex[stop.id] || []
+  const isComplete = stop => gotFor(stop).length >= stop.facts.length
+  const totalData = stops.reduce((n, s) => n + gotFor(s).length, 0)
+  const maxData = stops.reduce((n, s) => n + s.facts.length, 0)
+  const rank = [...SCOUT_RANKS].reverse().find(r => totalData >= r.min)
+  const nextRank = SCOUT_RANKS.find(r => r.min > totalData)
+
+  // a stop is unlocked if it's first or the previous stop is fully scanned
+  const isUnlocked = i => i === 0 || isComplete(stops[i - 1])
+
+  const openStop = i => {
+    if (!isUnlocked(i)) { playWrong(); return }
+    playClick()
+    setStopIdx(i); setLastFact(null); setDownloading(null)
+    setView('scan')
+  }
+
+  const download = orbIdx => {
+    const stop = stops[stopIdx]
+    const got = gotFor(stop)
+    if (got.includes(orbIdx) || downloading != null) return
+    setDownloading(orbIdx)
+    tone(700, 0.08, 'square', 0.08); tone(950, 0.08, 'square', 0.08, 0.09); tone(1200, 0.1, 'square', 0.08, 0.18)
+    setTimeout(() => {
+      setDownloading(null)
+      setLastFact(orbIdx)
+      playCorrect()
+      setCodex(c => ({ ...c, [stop.id]: [...(c[stop.id] || []), orbIdx] }))
+    }, 650)
+  }
+
+  // ── Map view ──
+  if (view === 'map') {
+    return (
+      <div className="scout-screen">
+        <Stars/>
+        <div className="scout-inner">
+          <div className="blaster-top">
+            <button className="back-btn" onClick={onBack}>← Back</button>
+            <h2 className="blaster-title">📡 Space Scout</h2>
+          </div>
+
+          <div className="scout-rank-card">
+            <div className="scout-rank-icon">{rank.icon}</div>
+            <div className="scout-rank-info">
+              <div className="scout-rank-title">{rank.title}</div>
+              <div className="scout-rank-sub">
+                {totalData}/{maxData} data fragments collected
+                {nextRank && <> · {nextRank.min - totalData} more to reach {nextRank.icon} {nextRank.title}</>}
+              </div>
+              <div className="scout-rank-bar">
+                <div className="scout-rank-fill" style={{ width: `${(totalData / maxData) * 100}%` }}/>
+              </div>
+            </div>
+          </div>
+
+          <p className="scout-mission-brief">
+            🛰️ <strong>Mission:</strong> Fly your probe from world to world. Scan each one by downloading
+            every data fragment — real facts beamed back to Earth. Fully scan a world to unlock the next!
+          </p>
+
+          <div className="scout-map">
+            {stops.map((s, i) => {
+              const got = gotFor(s).length
+              const done = isComplete(s)
+              const locked = !isUnlocked(i)
+              return (
+                <button key={s.id}
+                  className={`scout-stop${done ? ' done' : ''}${locked ? ' locked' : ''}`}
+                  style={{ '--sc': s.color }}
+                  onClick={() => openStop(i)}
+                >
+                  <div className="scout-stop-img-wrap">
+                    {s.img
+                      ? <img src={s.img} alt={s.name} className="scout-stop-img" loading="lazy"/>
+                      : <div className="scout-stop-giant" style={{ background: `radial-gradient(circle at 35% 35%, #ff8a65, ${s.color} 60%, #7f1d00)` }}/>}
+                    {locked && <div className="scout-lock">🔒</div>}
+                    {done && <div className="scout-done-stamp">✅</div>}
+                  </div>
+                  <div className="scout-stop-name" style={{ color: s.color }}>{s.name}</div>
+                  <div className="scout-stop-tag">{s.tag}</div>
+                  <div className="scout-stop-prog">
+                    {locked ? 'Scan previous world' : `📥 ${got}/${s.facts.length} fragments`}
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+
+          {totalData >= maxData && (
+            <div className="scout-complete-banner">
+              👑 <strong>CODEX COMPLETE!</strong> You've collected every data fragment in the solar system.
+              You are a true Cosmic Master!
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // ── Scan view ──
+  const stop = stops[stopIdx]
+  const got = gotFor(stop)
+  const done = isComplete(stop)
+  const R = 118
+  const orbPos = i => {
+    const ang = (i / stop.facts.length) * Math.PI * 2 - Math.PI / 2
+    return { left: `calc(50% + ${Math.cos(ang) * R}px)`, top: `calc(50% + ${Math.sin(ang) * R}px)` }
+  }
+
+  return (
+    <div className="scout-screen">
+      <Stars/>
+      <div className="scout-inner">
+        <div className="blaster-top">
+          <button className="back-btn" onClick={() => { playClick(); setView('map') }}>← Star Map</button>
+          <h2 className="blaster-title" style={{ color: stop.color }}>{stop.name}</h2>
+        </div>
+
+        <div className="scout-scan-status">
+          <span>📥 {got.length}/{stop.facts.length} downloaded</span>
+          <div className="scout-scan-bar"><div className="scout-scan-fill" style={{ width: `${(got.length / stop.facts.length) * 100}%`, background: stop.color }}/></div>
+        </div>
+
+        <div className="scout-orbit-arena">
+          <div className="scout-orbit-ring"/>
+          {stop.img
+            ? <img src={stop.img} alt={stop.name} className="scout-planet-img" style={{ boxShadow: `0 0 60px ${stop.color}55` }}/>
+            : <div className="scout-planet-img scout-stop-giant" style={{ background: `radial-gradient(circle at 35% 35%, #ff8a65, ${stop.color} 60%, #7f1d00)`, boxShadow: `0 0 60px ${stop.color}55` }}/>}
+          {stop.facts.map((_, i) => {
+            const collected = got.includes(i)
+            const busy = downloading === i
+            return (
+              <button key={i}
+                className={`scout-orb${collected ? ' got' : ''}${busy ? ' busy' : ''}`}
+                style={{ ...orbPos(i), animationDelay: `${i * 0.35}s` }}
+                onClick={() => download(i)}
+                disabled={collected}
+              >
+                {collected ? '✓' : busy ? '⇣' : '📡'}
+              </button>
+            )
+          })}
+        </div>
+
+        <div className="scout-terminal">
+          <div className="scout-terminal-head">
+            <span className="scout-terminal-dot"/> DATA TERMINAL — {stop.name.toUpperCase()}
+          </div>
+          {downloading != null && <div className="scout-terminal-line downloading">⇣ Receiving transmission...</div>}
+          {lastFact != null && downloading == null && (
+            <div className="scout-terminal-line fresh">
+              <span className="scout-data-chip">DATA #{String(lastFact + 1).padStart(2, '0')}</span> {stop.facts[lastFact]}
+            </div>
+          )}
+          {lastFact == null && downloading == null && !done && (
+            <div className="scout-terminal-line hint">Tap a 📡 satellite to download a data fragment...</div>
+          )}
+          {got.filter(i => i !== lastFact).sort((a, b) => a - b).map(i => (
+            <div key={i} className="scout-terminal-line dim">
+              <span className="scout-data-chip dim">#{String(i + 1).padStart(2, '0')}</span> {stop.facts[i]}
+            </div>
+          ))}
+          {done && (
+            <div className="scout-bonus">
+              <div className="scout-bonus-head">🌟 SCAN COMPLETE — BONUS INTEL UNLOCKED</div>
+              <div className="scout-bonus-fact">{stop.funFact}</div>
+              <button className="game-btn" style={{ marginTop: 14 }} onClick={() => { playClick(); setView('map') }}>
+                {stopIdx < stops.length - 1 ? `🚀 Fly to next world` : '👑 Return to Star Map'}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ── Facts Screen ───────────────────────────────────────────────────────────────
 const FACT_CATEGORIES = [
   { key:'all', label:'All Facts', emoji:'🌠' },
@@ -2299,7 +2509,7 @@ function FactsScreen({ onBack, onQuiz }) {
 }
 
 // ── Home Screen ────────────────────────────────────────────────────────────────
-function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts, onGame, onArcade }) {
+function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts, onGame, onArcade, onScout }) {
   return (
     <div className="home">
       <Stars/>
@@ -2358,6 +2568,15 @@ function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts, onGame, onArcade }
             </div>
           </div>
         </button>
+        <button className="mode-card scout-mode-card" onClick={() => { playClick(); onScout() }}>
+          <div className="galaxy-mode-inner">
+            <div className="mode-icon">📡</div>
+            <div>
+              <div className="mode-name">Space Scout: Data Hunter</div>
+              <div className="mode-desc">Scan every world, download real space facts &amp; rank up from Cadet to Cosmic Master!</div>
+            </div>
+          </div>
+        </button>
         <button className="mode-card facts-mode-card" onClick={() => { playClick(); onFacts() }}>
           <div className="galaxy-mode-inner">
             <div className="mode-icon">📖</div>
@@ -2378,9 +2597,10 @@ export default function App() {
   const [screen, setScreen] = useState('home')
   return (
     <div className="app">
-      {screen === 'home'      && <HomeScreen onExplore={() => setScreen('explore')} onQuiz={() => setScreen('quiz')} onGalaxies={() => setScreen('galaxies')} onFacts={() => setScreen('facts')} onGame={() => setScreen('game')} onArcade={() => setScreen('arcade')}/>}
+      {screen === 'home'      && <HomeScreen onExplore={() => setScreen('explore')} onQuiz={() => setScreen('quiz')} onGalaxies={() => setScreen('galaxies')} onFacts={() => setScreen('facts')} onGame={() => setScreen('game')} onArcade={() => setScreen('arcade')} onScout={() => setScreen('scout')}/>}
       {screen === 'game'      && <WalliGame onBack={() => setScreen('home')}/>}
       {screen === 'arcade'    && <SpaceBlaster onBack={() => setScreen('home')}/>}
+      {screen === 'scout'     && <SpaceScout onBack={() => setScreen('home')}/>}
       {screen === 'explore'   && <ExploreScreen onBack={() => setScreen('home')}/>}
       {screen === 'quiz'      && <QuizScreen onBack={() => setScreen('home')}/>}
       {screen === 'galaxies'  && <GalaxiesScreen onBack={() => setScreen('home')}/>}

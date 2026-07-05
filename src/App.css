@@ -936,6 +936,151 @@ body, #root {
 }
 .arcade-mode-card:hover { border-color:rgba(79,195,247,0.65) !important; }
 
+/* ── Space Scout: Data Hunter ───────────────────────────────────────────────── */
+.scout-screen {
+  min-height:100vh; background:#050d1a; overflow-y:auto;
+  position:relative; padding:16px; display:flex; justify-content:center;
+}
+.scout-inner {
+  position:relative; z-index:1; width:100%; max-width:560px;
+  display:flex; flex-direction:column; gap:14px; padding-bottom:60px;
+}
+
+.scout-rank-card {
+  display:flex; align-items:center; gap:14px;
+  background:linear-gradient(135deg,rgba(255,215,64,0.1),rgba(124,77,255,0.08));
+  border:1px solid rgba(255,215,64,0.25); border-radius:16px; padding:14px 16px;
+}
+.scout-rank-icon { font-size:38px; flex-shrink:0; }
+.scout-rank-info { flex:1; }
+.scout-rank-title { font-size:17px; font-weight:900; color:#ffd740; }
+.scout-rank-sub { font-size:12px; color:#90a4ae; margin:3px 0 8px; line-height:1.5; }
+.scout-rank-bar { height:7px; border-radius:4px; background:rgba(255,255,255,0.08); overflow:hidden; }
+.scout-rank-fill {
+  height:100%; border-radius:4px;
+  background:linear-gradient(90deg,#ffd740,#ff9100);
+  transition:width 0.5s ease;
+}
+
+.scout-mission-brief {
+  font-size:13px; color:#90a4ae; line-height:1.7;
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+  border-radius:12px; padding:12px 16px;
+}
+.scout-mission-brief strong { color:#82b1ff; }
+
+.scout-map {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px;
+}
+.scout-stop {
+  background:linear-gradient(145deg,#0a1428,#080e1f);
+  border:1px solid rgba(255,255,255,0.1); border-radius:16px;
+  padding:14px 10px; cursor:pointer; text-align:center;
+  transition:transform 0.2s, border-color 0.2s;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+.scout-stop:hover { transform:translateY(-3px); border-color:var(--sc,#7c4dff); }
+.scout-stop.done { border-color:rgba(76,175,80,0.45); }
+.scout-stop.locked { opacity:0.45; cursor:not-allowed; }
+.scout-stop.locked:hover { transform:none; border-color:rgba(255,255,255,0.1); }
+.scout-stop-img-wrap { position:relative; width:64px; height:64px; margin-bottom:4px; }
+.scout-stop-img { width:64px; height:64px; border-radius:50%; object-fit:cover; }
+.scout-stop-giant { width:64px; height:64px; border-radius:50%; }
+.scout-lock {
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-size:24px; background:rgba(5,13,26,0.55); border-radius:50%;
+}
+.scout-done-stamp { position:absolute; bottom:-2px; right:-2px; font-size:18px; }
+.scout-stop-name { font-size:13px; font-weight:800; }
+.scout-stop-tag { font-size:10px; color:#546e7a; }
+.scout-stop-prog { font-size:11px; color:#78909c; margin-top:2px; }
+
+.scout-complete-banner {
+  text-align:center; font-size:14px; color:#ffd740; line-height:1.7;
+  background:rgba(255,215,64,0.1); border:1px solid rgba(255,215,64,0.35);
+  border-radius:14px; padding:16px;
+}
+
+/* Scan view */
+.scout-scan-status { display:flex; align-items:center; gap:12px; font-size:13px; color:#90a4ae; }
+.scout-scan-bar { flex:1; height:7px; border-radius:4px; background:rgba(255,255,255,0.08); overflow:hidden; }
+.scout-scan-fill { height:100%; border-radius:4px; transition:width 0.4s ease; }
+
+.scout-orbit-arena {
+  position:relative; height:310px; margin:4px 0;
+}
+.scout-orbit-ring {
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:236px; height:236px; border-radius:50%;
+  border:1px dashed rgba(255,255,255,0.15);
+}
+.scout-planet-img {
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:110px; height:110px; border-radius:50%; object-fit:cover;
+}
+.scout-orb {
+  position:absolute; transform:translate(-50%,-50%);
+  width:44px; height:44px; border-radius:50%;
+  background:rgba(124,77,255,0.18); border:2px solid rgba(124,77,255,0.55);
+  font-size:19px; cursor:pointer; color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  animation:orbPulse 2s ease-in-out infinite;
+  transition:background 0.2s, border-color 0.2s;
+}
+@keyframes orbPulse {
+  0%,100% { box-shadow:0 0 6px rgba(124,77,255,0.4); }
+  50%     { box-shadow:0 0 18px rgba(124,77,255,0.9); }
+}
+.scout-orb:hover { background:rgba(124,77,255,0.4); }
+.scout-orb.busy { animation:none; background:rgba(255,215,64,0.25); border-color:#ffd740; color:#ffd740; }
+.scout-orb.got {
+  animation:none; cursor:default;
+  background:rgba(76,175,80,0.18); border-color:rgba(76,175,80,0.6); color:#69f0ae;
+  box-shadow:none;
+}
+
+.scout-terminal {
+  background:#03070f; border:1px solid rgba(105,240,174,0.25);
+  border-radius:14px; padding:14px 16px;
+  font-size:13px; line-height:1.65;
+  max-height:300px; overflow-y:auto;
+}
+.scout-terminal-head {
+  display:flex; align-items:center; gap:8px;
+  font-size:11px; font-weight:800; letter-spacing:0.12em; color:#69f0ae;
+  border-bottom:1px solid rgba(105,240,174,0.15); padding-bottom:8px; margin-bottom:10px;
+}
+.scout-terminal-dot {
+  width:8px; height:8px; border-radius:50%; background:#69f0ae;
+  animation:blink 1.4s ease-in-out infinite;
+}
+.scout-terminal-line { color:#b0bec5; margin-bottom:8px; }
+.scout-terminal-line.fresh { color:#e8f5e9; animation:fadeIn 0.35s ease; }
+.scout-terminal-line.downloading { color:#ffd740; animation:blink 0.6s linear infinite; }
+.scout-terminal-line.hint { color:#546e7a; font-style:italic; }
+.scout-terminal-line.dim { color:#607d8b; }
+.scout-data-chip {
+  display:inline-block; font-size:10px; font-weight:800;
+  background:rgba(105,240,174,0.15); color:#69f0ae;
+  border-radius:6px; padding:1px 7px; margin-right:6px;
+}
+.scout-data-chip.dim { background:rgba(255,255,255,0.06); color:#78909c; }
+
+.scout-bonus {
+  margin-top:10px; border-top:1px dashed rgba(255,215,64,0.3); padding-top:12px;
+  text-align:center;
+}
+.scout-bonus-head { font-size:12px; font-weight:900; letter-spacing:0.1em; color:#ffd740; margin-bottom:8px; }
+.scout-bonus-fact { font-size:13.5px; color:#ffe082; line-height:1.7; }
+
+/* Scout mode card on Home */
+.scout-mode-card {
+  background:linear-gradient(135deg,rgba(105,240,174,0.12),rgba(0,150,136,0.1)) !important;
+  border-color:rgba(105,240,174,0.3) !important;
+  width:100%; margin-bottom:12px;
+}
+.scout-mode-card:hover { border-color:rgba(105,240,174,0.6) !important; }
+
 /* ── Facts Screen ───────────────────────────────────────────────────────────── */
 .facts-screen {
   min-height:100vh; padding:20px 16px 120px; background:#050d1a;
