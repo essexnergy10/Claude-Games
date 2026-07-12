@@ -8,7 +8,9 @@ const ac = () => {
   if (_ac.state === 'suspended') _ac.resume()
   return _ac
 }
+let _soundOn = (() => { try { return (localStorage.getItem('walli-sound') ?? 'on') === 'on' } catch { return true } })()
 function tone(freq, dur, type = 'sine', vol = 0.25, delay = 0) {
+  if (!_soundOn) return
   const c = ac(), t = c.currentTime + delay
   const o = c.createOscillator(), g = c.createGain()
   o.type = type; o.frequency.value = freq
@@ -17,7 +19,40 @@ function tone(freq, dur, type = 'sine', vol = 0.25, delay = 0) {
 }
 const playCorrect = () => { tone(523,0.08,'sine',0.3); tone(659,0.09,'sine',0.25,0.07); tone(784,0.18,'sine',0.2,0.15) }
 const playWrong   = () => { tone(220,0.12,'sawtooth',0.3); tone(180,0.25,'sawtooth',0.25,0.1) }
-const playClick   = () => tone(600,0.06,'sine',0.15)
+const playClick   = () => { tone(600,0.06,'sine',0.15); ensureMusic() }
+
+// Gentle generative background music: slow pentatonic notes over a soft pad
+const MUSIC_NOTES = [261.63, 293.66, 329.63, 392.0, 440.0, 523.25]
+let _musicTimer = null
+function musicStep() {
+  if (!_soundOn) return
+  const n = MUSIC_NOTES[Math.floor(Math.random() * MUSIC_NOTES.length)]
+  tone(n, 3.2, 'sine', 0.035)
+  tone(n / 2, 4.0, 'sine', 0.025, 0.4)
+  if (Math.random() < 0.4) tone(n * 1.5, 2.6, 'sine', 0.018, 1.1)
+}
+function ensureMusic() {
+  if (!_soundOn || _musicTimer) return
+  musicStep()
+  _musicTimer = setInterval(musicStep, 2600)
+}
+function setSoundOn(on) {
+  _soundOn = on
+  try { localStorage.setItem('walli-sound', on ? 'on' : 'off') } catch { /* private mode */ }
+  if (!on && _musicTimer) { clearInterval(_musicTimer); _musicTimer = null }
+  if (on) ensureMusic()
+}
+const isSoundOn = () => _soundOn
+
+function SoundToggle() {
+  const [on, setOn] = useState(isSoundOn())
+  return (
+    <button className="sound-toggle" title={on ? 'Mute sound & music' : 'Turn on sound & music'}
+      onClick={() => { const next = !on; setSoundOn(next); setOn(next); if (next) playClick() }}>
+      {on ? '🔊' : '🔇'}
+    </button>
+  )
+}
 
 // ── Sun data ───────────────────────────────────────────────────────────────────
 const SUN = {
@@ -539,6 +574,82 @@ const BLACK_HOLES = [
       'It\'s so far away that the light we see left it before Earth even existed',
     ],
     funFact:'TON 618 is so enormous that 1,000 of our Milky Way\'s central black holes (Sgr A*) would fit inside it — with room to spare!',
+  },
+]
+
+// ── James Webb Space Telescope images ──────────────────────────────────────────
+const JWST_ITEMS = [
+  {
+    id:'webb-deep', name:'Webb\'s First Deep Field', nickname:'The Deepest Infrared View Ever',
+    type:'Galaxy Cluster SMACS 0723', chip:'🛰️ JWST',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Webb%27s_First_Deep_Field.jpg/500px-Webb%27s_First_Deep_Field.jpg',
+    thumbLg:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Webb%27s_First_Deep_Field.jpg/1280px-Webb%27s_First_Deep_Field.jpg',
+    img:'https://upload.wikimedia.org/wikipedia/commons/b/bf/Webb%27s_First_Deep_Field.jpg',
+    color:'#ffcc80',
+    distance:'4.6 billion light-years (cluster)', diameter:'A patch of sky the size of a sand grain at arm\'s length',
+    stars:'Thousands of galaxies', constellation:'Volans', age:'Some galaxies over 13 billion years old',
+    facts:[
+      'The very first science image released from the James Webb Space Telescope, unveiled in July 2022',
+      'The galaxy cluster\'s gravity bends light like a lens, magnifying galaxies far behind it',
+      'Some galaxies here appear as they were over 13 billion years ago — near the dawn of the universe',
+      'This entire field covers a patch of sky the size of a grain of sand held at arm\'s length',
+      'Webb captured in hours what took Hubble weeks — its mirror is 6 times larger',
+    ],
+    funFact:'The curved orange streaks are real galaxies stretched by gravity — Einstein predicted this "lensing" a century before Webb photographed it!',
+  },
+  {
+    id:'cosmic-cliffs', name:'Cosmic Cliffs', nickname:'Mountains of Starbirth',
+    type:'Carina Nebula (NGC 3324)', chip:'🛰️ JWST',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/NASA%E2%80%99s_Webb_Reveals_Cosmic_Cliffs%2C_Glittering_Landscape_of_Star_Birth.jpg/500px-NASA%E2%80%99s_Webb_Reveals_Cosmic_Cliffs%2C_Glittering_Landscape_of_Star_Birth.jpg',
+    thumbLg:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/NASA%E2%80%99s_Webb_Reveals_Cosmic_Cliffs%2C_Glittering_Landscape_of_Star_Birth.jpg/1280px-NASA%E2%80%99s_Webb_Reveals_Cosmic_Cliffs%2C_Glittering_Landscape_of_Star_Birth.jpg',
+    img:'https://upload.wikimedia.org/wikipedia/commons/4/44/NASA%E2%80%99s_Webb_Reveals_Cosmic_Cliffs%2C_Glittering_Landscape_of_Star_Birth.jpg',
+    color:'#ffb74d',
+    distance:'7,600 light-years', diameter:'The tallest "cliffs" are ~7 light-years high',
+    stars:'Hundreds of newborn stars', constellation:'Carina', age:'Stars just 1–2 million years old',
+    facts:[
+      'What looks like mountains at sunset is actually the glowing edge of a giant gas cavity in the Carina Nebula',
+      'The "cliffs" are being carved by scorching ultraviolet radiation from massive young stars above them',
+      'Webb\'s infrared vision reveals hundreds of baby stars completely hidden from normal telescopes',
+      'The tallest peaks in this image are about 7 light-years high — 65 trillion kilometres',
+      'The "steam" rising from the cliffs is hot gas escaping the nebula under intense radiation',
+    ],
+    funFact:'Some of the baby stars here shoot out jets of gas millions of kilometres long — cosmic sneezes from stars younger than humanity\'s oldest cave paintings are old!',
+  },
+  {
+    id:'southern-ring', name:'Southern Ring Nebula', nickname:'A Dying Star\'s Last Dance',
+    type:'Planetary Nebula (NGC 3132)', chip:'🛰️ JWST',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Southern_Ring_Nebula_%28NIRCam_Image%29.png/500px-Southern_Ring_Nebula_%28NIRCam_Image%29.png',
+    thumbLg:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Southern_Ring_Nebula_%28NIRCam_Image%29.png/1280px-Southern_Ring_Nebula_%28NIRCam_Image%29.png',
+    img:'https://upload.wikimedia.org/wikipedia/commons/2/29/Southern_Ring_Nebula_%28NIRCam_Image%29.png',
+    color:'#80deea',
+    distance:'2,500 light-years', diameter:'~0.5 light-years across',
+    stars:'Two stars at the centre', constellation:'Vela', age:'Shells expanding for ~10,000 years',
+    facts:[
+      'These glowing shells are layers of gas puffed off by a dying star over thousands of years',
+      'Webb revealed there are actually TWO stars at the centre, orbiting each other',
+      'The dimmer star is a white dwarf — the leftover core of a star that ran out of fuel',
+      'Our own Sun will create a nebula like this in about 5 billion years',
+      'The expanding gas shells travel outward at about 15 km every second',
+    ],
+    funFact:'This is a preview of our Sun\'s far future — but don\'t worry, it has 5 billion years of fuel left in the tank!',
+  },
+  {
+    id:'stephans-quintet', name:'Stephan\'s Quintet', nickname:'The Galactic Dance',
+    type:'Compact Galaxy Group', chip:'🛰️ JWST',
+    thumb:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Sonify7_stephansquintet.jpg/500px-Sonify7_stephansquintet.jpg',
+    thumbLg:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Sonify7_stephansquintet.jpg/1280px-Sonify7_stephansquintet.jpg',
+    img:'https://upload.wikimedia.org/wikipedia/commons/d/db/Sonify7_stephansquintet.jpg',
+    color:'#b39ddb',
+    distance:'290 million light-years (4 of 5)', diameter:'Group spans ~500,000 light-years',
+    stars:'5 galaxies, trillions of stars', constellation:'Pegasus', age:'Colliding for millions of years',
+    facts:[
+      'Five galaxies locked in a cosmic dance — four of them are slowly colliding with each other',
+      'Webb\'s mosaic of this group is built from almost 1,000 separate image files',
+      'One galaxy is a photobomber — it\'s 250 million light-years closer than the other four',
+      'Shockwaves from the collisions heat gas to millions of degrees, triggering bursts of new stars',
+      'This group was discovered in 1877 — Webb finally showed it in dazzling infrared detail',
+    ],
+    funFact:'Stephan\'s Quintet appears in the classic film "It\'s a Wonderful Life" — as the place where the angels have their meeting!',
   },
 ]
 
@@ -1108,7 +1219,7 @@ function GalaxiesScreen({ onBack }) {
         <img src={g.thumb} alt={g.name} className="galaxy-card-img" loading="lazy" decoding="async"
           onLoad={e => e.currentTarget.classList.add('loaded')}
         />
-        {g.hubble && <div className="galaxy-hubble-chip">🔭 Hubble</div>}
+        {(g.chip || g.hubble) && <div className="galaxy-hubble-chip">{g.chip || '🔭 Hubble'}</div>}
       </div>
       <div className="card-body">
         <div className="card-name" style={{color:g.color}}>{g.name}</div>
@@ -1142,6 +1253,20 @@ function GalaxiesScreen({ onBack }) {
       {/* Galaxy cards grid */}
       <div className="galaxy-cards">
         {GALAXIES.map(g => <GalaxyCard key={g.id} g={g}/>)}
+      </div>
+
+      {/* James Webb section */}
+      <div className="universe-section jwst-section">
+        <div className="universe-section-header">
+          <div className="universe-section-icon">🛰️</div>
+          <div>
+            <div className="universe-section-title">James Webb Space Telescope</div>
+            <div className="universe-section-sub">The newest, most powerful space telescope — seeing the universe in infrared since 2022</div>
+          </div>
+        </div>
+        <div className="galaxy-cards">
+          {JWST_ITEMS.map(g => <GalaxyCard key={g.id} g={g}/>)}
+        </div>
       </div>
 
       {/* Black Holes section */}
@@ -1180,11 +1305,42 @@ function GalaxiesScreen({ onBack }) {
 // ── Quiz Screen ────────────────────────────────────────────────────────────────
 function QuizScreen({ onBack, questionPool = QUESTIONS }) {
   const [questions] = useState(() => shuffle(questionPool).slice(0, Math.min(10, questionPool.length)))
+  const [mode, setMode] = useState(null)          // null (choosing) | 1 | 2
   const [qi, setQi] = useState(0)
   const [picked, setPicked] = useState(null)
   const [score, setScore] = useState(0)
+  const [scores, setScores] = useState([0, 0])    // two-player scores
   const [done, setDone] = useState(false)
   const [streak, setStreak] = useState(0)
+
+  const twoP = mode === 2
+  const player = qi % 2                           // whose turn (2P): 0 = P1, 1 = P2
+
+  if (mode === null) {
+    return (
+      <div className="quiz">
+        <Stars/>
+        <div className="quiz-top">
+          <button className="back-btn" onClick={onBack}>← Back</button>
+        </div>
+        <div className="quiz-card quiz-mode-card-select">
+          <h3 className="quiz-question">🧠 How do you want to play?</h3>
+          <div className="quiz-mode-btns">
+            <button className="quiz-mode-btn" onClick={() => { playClick(); setMode(1) }}>
+              <div className="qm-icon">🧑‍🚀</div>
+              <div className="qm-name">1 Player</div>
+              <div className="qm-desc">10 questions, beat your best!</div>
+            </button>
+            <button className="quiz-mode-btn" onClick={() => { playClick(); setMode(2) }}>
+              <div className="qm-icon">🧑‍🚀🧑‍🚀</div>
+              <div className="qm-name">2 Players</div>
+              <div className="qm-desc">Pass &amp; play — take turns, 5 questions each!</div>
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   const q = questions[qi]
   const _raw = PLANETS.find(p => p.id === q.planet) || GALAXIES.find(g => g.id === q.galaxy) || BLACK_HOLES.find(b => b.id === q.galaxy)
@@ -1195,8 +1351,11 @@ function QuizScreen({ onBack, questionPool = QUESTIONS }) {
     if (picked) return
     setPicked(choice)
     const isRight = choice === correctAnswer
-    if (isRight) { playCorrect(); setScore(s=>s+1); setStreak(s=>s+1) }
-    else { playWrong(); setStreak(0) }
+    if (isRight) {
+      playCorrect()
+      if (twoP) setScores(s => { const n = [...s]; n[player]++; return n })
+      else { setScore(s=>s+1); setStreak(s=>s+1) }
+    } else { playWrong(); setStreak(0) }
   }
 
   function next() {
@@ -1205,7 +1364,29 @@ function QuizScreen({ onBack, questionPool = QUESTIONS }) {
     else { setQi(q=>q+1); setPicked(null) }
   }
 
-  function restart() { playClick(); setQi(0); setPicked(null); setScore(0); setDone(false); setStreak(0) }
+  function restart() { playClick(); setQi(0); setPicked(null); setScore(0); setScores([0,0]); setDone(false); setStreak(0); setMode(null) }
+
+  if (done && twoP) {
+    const [a, b] = scores
+    const winner = a === b ? null : a > b ? 1 : 2
+    return (
+      <div className="quiz-result">
+        <Stars/>
+        <div className="result-box">
+          <div className="result-grade">{winner ? `🏆 Player ${winner} Wins!` : '🤝 It\'s a Tie!'}</div>
+          <div className="quiz-2p-final">
+            <div className={`quiz-2p-score${winner===1?' won':''}`}>🔵 Player 1<strong>{a}</strong></div>
+            <div className={`quiz-2p-score${winner===2?' won':''}`}>🟣 Player 2<strong>{b}</strong></div>
+          </div>
+          <p className="result-msg">{winner ? 'Amazing space knowledge! Rematch to defend the title?' : 'Two equally brilliant explorers! Play again to settle it!'}</p>
+          <div className="result-btns">
+            <button className="quiz-btn primary" onClick={restart}>🔄 Rematch</button>
+            <button className="quiz-btn secondary" onClick={onBack}>🏠 Home</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   if (done) {
     const pct = Math.round((score/questions.length)*100)
@@ -1245,10 +1426,15 @@ function QuizScreen({ onBack, questionPool = QUESTIONS }) {
           </div>
           <span className="progress-label">Q{qi+1} / {questions.length}</span>
         </div>
-        <div className="quiz-score-live">⭐ {score}</div>
+        <div className="quiz-score-live">{twoP ? `🔵 ${scores[0]} · 🟣 ${scores[1]}` : `⭐ ${score}`}</div>
       </div>
 
-      {streak >= 2 && <div className="streak-badge">🔥 {streak} streak!</div>}
+      {twoP && (
+        <div className={`quiz-turn-banner${player === 1 ? ' p2' : ''}`}>
+          {player === 0 ? '🔵 Player 1' : '🟣 Player 2'} — your question!
+        </div>
+      )}
+      {!twoP && streak >= 2 && <div className="streak-badge">🔥 {streak} streak!</div>}
 
       <div className="quiz-card">
         {q.type === 'image-to-name' && (
@@ -1509,12 +1695,14 @@ const WW_WORLDS = [
 // ── Small shared pieces ────────────────────────────────────────────────────────
 function Speech({ who, text }) {
   const isNova = who === 'nova'
+  const name = getExplorerName()
+  const personalised = name ? text.replace(/\bExplorer\b/g, name) : text
   return (
     <div className={`walli-says-wrap${isNova ? ' nova' : ''}`}>
       <div className="walli-char-icon">{isNova ? '🤖' : '🧑‍🚀'}</div>
       <div className="walli-bubble">
         <span className={`walli-name-chip${isNova ? ' nova-chip' : ''}`}>{isNova ? 'Nova' : 'Walli'}</span>
-        <p>{text}</p>
+        <p>{personalised}</p>
       </div>
     </div>
   )
@@ -1761,6 +1949,10 @@ function MiniGift({ cfg, onDone }) {
 const WW_MINIS = { checklist:MiniChecklist, collect:MiniCollect, reveal:MiniReveal, dodge:MiniDodge, rings:MiniRings, repair:MiniRepair, tapfast:MiniTapFast, gift:MiniGift }
 
 // ── Save helpers ───────────────────────────────────────────────────────────────
+function getExplorerName() {
+  try { return localStorage.getItem('walli-name') || '' } catch { return '' }
+}
+
 const WW_KEY = 'walli-world-save'
 function wwLoad() {
   try { return JSON.parse(localStorage.getItem(WW_KEY)) || { done:{}, crystals:0, coins:0 } }
@@ -1861,6 +2053,7 @@ function WalliGame({ onBack }) {
 
   // ── Certificate ──
   if (scene === 'cert') {
+    const explorerName = getExplorerName()
     return (
       <div className="ww-screen">
         <Stars/>
@@ -1870,12 +2063,15 @@ function WalliGame({ onBack }) {
             <div className="ww-cert-head">SPACE ACADEMY CERTIFICATE</div>
             <div className="ww-cert-walli">🧑‍🚀🤖</div>
             <div className="ww-cert-line">This certifies that</div>
-            <div className="ww-cert-name">WALLI &amp; YOU</div>
+            <div className="ww-cert-name">{explorerName ? `${explorerName.toUpperCase()} & WALLI` : 'WALLI & YOU'}</div>
             <div className="ww-cert-line">have completed all 12 missions and earned the rank of</div>
             <div className="ww-cert-rank">🏆 MASTER SPACE EXPLORER 🏆</div>
             <div className="ww-cert-stickers">{WW_WORLDS.map(w => <span key={w.id}>{w.sticker}</span>)}</div>
             <div className="ww-cert-motto">"Explore. Learn. Discover. Dream Beyond the Stars."</div>
-            <button className="game-btn" style={{ marginTop:20 }} onClick={() => { playClick(); setScene('map') }}>🗺️ Back to Star Map</button>
+            <div className="ww-cert-btns">
+              <button className="game-btn" onClick={() => { playClick(); window.print() }}>🖨️ Print Certificate</button>
+              <button className="game-btn" onClick={() => { playClick(); setScene('map') }}>🗺️ Back to Star Map</button>
+            </div>
           </div>
         </div>
       </div>
@@ -2702,12 +2898,210 @@ function FactsScreen({ onBack, onQuiz }) {
   )
 }
 
+// ── Memory Match ───────────────────────────────────────────────────────────────
+function MemoryMatch({ onBack }) {
+  const makeDeck = () => {
+    const chosen = shuffle(PLANETS).slice(0, 8)
+    return shuffle(chosen.flatMap(p => [
+      { key: p.id + '-a', pid: p.id, img: p.img, name: p.name },
+      { key: p.id + '-b', pid: p.id, img: p.img, name: p.name },
+    ]))
+  }
+  const [deck, setDeck] = useState(makeDeck)
+  const [flipped, setFlipped] = useState([])      // keys currently face-up (unmatched)
+  const [matched, setMatched] = useState([])      // pids matched
+  const [moves, setMoves] = useState(0)
+  const [lock, setLock] = useState(false)
+
+  const won = matched.length === 8
+  const stars = won ? (moves <= 12 ? 3 : moves <= 18 ? 2 : 1) : 0
+
+  const flip = card => {
+    if (lock || flipped.includes(card.key) || matched.includes(card.pid)) return
+    playClick()
+    const nf = [...flipped, card.key]
+    setFlipped(nf)
+    if (nf.length === 2) {
+      setMoves(m => m + 1)
+      setLock(true)
+      const [a, b] = nf.map(k => deck.find(c => c.key === k))
+      if (a.pid === b.pid) {
+        setTimeout(() => { playCorrect(); setMatched(m => [...m, a.pid]); setFlipped([]); setLock(false) }, 500)
+      } else {
+        setTimeout(() => { playWrong(); setFlipped([]); setLock(false) }, 900)
+      }
+    }
+  }
+
+  const restart = () => { playClick(); setDeck(makeDeck()); setFlipped([]); setMatched([]); setMoves(0); setLock(false) }
+
+  return (
+    <div className="memory-screen">
+      <Stars/>
+      <div className="memory-inner">
+        <div className="blaster-top">
+          <button className="back-btn" onClick={onBack}>← Back</button>
+          <h2 className="blaster-title">🃏 Planet Memory Match</h2>
+        </div>
+        <div className="blaster-hud">
+          <span className="bh-chip">🔄 <strong>{moves}</strong> moves</span>
+          <span className="bh-chip">✅ <strong>{matched.length}/8</strong> pairs</span>
+        </div>
+
+        {won ? (
+          <div className="badge-screen">
+            <div className="badge-glow">{'⭐'.repeat(stars)}</div>
+            <div className="badge-name">You matched all 8 planets!</div>
+            <div className="badge-msg">Finished in {moves} moves — {stars === 3 ? 'PERFECT memory!' : stars === 2 ? 'great memory!' : 'good job, try for fewer moves!'}</div>
+            <button className="game-btn" onClick={restart}>🔄 Play Again</button>
+          </div>
+        ) : (
+          <div className="memory-grid">
+            {deck.map(card => {
+              const up = flipped.includes(card.key) || matched.includes(card.pid)
+              return (
+                <button key={card.key} className={`memory-card${up ? ' up' : ''}${matched.includes(card.pid) ? ' matched' : ''}`} onClick={() => flip(card)}>
+                  {up
+                    ? <img src={card.img} alt={card.name} className="memory-card-img" loading="lazy"/>
+                    : <span className="memory-card-back">✨</span>}
+                </button>
+              )
+            })}
+          </div>
+        )}
+        <p className="games-sub">Flip two cards to find matching planets!</p>
+      </div>
+    </div>
+  )
+}
+
+// ── Rocket Builder ─────────────────────────────────────────────────────────────
+const RB_PARTS = {
+  nose: [
+    { id:'red',    name:'Classic Red',   cost:0,  color:'#ef5350' },
+    { id:'gold',   name:'Golden Peak',   cost:15, color:'#ffd740' },
+    { id:'violet', name:'Nebula Violet', cost:30, color:'#b388ff' },
+  ],
+  body: [
+    { id:'white',  name:'Classic White', cost:0,  color:'#eceff1' },
+    { id:'blue',   name:'Sky Blue',      cost:15, color:'#81d4fa' },
+    { id:'mint',   name:'Alien Mint',    cost:30, color:'#a5ffd6' },
+  ],
+  fins: [
+    { id:'grey',   name:'Steel Fins',    cost:0,  color:'#78909c' },
+    { id:'orange', name:'Flame Orange',  cost:15, color:'#ff9800' },
+    { id:'pink',   name:'Comet Pink',    cost:30, color:'#f48fb1' },
+  ],
+}
+const RB_KEY = 'walli-rocket'
+
+function RocketBuilder({ onBack }) {
+  const [wallet, setWallet] = useState(wwLoad)
+  const [rocket, setRocket] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(RB_KEY)) || { owned:['nose:red','body:white','fins:grey'], sel:{ nose:'red', body:'white', fins:'grey' } } }
+    catch { return { owned:['nose:red','body:white','fins:grey'], sel:{ nose:'red', body:'white', fins:'grey' } } }
+  })
+  const [launching, setLaunching] = useState(false)
+
+  useEffect(() => {
+    try { localStorage.setItem(RB_KEY, JSON.stringify(rocket)) } catch { /* private mode */ }
+  }, [rocket])
+
+  const partOf = slot => RB_PARTS[slot].find(p => p.id === rocket.sel[slot])
+  const ownedKey = (slot, id) => `${slot}:${id}`
+
+  const pickPart = (slot, part) => {
+    const key = ownedKey(slot, part.id)
+    if (rocket.owned.includes(key)) {
+      playClick()
+      setRocket(r => ({ ...r, sel: { ...r.sel, [slot]: part.id } }))
+      return
+    }
+    if (wallet.coins < part.cost) { playWrong(); return }
+    // buy it: deduct from the shared Galaxy Quest wallet
+    playCorrect()
+    const newWallet = { ...wallet, coins: wallet.coins - part.cost }
+    setWallet(newWallet)
+    try { localStorage.setItem(WW_KEY, JSON.stringify(newWallet)) } catch { /* private mode */ }
+    setRocket(r => ({ ...r, owned:[...r.owned, key], sel:{ ...r.sel, [slot]: part.id } }))
+  }
+
+  const launch = () => {
+    if (launching) return
+    setLaunching(true)
+    tone(180, 1.6, 'sawtooth', 0.12); tone(240, 1.6, 'sawtooth', 0.08, 0.15)
+    tone(523, 0.15, 'sine', 0.2, 1.4); tone(659, 0.15, 'sine', 0.2, 1.55); tone(784, 0.3, 'sine', 0.2, 1.7)
+    setTimeout(() => setLaunching(false), 2600)
+  }
+
+  const SLOT_LABEL = { nose:'🔺 Nose Cone', body:'🚀 Body', fins:'🪽 Fins' }
+
+  return (
+    <div className="rb-screen">
+      <Stars/>
+      <div className="rb-inner">
+        <div className="blaster-top">
+          <button className="back-btn" onClick={onBack}>← Back</button>
+          <h2 className="blaster-title">🛠️ Rocket Builder</h2>
+        </div>
+        <div className="blaster-hud">
+          <span className="bh-chip">🪙 <strong>{wallet.coins}</strong> coins</span>
+          <span className="bh-chip rb-earn-hint">Earn coins in Galaxy Quest!</span>
+        </div>
+
+        <div className="rb-stage">
+          <div className={`rb-rocket${launching ? ' launching' : ''}`}>
+            <div className="rb-nose" style={{ borderBottomColor: partOf('nose').color }}/>
+            <div className="rb-body" style={{ background: `linear-gradient(90deg, ${partOf('body').color}, color-mix(in srgb, ${partOf('body').color} 60%, #263238))` }}>
+              <div className="rb-window"/>
+            </div>
+            <div className="rb-fins">
+              <div className="rb-fin left"  style={{ borderTopColor: partOf('fins').color }}/>
+              <div className="rb-fin right" style={{ borderTopColor: partOf('fins').color }}/>
+            </div>
+            {launching && <div className="rb-flame">🔥</div>}
+          </div>
+          {launching && <div className="rb-launch-text">🚀 LIFT OFF!!</div>}
+        </div>
+
+        <button className="game-btn" onClick={launch} disabled={launching}>
+          {launching ? '🌌 Flying...' : '🚀 LAUNCH!'}
+        </button>
+
+        {Object.keys(RB_PARTS).map(slot => (
+          <div key={slot} className="rb-slot">
+            <div className="rb-slot-title">{SLOT_LABEL[slot]}</div>
+            <div className="rb-slot-row">
+              {RB_PARTS[slot].map(part => {
+                const owned = rocket.owned.includes(ownedKey(slot, part.id))
+                const selected = rocket.sel[slot] === part.id
+                const affordable = wallet.coins >= part.cost
+                return (
+                  <button key={part.id}
+                    className={`rb-part${selected ? ' selected' : ''}${!owned && !affordable ? ' cant' : ''}`}
+                    onClick={() => pickPart(slot, part)}>
+                    <span className="rb-part-swatch" style={{ background: part.color }}/>
+                    <span className="rb-part-name">{part.name}</span>
+                    <span className="rb-part-cost">{owned ? (selected ? '✅ On' : 'Owned') : `🪙 ${part.cost}`}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ── Games Hub ──────────────────────────────────────────────────────────────────
-function GamesScreen({ onBack, onGame, onArcade, onScout }) {
+function GamesScreen({ onBack, onGame, onArcade, onScout, onMemory, onRocket }) {
   const GAMES = [
     { icon:'🎮', cls:'game-mode-card',   name:'Walli\'s Space World: Galaxy Quest', desc:'Story mode! Walli & Nova the robot explore 12 worlds — earn badges, stickers & crystals, and unlock 6 spaceships', tag:'Story · 12 worlds · saves progress', go:onGame },
     { icon:'🛸', cls:'arcade-mode-card', name:'Space Blaster',      desc:'Arcade action! Steer your fighter, blast splitting asteroids, chain combos, grab power-ups', tag:'Arcade · endless waves', go:onArcade },
     { icon:'📡', cls:'scout-mode-card',  name:'Space Scout: Data Hunter', desc:'Exploration! Scan every world, download 52 real space facts & rank up to Cosmic Master', tag:'Explore · collect & learn', go:onScout },
+    { icon:'🃏', cls:'facts-mode-card',  name:'Planet Memory Match', desc:'Flip the cards and find all 8 matching planet pairs — fewer moves, more stars!', tag:'Puzzle · ages 4+', go:onMemory },
+    { icon:'🛠️', cls:'game-mode-card',  name:'Rocket Builder', desc:'Spend the coins you earned in Galaxy Quest on nose cones, colours & fins — then LAUNCH your creation!', tag:'Creative · uses your coins', go:onRocket },
   ]
   return (
     <div className="games-screen">
@@ -2737,9 +3131,31 @@ function GamesScreen({ onBack, onGame, onArcade, onScout }) {
 
 // ── Home Screen ────────────────────────────────────────────────────────────────
 function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts, onGames }) {
+  const [name, setName] = useState(getExplorerName)
+  const [editingName, setEditingName] = useState(false)
+  const [draft, setDraft] = useState('')
+
+  const saveName = () => {
+    const clean = draft.trim().slice(0, 16)
+    if (!clean) return
+    try { localStorage.setItem('walli-name', clean) } catch { /* private mode */ }
+    playCorrect(); setName(clean); setEditingName(false)
+  }
+
+  // progress pulled from the Galaxy Quest save
+  const wwSave = wwLoad()
+  const wwDone = Object.keys(wwSave.done).length
+  const wwRank = [...WW_RANKS].reverse().find(r => wwDone >= r.min)
+  const stickers = WW_WORLDS.filter(w => wwSave.done[w.id]).map(w => w.sticker)
+
+  // fact of the day rotates through the kids' fact library by date
+  const dayN = Math.floor(Date.now() / 86400000)
+  const dailyFact = SPACE_FACTS[dayN % SPACE_FACTS.length]
+
   return (
     <div className="home">
       <Stars/>
+      <SoundToggle/>
       <div className="home-content">
         <div className="home-hero">
           <div className="home-planets-preview">
@@ -2753,6 +3169,42 @@ function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts, onGames }) {
         </div>
         <h1 className="home-title">🚀 Walli's Space World</h1>
         <p className="home-sub">Discover New Worlds with Walli!</p>
+
+        {!name && !editingName && (
+          <button className="home-name-invite" onClick={() => { playClick(); setEditingName(true) }}>
+            👋 What's your explorer name? Tap to tell Walli!
+          </button>
+        )}
+        {editingName && (
+          <div className="home-name-form">
+            <input className="home-name-input" autoFocus maxLength={16} placeholder="Type your name..."
+              value={draft} onChange={e => setDraft(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && saveName()}
+            />
+            <button className="home-name-save" onClick={saveName}>🚀 Go!</button>
+          </div>
+        )}
+        {name && !editingName && (
+          <div className="home-greeting">
+            👋 Welcome back, <strong>{name}</strong>!
+            <button className="home-name-edit" title="Change name" onClick={() => { playClick(); setDraft(name); setEditingName(true) }}>✏️</button>
+          </div>
+        )}
+
+        {wwDone > 0 && (
+          <div className="home-progress">
+            <span className="home-progress-rank">🎖️ {wwRank.title}</span>
+            <span className="home-progress-stickers">{stickers.join(' ')}</span>
+            <span className="home-progress-count">💎 {wwSave.crystals} · 🪙 {wwSave.coins}</span>
+          </div>
+        )}
+
+        <div className="home-daily-fact">
+          <div className="home-daily-head">🌠 Space Fact of the Day</div>
+          <div className="home-daily-title">{dailyFact.emoji} {dailyFact.title}</div>
+          <div className="home-daily-body">{dailyFact.body}</div>
+        </div>
+
         <div className="home-story">
           <p>Join Walli on an exciting journey across the universe! Travel to distant planets, solve puzzles, rescue friendly aliens, collect space crystals, and discover amazing facts about our solar system and beyond. Every mission brings a new adventure and a chance to become the greatest space explorer in the galaxy.</p>
         </div>
@@ -2761,7 +3213,7 @@ function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts, onGames }) {
             <div className="mode-icon">🎮</div>
             <div>
               <div className="mode-name">Games</div>
-              <div className="mode-desc">3 space games: Walli's Adventure, Space Blaster arcade &amp; Space Scout data hunt!</div>
+              <div className="mode-desc">5 space games: Galaxy Quest, Space Blaster, Space Scout, Memory Match &amp; Rocket Builder!</div>
             </div>
           </div>
         </button>
@@ -2807,10 +3259,12 @@ export default function App() {
   return (
     <div className="app">
       {screen === 'home'      && <HomeScreen onExplore={() => setScreen('explore')} onQuiz={() => setScreen('quiz')} onGalaxies={() => setScreen('galaxies')} onFacts={() => setScreen('facts')} onGames={() => setScreen('games')}/>}
-      {screen === 'games'     && <GamesScreen onBack={() => setScreen('home')} onGame={() => setScreen('game')} onArcade={() => setScreen('arcade')} onScout={() => setScreen('scout')}/>}
+      {screen === 'games'     && <GamesScreen onBack={() => setScreen('home')} onGame={() => setScreen('game')} onArcade={() => setScreen('arcade')} onScout={() => setScreen('scout')} onMemory={() => setScreen('memory')} onRocket={() => setScreen('rocket')}/>}
       {screen === 'game'      && <WalliGame onBack={() => setScreen('games')}/>}
       {screen === 'arcade'    && <SpaceBlaster onBack={() => setScreen('games')}/>}
       {screen === 'scout'     && <SpaceScout onBack={() => setScreen('games')}/>}
+      {screen === 'memory'    && <MemoryMatch onBack={() => setScreen('games')}/>}
+      {screen === 'rocket'    && <RocketBuilder onBack={() => setScreen('games')}/>}
       {screen === 'explore'   && <ExploreScreen onBack={() => setScreen('home')}/>}
       {screen === 'quiz'      && <QuizScreen onBack={() => setScreen('home')}/>}
       {screen === 'galaxies'  && <GalaxiesScreen onBack={() => setScreen('home')}/>}

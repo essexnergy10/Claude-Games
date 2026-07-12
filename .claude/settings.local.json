@@ -6,7 +6,15 @@
       "Bash(brew --version)",
       "Bash(git init *)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(git push *)",
+      "Bash(npm run *)",
+      "Bash(npx vite *)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(python3 -)",
+      "Bash(curl -s https://claude-games-five.vercel.app/)",
+      "Bash(curl -s https://claude-games-five.vercel.app/assets/index-BicYfbUf.js)"
     ]
   }
 }
