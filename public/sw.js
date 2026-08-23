@@ -1,6 +1,8 @@
 // Walli's Space World — simple offline-capable service worker
-const CACHE = 'walli-space-v1'
-const SHELL = ['/', '/manifest.webmanifest', '/app-icon.svg', '/favicon.svg']
+// All paths are relative to the SW's own location so the app works at any
+// base URL (localhost root or a GitHub Pages subpath).
+const CACHE = 'walli-space-v2'
+const SHELL = ['./', './manifest.webmanifest', './app-icon.svg', './favicon.svg']
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)))
@@ -22,8 +24,8 @@ self.addEventListener('fetch', e => {
   if (e.request.mode === 'navigate') {
     e.respondWith(
       fetch(e.request)
-        .then(res => { caches.open(CACHE).then(c => c.put('/', res.clone())); return res })
-        .catch(() => caches.match('/'))
+        .then(res => { caches.open(CACHE).then(c => c.put('./', res.clone())); return res })
+        .catch(() => caches.match('./'))
     )
     return
   }

@@ -653,6 +653,133 @@ const JWST_ITEMS = [
   },
 ]
 
+// ── The Multiverse ─────────────────────────────────────────────────────────────
+// These are IDEAS, not photographed objects — so the cards use portal art, never
+// a photo. `real` (0-100) drives the "Is it real?" meter and keeps kids honest
+// about which of these scientists actually take seriously.
+const MULTIVERSE = [
+  {
+    id:'bubbles', emoji:'🫧', name:'Bubble Universes', nickname:'The Foamy Multiverse',
+    type:'Eternal Inflation', color:'#64b5f6', real:60,
+    realLabel:'Quite likely — lots of scientists take this one seriously',
+    imagine:'Imagine blowing bubbles in the bath. Each bubble is a whole universe — and ours is just one little bubble floating in a giant foam!',
+    facts:[
+      'Right after the Big Bang, space stretched faster than anything you can imagine — that is called inflation',
+      'Some scientists think the stretching never stopped, and it keeps blowing new bubbles',
+      'Each bubble grows into its own universe, with its own space and its own time',
+      'The bubbles rush apart so fast that they can never bump into each other',
+      'Our entire universe would be just one tiny bubble in an endless foam',
+    ],
+    visit:'No — the bubbles fly apart faster than light can travel, so no rocket could ever catch one.',
+    funFact:'If bubble universes are real, brand-new ones might be popping into existence right now — far too fast to ever count!',
+  },
+  {
+    id:'many-worlds', emoji:'🌿', name:'Many Worlds', nickname:'Every Choice Grows a New World',
+    type:'Quantum Many-Worlds', color:'#81c784', real:45,
+    realLabel:'Possible — but scientists argue about this one a lot',
+    imagine:'Imagine you pick chocolate ice cream. In another world, that you picked strawberry! Every choice grows a new branch, like a giant tree.',
+    facts:[
+      'Tiny particles can do two things at once — scientists have really watched this happen',
+      'One idea says the universe splits so that BOTH things happen, in two different worlds',
+      'A student named Hugh Everett thought this up in 1957, and almost nobody believed him',
+      'It would mean there are copies of you doing all the things you decided not to do',
+      'The worlds cannot talk to each other, so you would never feel the split',
+    ],
+    visit:'No — the branches separate completely, so there is no door from one to the other.',
+    funFact:'If Many Worlds is true, somewhere out there is a you who became an astronaut and is walking on Mars right now!',
+  },
+  {
+    id:'branes', emoji:'🍞', name:'Universes Side by Side', nickname:'Slices of Cosmic Bread',
+    type:'Brane Worlds', color:'#ba68c8', real:35,
+    realLabel:'A big maybe — very hard to test',
+    imagine:'Imagine a loaf of sliced bread. Each slice is a whole universe, sitting right beside ours — closer than your own shadow!',
+    facts:[
+      'Some scientists think space has extra hidden directions that we cannot see or point at',
+      'Our universe might be one flat sheet floating inside a much bigger space',
+      'Other sheets could be right next to us, but light cannot cross between them',
+      'Gravity might be the only thing that can leak from one sheet to another',
+      'That could explain why gravity feels so weak — a fridge magnet beats the whole Earth!',
+    ],
+    visit:'Not by rocket — you cannot fly there, because "there" is in a direction nobody can point at.',
+    funFact:'Another universe could be less than a millimetre away from the tip of your nose — and you would never know!',
+  },
+  {
+    id:'babies', emoji:'🕳️', name:'Baby Universes', nickname:'Born Inside Black Holes',
+    type:'Black Hole Cosmology', color:'#ff8a65', real:30,
+    realLabel:'A long shot — fun to think about',
+    imagine:'Imagine every black hole is an egg. Squeeze enough stuff inside, and a brand-new baby universe hatches out the other side!',
+    facts:[
+      'Black holes squash matter into an unbelievably tiny space',
+      'Some scientists wonder if that squashed matter bounces and blossoms into a new universe',
+      'If so, our universe might have been born inside a black hole in somebody else\'s universe',
+      'Each new baby universe would grow up with slightly different rules',
+      'Nobody can see inside a black hole, which makes this idea very hard to check',
+    ],
+    visit:'Definitely not — falling into a black hole is a one-way trip, and nothing ever comes back out.',
+    funFact:'Our galaxy holds millions of black holes. If this idea is right, that is millions of baby universes!',
+  },
+  {
+    id:'repeat', emoji:'🔁', name:'The Repeating Universe', nickname:'A Copy of You, Far Far Away',
+    type:'Infinite Space', color:'#4dd0e1', real:50,
+    realLabel:'Maybe! It follows from ideas we already trust',
+    imagine:'Shuffle a deck of cards long enough and the same order comes up again. If space goes on forever, the same YOU comes up again too!',
+    facts:[
+      'There are only so many ways to arrange the tiny bits that make up a person',
+      'If space truly never ends, every arrangement has to appear again somewhere',
+      'That means there could be another Earth out there, exactly like ours',
+      'Your copy would be so far away that its light will never, ever reach us',
+      'This one needs no magic at all — just ordinary physics and endless space',
+    ],
+    visit:'No — your copy sits far beyond the edge of everything we can ever see.',
+    funFact:'Scientists guess your nearest exact copy is so far away that writing the distance down would take more zeros than there are atoms in your body!',
+  },
+  {
+    id:'rules', emoji:'🎛️', name:'Different Rules Universes', nickname:'Where Physics Works Differently',
+    type:'Different Constants', color:'#ffd54f', real:40,
+    realLabel:'Possible — it would explain a real puzzle',
+    imagine:'Imagine a universe where gravity is enormously strong, so everything is squished flat. Or one so weak that stars never switch on at all!',
+    facts:[
+      'Our universe has "settings" — how strong gravity is, how heavy each particle is',
+      'If those settings were even a tiny bit different, stars and planets could not exist',
+      'Some scientists think other universes got all the other settings',
+      'Most of them would be dark and empty, with no stars and nobody to look at them',
+      'We live in one that works — because we could not live in one that does not!',
+    ],
+    visit:'No — and you would not want to. In almost all of them you could not survive a single second.',
+    funFact:'If gravity were just a little bit stronger, the whole universe would have crunched back together long before Earth was born.',
+  },
+  {
+    id:'bounce', emoji:'⏪', name:'The Bouncing Universe', nickname:'The Universe Before Ours',
+    type:'Big Bounce', color:'#f06292', real:35,
+    realLabel:'A big maybe — scientists are still searching for clues',
+    imagine:'Imagine a bouncy ball. It squashes all the way down, then springs straight back up. The universe might do that too — over and over, forever!',
+    facts:[
+      'Most scientists agree our universe began with the Big Bang, 13.8 billion years ago',
+      'But some wonder what — if anything — happened before that',
+      'The Big Bounce idea says an older universe shrank down and bounced into ours',
+      'Universes would come one after another, like beads threaded on a string',
+      'There could have been countless universes before this one',
+    ],
+    visit:'No — that universe is in the past, and nobody has ever built a time machine.',
+    funFact:'If the Big Bounce is real, our Big Bang was not a beginning at all — it was somebody else\'s ending!',
+  },
+  {
+    id:'simulation', emoji:'🖥️', name:'The Simulated Universe', nickname:'Is Everything a Giant Computer Game?',
+    type:'Simulation Idea', color:'#90a4ae', real:20,
+    realLabel:'Just a what-if — this one is not really science yet',
+    imagine:'Imagine the whole universe is a super-advanced video game, and we are the characters inside it. Would we even be able to tell?',
+    facts:[
+      'Computers can already build worlds that look astonishingly real',
+      'Some people wonder whether a very advanced civilisation could simulate a whole universe',
+      'A few scientists hunt for "glitches" — tiny clues that space is made of pixels',
+      'So far nobody has found a single glitch anywhere',
+      'Most scientists say this is a fun question, not a proper theory',
+    ],
+    visit:'You would already be there! But there would be no way to walk out of the game.',
+    funFact:'This is the least scientific idea on this page — it is really a big "what if?" rather than a real theory.',
+  },
+]
+
 // ── Space Facts for Kids ───────────────────────────────────────────────────────
 const SPACE_FACTS = [
   {
@@ -821,6 +948,81 @@ const FACT_QUESTIONS = [
   { q:'What is the number of stars in the observable universe compared to Earth\'s sand grains?', type:'text-to-name', textChoices:true,
     choices:['More stars than sand grains','Fewer stars than sand grains','Exactly the same number','About twice as many sand grains'],
     answer:'More stars than sand grains', hint:'There are about 10²⁴ stars — more than every grain of sand on every beach on Earth combined!' },
+]
+
+// ── Little Explorer questions (ages ~4-6) ─────────────────────────────────────
+// Designed for pre-readers: 3 choices, big picture clues, and answers a young
+// child can get from looking rather than reading. Planet-name answers omit
+// `textChoices` on purpose so the buttons show planet photos as visual hints.
+const EASY_QUESTIONS = [
+  { q:'Which planet do we live on?', type:'text-to-name',
+    choices:['Earth','Mars','Jupiter'], answer:'Earth',
+    hint:'Earth is our home — the blue and green one!' },
+  { q:'Which planet is red?', type:'text-to-name',
+    choices:['Mars','Earth','Neptune'], answer:'Mars',
+    hint:'Mars is covered in rusty red dust, like a big red desert!' },
+  { q:'Which planet has big beautiful rings?', type:'text-to-name',
+    choices:['Saturn','Earth','Mercury'], answer:'Saturn',
+    hint:'Saturn wears rings made of ice and rock, like a hula hoop!' },
+  { q:'Which planet is the BIGGEST?', type:'text-to-name',
+    choices:['Jupiter','Earth','Mercury'], answer:'Jupiter',
+    hint:'Jupiter is so big that all the other planets could fit inside it!' },
+  { q:'Which planet is the SMALLEST?', type:'text-to-name',
+    choices:['Mercury','Jupiter','Saturn'], answer:'Mercury',
+    hint:'Mercury is the littlest planet — about the size of our Moon!' },
+  { q:'What is this planet?', type:'image-to-name', planet:'earth',
+    choices:['Earth','Mars','Saturn'] },
+  { q:'What is this planet?', type:'image-to-name', planet:'saturn',
+    choices:['Saturn','Earth','Mercury'] },
+  { q:'What is this planet?', type:'image-to-name', planet:'mars',
+    choices:['Mars','Neptune','Venus'] },
+  { q:'What is this planet?', type:'image-to-name', planet:'jupiter',
+    choices:['Jupiter','Mercury','Earth'] },
+  { q:'What gives us light and warmth in the daytime?', type:'text-to-name', textChoices:true,
+    choices:['☀️ The Sun','🌙 The Moon','⭐ A star at night'], answer:'☀️ The Sun',
+    hint:'The Sun is our very own star, and it keeps us warm every day!' },
+  { q:'What do we see in the sky at night?', type:'text-to-name', textChoices:true,
+    choices:['⭐ Stars and the Moon','🌈 Rainbows','🌻 Flowers'], answer:'⭐ Stars and the Moon',
+    hint:'When the Sun goes down, the stars and Moon come out to say hello!' },
+  { q:'What colour is the Earth from space?', type:'text-to-name', textChoices:true,
+    choices:['💙 Blue','💜 Purple','🖤 Black'], answer:'💙 Blue',
+    hint:'Earth looks blue because most of it is covered in water!' },
+  { q:'What do we ride to fly into space?', type:'text-to-name', textChoices:true,
+    choices:['🚀 A rocket','🚌 A bus','🚲 A bicycle'], answer:'🚀 A rocket',
+    hint:'Rockets are super fast and push all the way up past the sky!' },
+  { q:'What do we call someone who travels into space?', type:'text-to-name', textChoices:true,
+    choices:['👩‍🚀 An astronaut','👩‍🍳 A chef','👩‍🏫 A teacher'], answer:'👩‍🚀 An astronaut',
+    hint:'Astronauts wear special white suits and float around!' },
+  { q:'Why do astronauts wear a space suit?', type:'text-to-name', textChoices:true,
+    choices:['🌬️ There is no air in space','🎉 To look pretty','❄️ To go swimming'], answer:'🌬️ There is no air in space',
+    hint:'There is no air in space, so the suit carries air for them to breathe!' },
+  { q:'How many moons does the Earth have?', type:'text-to-name', textChoices:true,
+    choices:['1️⃣ One','🔟 Ten','0️⃣ None'], answer:'1️⃣ One',
+    hint:'We have exactly one Moon, and it goes round and round the Earth!' },
+  { q:'Is the Moon bigger or smaller than the Earth?', type:'text-to-name', textChoices:true,
+    choices:['🌙 Smaller','🌍 Bigger','⚖️ Exactly the same'], answer:'🌙 Smaller',
+    hint:'The Moon is much smaller — Earth is about 4 times wider!' },
+  { q:'What is the Moon made of?', type:'text-to-name', textChoices:true,
+    choices:['🪨 Rock and dust','🧀 Cheese','🍦 Ice cream'], answer:'🪨 Rock and dust',
+    hint:'It is grey rock and dust — not cheese, even though it looks a bit like it!' },
+  { q:'Which is hotter?', type:'text-to-name', textChoices:true,
+    choices:['☀️ The Sun','🧊 An ice cube','❄️ Snow'], answer:'☀️ The Sun',
+    hint:'The Sun is the hottest thing around — far hotter than anything on Earth!' },
+  { q:'What shape is the Earth?', type:'text-to-name', textChoices:true,
+    choices:['⚪ Round like a ball','⬛ Flat like a pancake','🔺 Pointy like a triangle'], answer:'⚪ Round like a ball',
+    hint:'Earth is round like a giant ball spinning in space!' },
+  { q:'Can you hear a sound in space?', type:'text-to-name', textChoices:true,
+    choices:['🤫 No, space is silent','📣 Yes, very loudly','🎵 Only music'], answer:'🤫 No, space is silent',
+    hint:'Sound needs air to travel, and space has no air — so it is totally quiet!' },
+  { q:'How many planets go around our Sun?', type:'text-to-name', textChoices:true,
+    choices:['8️⃣ Eight','2️⃣ Two','💯 One hundred'], answer:'8️⃣ Eight',
+    hint:'Eight planets! Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune.' },
+  { q:'Which planet is closest to the Sun?', type:'text-to-name',
+    choices:['Mercury','Neptune','Earth'], answer:'Mercury',
+    hint:'Mercury sits nearest the Sun, so it gets very toasty!' },
+  { q:'What happens to astronauts inside a spaceship?', type:'text-to-name', textChoices:true,
+    choices:['🎈 They float around','🛌 They fall asleep','🏃 They run fast'], answer:'🎈 They float around',
+    hint:'In space everything floats — even their food and water!' },
 ]
 
 // ── Quiz questions ─────────────────────────────────────────────────────────────
@@ -1302,9 +1504,132 @@ function GalaxiesScreen({ onBack }) {
   )
 }
 
+// ── Multiverse ─────────────────────────────────────────────────────────────────
+function MultiverseModal({ uni, onClose }) {
+  useEffect(() => {
+    const onKey = e => { if(e.key==='Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
+
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal mv-modal" style={{'--mc':uni.color}} onClick={e=>e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose}>✕</button>
+
+        <div className="mv-modal-hero">
+          <div className="mv-portal mv-portal-lg">
+            <span className="mv-portal-emoji">{uni.emoji}</span>
+          </div>
+          <h2 className="mv-modal-name" style={{color:uni.color}}>{uni.name}</h2>
+          <p className="mv-modal-nick">"{uni.nickname}"</p>
+          <div className="galaxy-type-chip">{uni.type}</div>
+        </div>
+
+        <div className="mv-imagine">
+          <span className="mv-imagine-icon">🌈</span>
+          <div>
+            <div className="mv-imagine-head">Imagine this...</div>
+            <p className="mv-imagine-body">{uni.imagine}</p>
+          </div>
+        </div>
+
+        <div className="mv-meter-block">
+          <div className="mv-meter-head">🔬 Is it real?</div>
+          <div className="mv-meter"><div className="mv-meter-fill" style={{width:`${uni.real}%`}}/></div>
+          <div className="mv-meter-label">{uni.realLabel}</div>
+        </div>
+
+        <div className="modal-facts">
+          <h3>🌌 What scientists think</h3>
+          <ul>{uni.facts.map((f,i) => <li key={i}>{f}</li>)}</ul>
+        </div>
+
+        <div className="mv-visit">
+          <span>🚀</span>
+          <div><strong>Could we visit?</strong> {uni.visit}</div>
+        </div>
+
+        <div className="modal-funfact">
+          <span>💡</span><span>{uni.funFact}</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function MultiverseScreen({ onBack }) {
+  const [selected, setSelected] = useState(null)
+
+  return (
+    <div className="explore multiverse-screen">
+      <div className="explore-header">
+        <button className="back-btn" onClick={onBack}>← Back</button>
+        <h2 className="explore-title">🌀 The Multiverse</h2>
+        <p className="explore-sub">What if ours isn't the only universe?</p>
+      </div>
+
+      <div className="hubble-banner mv-banner">
+        <div className="hubble-banner-icon">🌀</div>
+        <div className="hubble-banner-text">
+          <div className="hubble-banner-title">Could there be other universes?</div>
+          <div className="hubble-banner-sub">
+            Our universe is unbelievably huge — but some scientists think it might not be the only one!
+            Here are 8 big ideas about other universes. Tap any portal to explore it, and check the
+            "Is it real?" meter to see how seriously scientists take it.
+          </div>
+        </div>
+      </div>
+
+      <div className="galaxy-cards mv-cards">
+        {MULTIVERSE.map(u => (
+          <button key={u.id} className="galaxy-card mv-card" style={{'--mc':u.color, '--gc':u.color}}
+            onClick={() => { playClick(); setSelected(u) }}>
+            <div className="mv-card-art">
+              <div className="mv-portal"><span className="mv-portal-emoji">{u.emoji}</span></div>
+              <div className="mv-card-chip">{u.type}</div>
+            </div>
+            <div className="card-body">
+              <div className="card-name" style={{color:u.color}}>{u.name}</div>
+              <div className="card-nick">{u.nickname}</div>
+              <div className="mv-mini-meter"><div className="mv-mini-fill" style={{width:`${u.real}%`}}/></div>
+              <div className="card-type">Tap to explore →</div>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      <div className="mv-honesty">
+        <div className="mv-honesty-icon">🔭</div>
+        <div>
+          <div className="mv-honesty-title">Remember, Explorer!</div>
+          <div className="mv-honesty-body">
+            Nobody has ever proved that ANY of these other universes exist. Scientists have not seen one,
+            photographed one, or visited one — these are clever ideas built from the maths and the clues we
+            have so far. That is what makes them so exciting: one day, someone might find the answer.
+            Maybe it will be you!
+          </div>
+        </div>
+      </div>
+
+      {selected && <MultiverseModal uni={selected} onClose={() => setSelected(null)}/>}
+    </div>
+  )
+}
+
 // ── Quiz Screen ────────────────────────────────────────────────────────────────
-function QuizScreen({ onBack, questionPool = QUESTIONS }) {
-  const [questions] = useState(() => shuffle(questionPool).slice(0, Math.min(10, questionPool.length)))
+// Pick 10 random questions and shuffle each one's choices so the correct
+// answer never sits in a predictable spot.
+const prepQuestions = pool =>
+  shuffle(pool).slice(0, Math.min(10, pool.length)).map(q => ({ ...q, choices: shuffle(q.choices) }))
+
+// `questionPool` pins the quiz to one pool (used by the Facts quiz). Left null,
+// the player first picks a difficulty.
+function QuizScreen({ onBack, questionPool = null }) {
+  const [level, setLevel] = useState(questionPool ? 'preset' : null)
+  const [questions, setQuestions] = useState(
+    () => questionPool ? prepQuestions(questionPool) : []
+  )
   const [mode, setMode] = useState(null)          // null (choosing) | 1 | 2
   const [qi, setQi] = useState(0)
   const [picked, setPicked] = useState(null)
@@ -1312,11 +1637,20 @@ function QuizScreen({ onBack, questionPool = QUESTIONS }) {
   const [scores, setScores] = useState([0, 0])    // two-player scores
   const [done, setDone] = useState(false)
   const [streak, setStreak] = useState(0)
+  const [handoff, setHandoff] = useState(false)   // "pass the device" screen (2P)
 
   const twoP = mode === 2
   const player = qi % 2                           // whose turn (2P): 0 = P1, 1 = P2
+  const easy = level === 'easy'
 
-  if (mode === null) {
+  function chooseLevel(l) {
+    playClick()
+    const pool = l === 'easy' ? EASY_QUESTIONS : QUESTIONS
+    setQuestions(prepQuestions(pool))
+    setLevel(l)
+  }
+
+  if (level === null) {
     return (
       <div className="quiz">
         <Stars/>
@@ -1324,17 +1658,44 @@ function QuizScreen({ onBack, questionPool = QUESTIONS }) {
           <button className="back-btn" onClick={onBack}>← Back</button>
         </div>
         <div className="quiz-card quiz-mode-card-select">
+          <h3 className="quiz-question">🧠 Pick your level</h3>
+          <div className="quiz-mode-btns">
+            <button className="quiz-mode-btn level-easy" onClick={() => chooseLevel('easy')}>
+              <div className="qm-icon">🧸</div>
+              <div className="qm-name">Little Explorer</div>
+              <div className="qm-desc">Ages 4–6 · big pictures, 3 easy choices</div>
+            </button>
+            <button className="quiz-mode-btn" onClick={() => chooseLevel('normal')}>
+              <div className="qm-icon">🔭</div>
+              <div className="qm-name">Space Cadet</div>
+              <div className="qm-desc">Ages 7+ · the full planet &amp; galaxy quiz</div>
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (mode === null) {
+    return (
+      <div className="quiz">
+        <Stars/>
+        <div className="quiz-top">
+          <button className="back-btn" onClick={() => { playClick(); if (level === 'preset') onBack(); else setLevel(null) }}>← Back</button>
+        </div>
+        <div className="quiz-card quiz-mode-card-select">
+          {easy && <div className="quiz-level-tag">🧸 Little Explorer</div>}
           <h3 className="quiz-question">🧠 How do you want to play?</h3>
           <div className="quiz-mode-btns">
             <button className="quiz-mode-btn" onClick={() => { playClick(); setMode(1) }}>
               <div className="qm-icon">🧑‍🚀</div>
               <div className="qm-name">1 Player</div>
-              <div className="qm-desc">10 questions, beat your best!</div>
+              <div className="qm-desc">{questions.length} questions, beat your best!</div>
             </button>
             <button className="quiz-mode-btn" onClick={() => { playClick(); setMode(2) }}>
               <div className="qm-icon">🧑‍🚀🧑‍🚀</div>
               <div className="qm-name">2 Players</div>
-              <div className="qm-desc">Pass &amp; play — take turns, 5 questions each!</div>
+              <div className="qm-desc">Pass &amp; play — take turns, {questions.length / 2} questions each!</div>
             </button>
           </div>
         </div>
@@ -1361,10 +1722,23 @@ function QuizScreen({ onBack, questionPool = QUESTIONS }) {
   function next() {
     playClick()
     if (qi+1 >= questions.length) setDone(true)
-    else { setQi(q=>q+1); setPicked(null) }
+    else {
+      setQi(q=>q+1); setPicked(null)
+      // Hide the next question behind a handoff card so the other player
+      // can take the device without seeing it early.
+      if (twoP) setHandoff(true)
+    }
   }
 
-  function restart() { playClick(); setQi(0); setPicked(null); setScore(0); setScores([0,0]); setDone(false); setStreak(0); setMode(null) }
+  function restart() {
+    playClick()
+    const pool = level === 'preset' ? questionPool : easy ? EASY_QUESTIONS : QUESTIONS
+    setQuestions(prepQuestions(pool))
+    setQi(0); setPicked(null); setScore(0); setScores([0,0])
+    setDone(false); setStreak(0); setMode(null); setHandoff(false)
+    // Level is kept so a rematch stays at the same difficulty; the mode
+    // screen's Back button returns to the level picker.
+  }
 
   if (done && twoP) {
     const [a, b] = scores
@@ -1390,11 +1764,17 @@ function QuizScreen({ onBack, questionPool = QUESTIONS }) {
 
   if (done) {
     const pct = Math.round((score/questions.length)*100)
-    const grade = pct>=90?'🏆 Astronaut!':pct>=70?'🚀 Explorer!':pct>=50?'🌟 Cadet!':'🌙 Beginner!'
-    const msg = pct>=90?'Incredible! You know the cosmos better than most astronomers!'
-              : pct>=70?'Great job! You\'re a true space explorer!'
-              : pct>=50?'Good effort! Keep studying the planets and galaxies!'
-              : 'Keep exploring! Visit the Planet and Galaxy sections to learn more.'
+    const grade = easy
+      ? (pct>=80?'🌟 Super Star!':pct>=50?'🚀 Great Job!':'🧸 Well Done!')
+      : (pct>=90?'🏆 Astronaut!':pct>=70?'🚀 Explorer!':pct>=50?'🌟 Cadet!':'🌙 Beginner!')
+    const msg = easy
+      ? (pct>=80?'Wow! You know so much about space. Walli is proud of you!'
+        : pct>=50?'Nice work, little explorer! Want to play one more?'
+        : 'Great trying! Every explorer learns a bit more each time. Play again!')
+      : (pct>=90?'Incredible! You know the cosmos better than most astronomers!'
+        : pct>=70?'Great job! You\'re a true space explorer!'
+        : pct>=50?'Good effort! Keep studying the planets and galaxies!'
+        : 'Keep exploring! Visit the Planet and Galaxy sections to learn more.')
     return (
       <div className="quiz-result">
         <Stars/>
@@ -1407,6 +1787,26 @@ function QuizScreen({ onBack, questionPool = QUESTIONS }) {
             <button className="quiz-btn primary" onClick={restart}>🔄 Try Again</button>
             <button className="quiz-btn secondary" onClick={onBack}>🏠 Home</button>
           </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (handoff) {
+    return (
+      <div className="quiz">
+        <Stars/>
+        <div className="quiz-top">
+          <button className="back-btn" onClick={onBack}>← Back</button>
+          <div className="quiz-score-live">🔵 {scores[0]} · 🟣 {scores[1]}</div>
+        </div>
+        <div className={`quiz-card quiz-handoff${player === 1 ? ' p2' : ''}`}>
+          <div className="handoff-icon">🤝</div>
+          <h3 className="quiz-question">Pass the device to {player === 0 ? '🔵 Player 1' : '🟣 Player 2'}</h3>
+          <p className="handoff-sub">No peeking! Tap when you&apos;re holding it.</p>
+          <button className="next-btn" onClick={() => { playClick(); setHandoff(false) }}>
+            I&apos;m ready — show my question →
+          </button>
         </div>
       </div>
     )
@@ -1436,7 +1836,7 @@ function QuizScreen({ onBack, questionPool = QUESTIONS }) {
       )}
       {!twoP && streak >= 2 && <div className="streak-badge">🔥 {streak} streak!</div>}
 
-      <div className="quiz-card">
+      <div className={`quiz-card${easy ? ' quiz-easy' : ''}`}>
         {q.type === 'image-to-name' && (
           <div className="quiz-img-wrap">
             <img
@@ -3130,7 +3530,7 @@ function GamesScreen({ onBack, onGame, onArcade, onScout, onMemory, onRocket }) 
 }
 
 // ── Home Screen ────────────────────────────────────────────────────────────────
-function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts, onGames }) {
+function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts, onGames, onMultiverse }) {
   const [name, setName] = useState(getExplorerName)
   const [editingName, setEditingName] = useState(false)
   const [draft, setDraft] = useState('')
@@ -3238,6 +3638,15 @@ function HomeScreen({ onExplore, onQuiz, onGalaxies, onFacts, onGames }) {
             </div>
           </div>
         </button>
+        <button className="mode-card mv-mode-card" onClick={() => { playClick(); onMultiverse() }}>
+          <div className="galaxy-mode-inner">
+            <div className="mode-icon">🌀</div>
+            <div>
+              <div className="mode-name">The Multiverse</div>
+              <div className="mode-desc">What if ours isn't the only universe? 8 mind-bending ideas — with an "Is it real?" meter</div>
+            </div>
+          </div>
+        </button>
         <button className="mode-card facts-mode-card" onClick={() => { playClick(); onFacts() }}>
           <div className="galaxy-mode-inner">
             <div className="mode-icon">📖</div>
@@ -3258,7 +3667,7 @@ export default function App() {
   const [screen, setScreen] = useState('home')
   return (
     <div className="app">
-      {screen === 'home'      && <HomeScreen onExplore={() => setScreen('explore')} onQuiz={() => setScreen('quiz')} onGalaxies={() => setScreen('galaxies')} onFacts={() => setScreen('facts')} onGames={() => setScreen('games')}/>}
+      {screen === 'home'      && <HomeScreen onExplore={() => setScreen('explore')} onQuiz={() => setScreen('quiz')} onGalaxies={() => setScreen('galaxies')} onFacts={() => setScreen('facts')} onGames={() => setScreen('games')} onMultiverse={() => setScreen('multiverse')}/>}
       {screen === 'games'     && <GamesScreen onBack={() => setScreen('home')} onGame={() => setScreen('game')} onArcade={() => setScreen('arcade')} onScout={() => setScreen('scout')} onMemory={() => setScreen('memory')} onRocket={() => setScreen('rocket')}/>}
       {screen === 'game'      && <WalliGame onBack={() => setScreen('games')}/>}
       {screen === 'arcade'    && <SpaceBlaster onBack={() => setScreen('games')}/>}
@@ -3268,6 +3677,7 @@ export default function App() {
       {screen === 'explore'   && <ExploreScreen onBack={() => setScreen('home')}/>}
       {screen === 'quiz'      && <QuizScreen onBack={() => setScreen('home')}/>}
       {screen === 'galaxies'  && <GalaxiesScreen onBack={() => setScreen('home')}/>}
+      {screen === 'multiverse'&& <MultiverseScreen onBack={() => setScreen('home')}/>}
       {screen === 'facts'     && <FactsScreen onBack={() => setScreen('home')} onQuiz={() => setScreen('factsquiz')}/>}
       {screen === 'factsquiz' && <QuizScreen onBack={() => setScreen('facts')} questionPool={FACT_QUESTIONS}/>}
     </div>

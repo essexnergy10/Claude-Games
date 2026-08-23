@@ -1154,6 +1154,22 @@ body, #root {
 .quiz-2p-score.won { border-color:rgba(255,215,64,0.5); background:rgba(255,215,64,0.08); }
 .quiz-2p-score.won strong { color:#ffd740; }
 
+/* Level picker + Little Explorer mode */
+.quiz-mode-btn.level-easy:hover { border-color:#ffd740; }
+.quiz-level-tag {
+  display:inline-block; font-size:12px; font-weight:800; color:#ffd740;
+  background:rgba(255,215,64,0.1); border:1px solid rgba(255,215,64,0.3);
+  border-radius:20px; padding:5px 14px; margin-bottom:12px;
+}
+.quiz-easy .quiz-question { font-size:26px; line-height:1.4; }
+.quiz-easy .choice-btn { font-size:20px; padding:20px 18px; }
+
+/* 2P "pass the device" handoff */
+.quiz-handoff { text-align:center; border-color:rgba(79,195,247,0.35); }
+.quiz-handoff.p2 { border-color:rgba(206,147,216,0.35); }
+.handoff-icon { font-size:52px; margin-bottom:6px; }
+.handoff-sub { font-size:14px; color:#90a4ae; margin:8px 0 18px; }
+
 /* ── Memory Match ───────────────────────────────────────────────────────────── */
 .memory-screen {
   min-height:100vh; background:#050d1a; overflow-y:auto;
@@ -1548,3 +1564,151 @@ body, #root {
   width:100%; margin-bottom:20px;
 }
 .facts-mode-card:hover { border-color:rgba(160,130,255,0.5) !important; }
+
+/* ════════════════════════════════════════════
+   MULTIVERSE SCREEN
+════════════════════════════════════════════ */
+.mv-banner {
+  background:linear-gradient(135deg,rgba(120,60,220,0.18),rgba(40,110,200,0.14)) !important;
+  border-color:rgba(170,120,255,0.28) !important;
+}
+.mv-banner .hubble-banner-title { color:#b388ff; }
+
+/* Tint helpers. NOTE: `var(--mc)33` does NOT work — var() substitutes whole
+   tokens, so the alpha suffix never fuses onto the hex. Use color-mix instead. */
+.mv-card, .mv-modal {
+  --mc-t:   color-mix(in srgb, var(--mc) 0%,  transparent);
+  --mc-a10: color-mix(in srgb, var(--mc) 10%, transparent);
+  --mc-a20: color-mix(in srgb, var(--mc) 20%, transparent);
+  --mc-a27: color-mix(in srgb, var(--mc) 27%, transparent);
+  --mc-a35: color-mix(in srgb, var(--mc) 35%, transparent);
+  --mc-a47: color-mix(in srgb, var(--mc) 47%, transparent);
+  --mc-a67: color-mix(in srgb, var(--mc) 67%, transparent);
+}
+
+/* Portal art — stands in for a photo, because nobody has ever photographed these */
+.mv-portal {
+  position:relative; width:96px; height:96px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:
+    radial-gradient(circle at 50% 50%, var(--mc-a20) 0%, transparent 62%),
+    conic-gradient(from 0deg, var(--mc-t), var(--mc-a67), var(--mc-t) 70%);
+  box-shadow:0 0 34px var(--mc-a27), inset 0 0 26px rgba(0,0,0,0.65);
+  animation:mv-spin 9s linear infinite;
+}
+.mv-portal::after {
+  content:''; position:absolute; inset:13px; border-radius:50%;
+  background:radial-gradient(circle at 40% 35%, #0d1430, #04070f 75%);
+  border:1px solid var(--mc-a35);
+}
+.mv-portal-emoji {
+  position:relative; z-index:2; font-size:38px; line-height:1;
+  animation:mv-counter-spin 9s linear infinite;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,0.8));
+}
+@keyframes mv-spin { to { transform:rotate(360deg) } }
+@keyframes mv-counter-spin { to { transform:rotate(-360deg) } }
+@media (prefers-reduced-motion:reduce) {
+  .mv-portal, .mv-portal-emoji { animation:none; }
+}
+
+.mv-portal-lg { width:132px; height:132px; margin-bottom:14px; }
+.mv-portal-lg::after { inset:17px; }
+.mv-portal-lg .mv-portal-emoji { font-size:54px; }
+
+/* Cards */
+.mv-card { background:linear-gradient(150deg,#0a0a1f,#0b1026) !important; }
+.mv-card-art {
+  position:relative; aspect-ratio:16/10;
+  display:flex; align-items:center; justify-content:center;
+  background:
+    radial-gradient(ellipse at 50% 55%, var(--mc-a10), transparent 68%),
+    linear-gradient(150deg,#07071a,#0a1030);
+  overflow:hidden;
+}
+.mv-card-chip {
+  position:absolute; top:10px; right:10px;
+  background:rgba(8,8,26,0.82); border:1px solid var(--mc-a35);
+  border-radius:20px; padding:3px 10px;
+  font-size:10px; font-weight:800; color:var(--mc,#fff); letter-spacing:0.4px;
+  backdrop-filter:blur(4px);
+}
+
+/* "Is it real?" meter */
+.mv-mini-meter {
+  height:6px; border-radius:6px; margin-top:4px;
+  background:rgba(255,255,255,0.08); overflow:hidden;
+}
+.mv-mini-fill {
+  height:100%; border-radius:6px;
+  background:linear-gradient(90deg,var(--mc-a47),var(--mc));
+}
+
+.mv-meter-block {
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.09); border-radius:14px;
+  padding:14px 18px; margin-bottom:18px;
+}
+.mv-meter-head { font-size:14px; font-weight:800; color:#e0e6f0; margin-bottom:10px; }
+.mv-meter {
+  height:12px; border-radius:8px; overflow:hidden;
+  background:rgba(255,255,255,0.08); margin-bottom:8px;
+}
+.mv-meter-fill {
+  height:100%; border-radius:8px;
+  background:linear-gradient(90deg,#455a64,var(--mc,#fff));
+  transition:width 0.6s ease;
+}
+.mv-meter-label { font-size:12.5px; color:#90a4ae; line-height:1.5; }
+
+/* Modal */
+.mv-modal { border-color:var(--mc-a35) !important; }
+.mv-modal-hero {
+  display:flex; flex-direction:column; align-items:center;
+  text-align:center; margin-bottom:22px;
+}
+.mv-modal-name { font-size:clamp(20px,4vw,30px); font-weight:900; margin-bottom:2px; }
+.mv-modal-nick { font-size:14px; color:#90a4ae; margin-bottom:10px; }
+
+.mv-imagine {
+  background:linear-gradient(135deg,rgba(255,200,80,0.1),rgba(255,120,200,0.09));
+  border:1px solid rgba(255,200,120,0.22); border-radius:14px;
+  padding:14px 18px; margin-bottom:18px;
+  display:flex; gap:12px; align-items:flex-start;
+}
+.mv-imagine-icon { font-size:22px; flex-shrink:0; }
+.mv-imagine-head { font-size:13px; font-weight:900; color:#ffd54f; margin-bottom:4px; }
+.mv-imagine-body { font-size:14px; color:#e0e6f0; line-height:1.6; }
+
+.mv-visit {
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.09); border-radius:14px;
+  padding:13px 18px; margin-bottom:16px;
+  display:flex; gap:10px; align-items:flex-start;
+  font-size:13.5px; color:#b0bec5; line-height:1.6;
+}
+.mv-visit span:first-child { font-size:19px; flex-shrink:0; }
+.mv-visit strong { color:#90caf9; }
+
+/* Honesty note — these are ideas, not proven facts */
+.mv-honesty {
+  margin-top:36px;
+  display:flex; gap:16px; align-items:flex-start;
+  background:linear-gradient(135deg,rgba(80,100,200,0.14),rgba(120,60,200,0.11));
+  border:1px solid rgba(130,177,255,0.2); border-radius:18px;
+  padding:20px 22px;
+}
+.mv-honesty-icon { font-size:34px; flex-shrink:0; }
+.mv-honesty-title { font-size:16px; font-weight:900; color:#82b1ff; margin-bottom:5px; }
+.mv-honesty-body { font-size:13.5px; color:#90a4ae; line-height:1.65; }
+
+/* Multiverse mode card on Home */
+.mv-mode-card {
+  background:linear-gradient(135deg,rgba(120,60,220,0.18),rgba(40,110,200,0.12)) !important;
+  border-color:rgba(170,120,255,0.25) !important;
+  width:100%; margin-bottom:12px;
+}
+.mv-mode-card:hover {
+  box-shadow:0 8px 32px rgba(170,120,255,0.25) !important;
+  border-color:rgba(170,120,255,0.5) !important;
+}
