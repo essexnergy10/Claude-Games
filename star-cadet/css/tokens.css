@@ -1,0 +1,30 @@
+/* Star Cadet design tokens — the only place colours and type live (spec §2) */
+:root{
+  /* ground */
+  --void:      #14102B;   /* page ground, deep indigo-plum */
+  --void-2:    #0E0A1F;   /* deepest, screen bottoms */
+  --nebula:    #241847;   /* raised panel */
+  --nebula-2:  #2E1F58;   /* raised panel, lighter */
+  --rim:       #4B3383;   /* borders, active */
+  --rim-soft:  #38266A;   /* borders, resting */
+
+  /* ink */
+  --star:      #FFF4DE;   /* primary text — warm cream, never pure white */
+  --star-dim:  #BFAEDC;   /* secondary text */
+
+  /* accents */
+  --sun:       #FFB13C;   /* PRIMARY. buttons, coins, stars, current */
+  --sun-deep:  #E8890F;   /* button underside / 3D edge */
+  --coral:     #FF5D73;   /* hearts, Zibby's cheeks, playful */
+  --aqua:      #3FE0D0;   /* correct, mastered, energy */
+  --aqua-deep: #17A99C;
+  --lilac:     #A98CE8;   /* labels */
+
+  /* mastery semantics (parent zone) */
+  --m-mastered:#3FE0D0;  --m-nearly:#FFB13C;
+  --m-learning:#6B4FB0;  --m-none:#2E2352;
+
+  /* type */
+  --font-display:'Fredoka','Comic Sans MS','Chalkboard SE',system-ui,sans-serif;
+  --font-mono:'DM Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}

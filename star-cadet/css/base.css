@@ -1,0 +1,120 @@
+/* Reset + fixed-canvas scaling + shared components (spec §3, §12, §13) */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+html,body{height:100%}
+body{
+  user-select:none;-webkit-user-select:none;overscroll-behavior:none;position:fixed;inset:0;
+  font-family:var(--font-display);color:var(--star);background:var(--void-2);
+}
+button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer}
+img,svg{display:block;max-width:100%}
+
+/* ── The 1024×768 canvas, scaled to fit ── */
+#fit{position:fixed;inset:0;overflow:hidden;background:var(--void-2)}
+#canvas{
+  /* Centered via absolute offsets, not grid: an overflowing grid item loses
+     its center alignment on small viewports, pushing the game off-screen. */
+  width:1024px;height:768px;transform-origin:center center;overflow:hidden;
+  position:absolute;left:calc(50% - 512px);top:calc(50% - 384px);
+  background:radial-gradient(120% 90% at 50% -18%, #3B2670 0%, #1B1338 46%, #0E0A1F 100%);
+}
+#starfield{position:absolute;inset:0;pointer-events:none}
+#screen-root{position:absolute;inset:0}
+#overlay-root{position:absolute;inset:0;pointer-events:none;z-index:50}
+#overlay-root>*{pointer-events:auto}
+
+.screen{position:absolute;inset:0}
+
+/* ── Type helpers ── */
+.mono{font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.16em;font-weight:400}
+.tnum{font-variant-numeric:tabular-nums}
+.title{font-size:30px;font-weight:600}
+.panel-h{font-size:22px;font-weight:600}
+
+/* ── Buttons ── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:12px;
+  background:var(--sun);color:#3A2404;border-radius:999px;font-weight:700;
+  box-shadow:0 12px 0 var(--sun-deep);transform:translateY(0);
+  transition:transform .08s ease, box-shadow .08s ease;
+  min-width:88px;min-height:88px;padding:0 44px;font-size:28px;
+}
+.btn:active{transform:translateY(6px);box-shadow:0 6px 0 var(--sun-deep)}
+.btn.big{font-size:44px;padding:0 64px;min-height:104px}
+.btn-ghost{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  background:var(--nebula-2);color:var(--star);border:3px solid var(--rim);
+  border-radius:999px;font-weight:600;font-size:22px;min-width:88px;min-height:88px;padding:0 30px;
+  box-shadow:0 8px 0 #1A1140;transition:transform .08s ease, box-shadow .08s ease;
+}
+.btn-ghost:active{transform:translateY(4px);box-shadow:0 4px 0 #1A1140}
+.btn-round{min-width:88px;min-height:88px;width:88px;padding:0;border-radius:999px;font-size:36px}
+
+/* ── Pills / chips / panels ── */
+.pill{
+  display:inline-flex;align-items:center;gap:9px;background:var(--nebula);
+  border:2px solid var(--rim-soft);border-radius:999px;padding:10px 20px;
+  font-size:19px;font-weight:600;
+}
+.chip{background:var(--nebula-2);border:2px solid var(--rim-soft);border-radius:14px;padding:8px 14px}
+.panel{
+  background:var(--nebula);border:3px solid var(--rim);border-radius:28px;padding:28px;
+}
+
+/* ── Overlay / modal ── */
+.overlay{
+  position:absolute;inset:0;background:rgba(10,7,24,.78);display:grid;place-items:center;
+  pointer-events:auto;z-index:60;
+}
+.overlay .panel{max-width:900px;max-height:700px}
+
+/* ── Hearts ── */
+.hearts{display:flex;gap:8px;font-size:30px}
+.hearts .h{color:var(--coral);transition:opacity .3s, transform .3s}
+.hearts .h.lost{opacity:.22;transform:scale(.8)}
+
+/* ── Shared animations ── */
+@keyframes wobble{
+  0%,100%{transform:translateX(0) rotate(0)}
+  20%{transform:translateX(-10px) rotate(-4deg)}
+  45%{transform:translateX(9px) rotate(3deg)}
+  70%{transform:translateX(-6px) rotate(-2deg)}
+}
+.wobble{animation:wobble .5s ease}
+@keyframes pop-in{from{transform:scale(.3);opacity:0}70%{transform:scale(1.12)}to{transform:scale(1);opacity:1}}
+.pop-in{animation:pop-in .35s ease both}
+@keyframes float-away{to{transform:translateY(-130px);opacity:0}}
+.float-away{animation:float-away .9s ease both}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.bob{animation:bob 3.2s ease-in-out infinite}
+@keyframes drift-glow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.25)}}
+
+/* ── Starburst particles ── */
+.burst-star{
+  position:absolute;font-size:26px;pointer-events:none;z-index:70;
+  animation:burst .8s ease-out both;
+}
+@keyframes burst{
+  from{transform:translate(0,0) scale(.6);opacity:1}
+  to{transform:translate(var(--bx),var(--by)) scale(1.25);opacity:0}
+}
+
+/* ── Toast / Zibby line ── */
+.toast{
+  position:absolute;left:50%;top:104px;transform:translateX(-50%);
+  display:flex;align-items:center;gap:14px;background:var(--nebula);
+  border:3px solid var(--rim);border-radius:999px;padding:12px 26px;
+  font-size:22px;font-weight:600;z-index:65;animation:toast-in .3s ease both;
+  white-space:nowrap;
+}
+@keyframes toast-in{from{transform:translate(-50%,-24px);opacity:0}to{transform:translate(-50%,0);opacity:1}}
+.toast.out{animation:toast-out .3s ease both}
+@keyframes toast-out{to{transform:translate(-50%,-24px);opacity:0}}
+
+/* ── Reduced motion: instant cuts, no drift (spec §13.7) ── */
+html.reduce-motion *,
+html.reduce-motion *::before,
+html.reduce-motion *::after{
+  animation-duration:.001s !important;
+  animation-iteration-count:1 !important;
+  transition-duration:.001s !important;
+}

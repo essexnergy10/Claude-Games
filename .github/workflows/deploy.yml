@@ -25,6 +25,12 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      - name: Bundle Star Cadet (static, no build step)
+        run: |
+          cp -r star-cadet dist/star-cadet
+          rm -rf dist/star-cadet/tests dist/star-cadet/package.json dist/star-cadet/CONTRACT.md
+          # Stamp the SW cache name per deploy so installed iPads pick up updates
+          sed -i "s/const CACHE = 'sc-[^']*'/const CACHE = 'sc-${GITHUB_SHA:0:8}'/" dist/star-cadet/sw.js
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
