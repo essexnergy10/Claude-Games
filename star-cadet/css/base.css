@@ -18,6 +18,21 @@ img,svg{display:block;max-width:100%}
   background:radial-gradient(120% 90% at 50% -18%, #3B2670 0%, #1B1338 46%, #0E0A1F 100%);
 }
 #starfield{position:absolute;inset:0;pointer-events:none}
+
+/* The canvas is landscape-only; upright on a touch device it shrinks to a thin strip. */
+#rotate{display:none}
+@media (orientation:portrait) and (pointer:coarse){
+  #fit{display:none}
+  #rotate{
+    position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:16px;padding:24px;text-align:center;
+    background:radial-gradient(120% 90% at 50% -18%, #3B2670 0%, #1B1338 46%, #0E0A1F 100%);
+  }
+  .rotate-phone{font-size:72px;animation:rotate-hint 2.4s ease-in-out infinite}
+  .rotate-title{font-size:26px;font-weight:700}
+  .rotate-sub{font-size:16px;opacity:.7}
+}
+@keyframes rotate-hint{0%,25%{transform:rotate(0)}50%,75%{transform:rotate(-90deg)}100%{transform:rotate(0)}}
 #screen-root{position:absolute;inset:0}
 #overlay-root{position:absolute;inset:0;pointer-events:none;z-index:50}
 #overlay-root>*{pointer-events:auto}

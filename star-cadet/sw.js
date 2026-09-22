@@ -1,5 +1,5 @@
 // Star Cadet service worker — cache-first so the game loads in aeroplane mode (spec §12).
-const CACHE = 'sc-v2'
+const CACHE = 'sc-v3'
 
 const SHELL = [
   './',
